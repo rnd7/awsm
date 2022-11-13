@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: hidden;
+    gap: 10px;
+}
+.voice-settings, .voice-launcher {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    padding: 10px;
+    background-color: #303030;
+    gap: 10px;
+}
+.container.visible {
+    display: flex;
+}

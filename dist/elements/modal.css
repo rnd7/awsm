@@ -1,0 +1,49 @@
+
+:host {
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.container {
+    display: flex;
+    flex: 1;
+    gap: 5px;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #A0A0A0A0;
+
+    font-family: sans-serif;
+    font-size: 10px;
+    color: #E0E0E0;
+    padding: 10px;
+    margin: 5px 0px 5px 0px;
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0, 0.3);
+}
+.content {
+    display: flex;
+    flex: 1;
+    gap: 5px;
+    flex-direction: column;
+    overflow: hidden;
+
+    font-family: sans-serif;
+    font-size: 10px;
+    color: #E0E0E0;
+}
+button {
+    background-color: #303030;
+    color: #E0E0E0;
+    display: flex;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 10px;
+    align-items: flex-end;
+    border: none;
+    padding: 5px;
+}
+button:focus {
+    border: none;
+}

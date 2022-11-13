@@ -1,0 +1,42 @@
+:host {
+    display: flex;
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden;
+    /*padding: 0px 20px 20px 20px;*/
+    gap: 10px;
+    background-color: #303030;
+    padding: 10px;
+}
+.controls, .settings {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    /*padding: 0px 20px 20px 20px;*/
+    gap: 10px;
+}
+awsm-keyboard {
+    display: flex;
+    min-height: 60px;
+    flex: 1;
+}
+button { 
+    background-color: #202020;
+    color: #E0E0E0;
+    display: flex;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 10px;
+    align-items: flex-end;
+    border: none;
+    padding: 5px;
+}
+button:focus {
+    border: none;
+}

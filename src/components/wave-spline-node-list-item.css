@@ -1,0 +1,22 @@
+
+.container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+    background-color: #303030;
+    transition: background-color .2s ease-in-out;
+}
+
+.h-container {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    overflow: hidden;
+}
+.container.active {
+    background-color: #606060;
+}
+.hidden {
+    display: none;
+}

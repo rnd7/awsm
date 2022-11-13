@@ -1,0 +1,24 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex-direction: column;    
+    flex: 1;
+    overflow: hidden;
+    gap: 10px;
+    background-color: #101010;
+}
+awsm-wave-spline-section {
+        
+    display: flex;
+    flex: 1;
+}
+awsm-voice-section {
+    
+    display: flex;
+}
+
+awsm-keyboard-section {
+    display: flex;
+}

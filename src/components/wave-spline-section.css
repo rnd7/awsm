@@ -1,0 +1,71 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+}
+.active-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+
+}
+.inactive-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #181818;
+    gap: 10px;
+    padding: 20px;
+}
+.hidden {
+    display: none;
+}
+.h-container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden;
+    gap: 10px;
+}
+.settings-container {
+    display: flex;
+    flex-direction: row;    
+    flex-wrap: wrap;
+    gap: 10px;
+    overflow: hidden;
+    background-color: #181818;
+
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30px" width="120px"><text x="110px" y="18px" font-size="15" font-weight="bold" font-family="sans-serif" text-anchor="end" fill="%23303030">Generator</text></svg>');
+
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+}
+
+awsm-hint {
+
+    display: flex;
+    flex: 1;
+}
+awsm-wave-spline-canvas {
+    display: flex;
+    flex: 1;
+}
+awsm-wave-spline-node-list {
+    display: flex;
+    flex: 1;
+}

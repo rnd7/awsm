@@ -1,0 +1,25 @@
+
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+button {
+    background-color: #202020;
+    color: #E0E0E0;
+    display: flex;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 10px;
+    align-items: flex-end;
+    border: none;
+    padding: 5px;
+}
+button:focus {
+    border: none;
+}

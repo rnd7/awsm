@@ -1,0 +1,5 @@
+export const IDLE = "idle"
+export const ATTACK = "attack"
+export const HOLD = "hold"
+export const RELEASE = "release"
+export const DEAD = "dead"

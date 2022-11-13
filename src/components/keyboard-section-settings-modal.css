@@ -1,0 +1,18 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.controls {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    /*padding: 0px 20px 20px 20px;*/
+    gap: 20px;
+}

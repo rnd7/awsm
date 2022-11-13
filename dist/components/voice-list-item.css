@@ -1,0 +1,40 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    flex-direction: row;
+    overflow: hidden;
+    background-color: #303030;
+    padding: 10px;
+    min-width: 60px;
+    min-height: 60px;
+    transition: background-color .2s ease-in-out, opacity .5s ease-in-out;
+}
+
+.container.active {
+    background-color: #606060;
+}
+
+.category {
+    flex: 1;
+}
+
+.v-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+}
+
+.container.release {
+    opacity: .3;
+}
+
+awsm-label {
+    min-width: 60px;
+}

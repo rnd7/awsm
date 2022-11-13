@@ -1,0 +1,16 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    align-items: center;
+}
+.rotary{
+    display: flex;
+    flex: 1;
+}
+canvas {
+    touch-action: none;
+}

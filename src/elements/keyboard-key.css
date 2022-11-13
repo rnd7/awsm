@@ -1,0 +1,54 @@
+:host {
+    overflow: hidden;
+    display: flex;
+    flex: 1;
+    flex-basis: 0;
+}
+button {
+    background-color: #808080;
+    color: #E0E0E0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-basis: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 10px;
+    justify-content: flex-end;
+    border: none;
+    padding: 5px;
+    overflow: hidden;
+}
+button > .spacer {
+    display: flex;
+    flex: 1;
+}
+button > .highlight-indicator {
+    background: none;
+    height: 5px;
+    display: flex;
+}
+
+button.highlight > .highlight-indicator {
+    background-color: #505050;
+}
+
+button > div {
+    
+    overflow: hidden;
+    text-overflow: clip;
+    /* flex-basis: 0; */
+    /* flex-direction: row; */
+    width: 100%;
+}
+button:focus {
+    border: none;
+}
+button.black {
+    background-color: #101010;
+    color: #E0E0E0;
+}
+button.white {
+    background-color: #E0E0E0;
+    color: #101010;
+}

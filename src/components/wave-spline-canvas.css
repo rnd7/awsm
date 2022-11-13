@@ -1,0 +1,13 @@
+:host {
+    overflow: hidden;
+}
+.container {
+    background-color: #202020;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+canvas {
+    touch-action: none;
+    user-select: none; 
+}

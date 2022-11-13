@@ -1,0 +1,53 @@
+:host {
+    display: flex;
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    /*padding: 0px 20px 20px 20px;*/
+    gap: 10px;
+}
+.generator-row {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    background-color: #181818;
+    gap: 10px;
+}
+
+.voice-row {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    background-color: #181818;
+    gap: 10px;
+}
+
+.voice-settings-row {
+
+
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30px" width="120px"><text x="110px" y="18px" font-size="15" font-weight="bold" font-family="sans-serif" text-anchor="end" fill="%23303030">Voice</text></svg>');
+}
+
+.voice-selection-row {
+
+
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30px" width="120px"><text x="110px" y="18px" font-size="15" font-weight="bold" font-family="sans-serif" text-anchor="end" fill="%23303030">Voices</text></svg>');
+}
+
+.voices {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+}

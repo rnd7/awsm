@@ -1,0 +1,22 @@
+{
+    "name": "awsm",
+    "description": "AwesomeWaveSplineMachine - EcmaScript software synthesizer",
+    "license": "GPL-3.0-only",
+    "author": "C. Nicholas Schreiber <rnd7@riseup.net>",
+    "keywords": [
+        "AudioWorklet",
+        "WaveSpline",
+        "Audio",
+        "WebAudioAPI"
+    ],
+    "type": "module",
+    "version": "0.1.57",
+    "scripts": {
+        "build": "node scripts/build.js"
+    },
+    "devDependencies": {
+        "fs-extra": "^10.1.0",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^4.10.0"
+    }
+}

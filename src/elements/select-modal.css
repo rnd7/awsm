@@ -1,0 +1,10 @@
+
+:host {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow: hidden;
+}
