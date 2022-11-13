@@ -3,7 +3,7 @@ The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes, what I c
 
 Check out the AwesomeWaveSplineMachine. Only tested on Chrome and Firefox. Will not work with older Browser.
 
-[AWSM - AwesomeWaveSplineMachine](https://rnd7.github.io/awsm/)
+[AWSM - AwesomeWaveSplineMachine](https://rnd7.github.io/awsm/dist/index.html)
 
 ## Purpose
 First of all: This is not a production ready music instrument! Some crucial features are missing, there are probably some bugs and you can expect audio clicks and glitches under some conditions. It's a proof of concept and a personal playground. 
