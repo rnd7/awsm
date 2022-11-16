@@ -1,18 +1,24 @@
 # AWSM
-The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes, what I call, dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal ordered unitless time value pairs as parametric exponential interpolated one dimensional spline. I wonder if no one has come up with something like this, but I could not find anything directly related.
+The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes, what I call, dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal ordered unitless time value pairs as parametric exponential interpolated one dimensional spline that you can modify in realtime. I wonder if no one has come up with something like this, but I could not find anything directly related. Let me know if you stumbled upon similar projects.
 
-Check out the AwesomeWaveSplineMachine. Only tested on Chrome and Firefox. Will not work with older Browser.
+## Purpose
+This is not a production ready music instrument! Some crucial features are missing, there are probably some bugs and you can expect audio clicks and glitches under some conditions. It's still a proof of concept and always a personal playground. But yes, you can use it to make music.
+
+## Tryout
+
+The software is only tested on MacOS using Chrome and Firefox. In theory it is cross platform. It will probably not work with outdated or esoteric browsers. 
+
+It is designed to support touch interaction and should work on some mobile devices. At least I could run it on a Android device. I had not time to test this extensively, so expect some bugs. I recommend using a desktop or laptop.
+
+**Beware:** You can scrap your speakers with this tool. You can literally melt the coil. Use it on your own risk! Make sure the `Wave` generator waveform always crosses zero within a sane amount of time.
+
+Click the link below to try out the AWSM synthesizer in your browser. 
 
 [AWSM - AwesomeWaveSplineMachine](https://rnd7.github.io/awsm/dist/index.html)
 
-## Purpose
-First of all: This is not a production ready music instrument! Some crucial features are missing, there are probably some bugs and you can expect audio clicks and glitches under some conditions. It's a proof of concept and a personal playground. 
-
-Beware: You can scrap your speakers with this tool. You can literally melt the coil.
-
 ## Motivation
 
-When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations the previous approach had. Perhaps finally sophisticated realtime audio in the browser. I wanted to give it a try. It felt like it was time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in the vector graphics program.
+Curiosity and the joy of developing software that acts as tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations the previous approach had. Perhaps finally sophisticated realtime audio in the browser. I wanted to give it a try. It felt like it was time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in the vector graphics program.
 
 ## Concept
 No sines, squares, triangles or sawtooths. I always liked the idea of manipulating the waveform directly. As mentioned this is not my first approach to this idea. I know, it takes more than an fancy oscillator to make a synthesizer fun to play with, but this was the starting point.
@@ -20,6 +26,8 @@ No sines, squares, triangles or sawtooths. I always liked the idea of manipulati
 I was thinking of something to create microtonal soundscapes, sustained clusters and evil bass sounds. That seems to me to be a suitable area of application for this form of synthesis.
 
 Expect *AWSM* to work like a polyphonic drone synth. Therefore, although that is configurable, voices are sustained per default.
+
+Every single note that is played can be controlled individually. A Voice is accessible throughout its entire life cycle. The waveform and parameters of each Voice are independently configurable. The principle of having a discrete parametric preset as template for a voice is softened. Voices float and evolve.
 
 There is no filter section. For a similar effect you might want to try fiddling with the exponent settings or try moving around the WaveSplineNodes.
 
@@ -54,23 +62,25 @@ Global mix output volume value. All Wave Generator outputs are mixed and multipl
 
 
 ### Panic
-Releases all voices. `Sustain` values are still taken into account.
+Releases all voices. `Release` values are still taken into account.
 
 ![alt text](documentation/awsm-header-panic.png "AWSM - Header Panic")
 
+---
 
 ## WaveSpline section
-Within this section you can modify the waveforms by dragging the around on the canvas or using the rotaries in the nodes list.
+Within this section you can modify the waveforms by dragging the `WaveSplineNodes` around on the canvas or using the rotary controllers in the `WaveSplineNode` list.
 
 ![alt text](documentation/awsm-wave-spline-section.png "AWSM - WaveSpline section")
 
 ### WaveSpline canvas
-`Click` to select the closest `WaveSplineNode` on the canvas. Drag Nodes to modify the waveform. Use `Longpress` to add new nodes at the pointer position. The canvas shows always the `WaveSpline` of the currently selected `Generator` within the active `Voice`.
+`Click` to select the closest `WaveSplineNode` on the canvas. Drag nodes to modify the waveform. Use `Longpress` to add new nodes at the pointer position. The canvas shows always the `WaveSpline` of the currently selected `Generator` within the active `Voice`.
 
 The currently selected `WaveSplineNode`is highlighted.
 
 ![alt text](documentation/awsm-wave-spline-canvas.png "AWSM - WaveSpline Canvas")
 
+Removal of a `WaveSplineNode` is currently only possible by clicking on the remove button in the list view.
 
 ### WaveSplineNode list
 Just a different view of the `WaveSplineNodes` shown on the canvas. Use this to manually input `WaveSplineNode` values. The entries are sorted according to the position on the canvas.
@@ -80,9 +90,9 @@ The currently selected `WaveSplineNode` is highlighted.
 ![alt text](documentation/awsm-wave-spline-nodes.png "AWSM - WaveSpline Nodes")
 
 ### WaveSplineNode
-There are two types of `WaveSplineNodes` depending on the Type chosen in the WaveSpline Settings section.
+There are two types of `WaveSplineNodes` depending on the type chosen in the WaveSpline Settings section.
 
-If the type of the `WaveSpline` is Spline or Step.
+If the type of the `WaveSpline` is `Spline` or `Step`.
 
 ![alt text](documentation/awsm-wave-spline-node.png "AWSM - WaveSpline Node")
 
@@ -91,7 +101,7 @@ When the `WaveSpline` type is `Nodes`.
 ![alt text](documentation/awsm-wave-spline-node-exponential.png "AWSM - Exponential WaveSpline Node")
 
 ### WaveSplineNode Time
-The temporal position of the `WaveSplineNode` within the waveform. The same as dragging a node from left to right.
+The temporal position of the `WaveSplineNode` within the waveform. The same as dragging a node from left to right on the canvas.
 
 ![alt text](documentation/awsm-wave-spline-node-time.png "AWSM - WaveSpline Node Time")
 
@@ -110,11 +120,12 @@ Delete a `WaveSplineNode`.
 
 ![alt text](documentation/awsm-wave-spline-node-remove.png "AWSM - WaveSpline Node Remove")
 
+---
+
 ## Generator section
 Configure how the `WaveSpline` is interpreted. Always shows the values of the selected `Generator` within the active `Voice`
 
 ![alt text](documentation/awsm-generator-section.png "AWSM - Generator Section")
-
 
 ### WaveSplineSettings
 Change `WaveSpline` specific values. Depending on the selected `WaveSpline` type the view differs.
@@ -201,6 +212,8 @@ Only visible for non zero Time Grids. Use this to shift the quantized `WaveSplin
 Quantize value. A value of zero turns of value quantization. Useful if you want pitch steps for example. Acts like a bitrate reducer when applied to a `Wave` Generator. 
 
 ![alt text](documentation/awsm-wave-spline-view-value-grid.png "AWSM - WaveSpline Value Grid")
+
+---
 
 ## Voice section
 The currently selected voice can be configured in this section. You can manage the generators and parametes of the envelope for example.
@@ -302,6 +315,7 @@ Click this button to spawn a new Voice by cloning the values of the currently se
 
 ![alt text](documentation/awsm-spawn.png "AWSM - Voice Spawn")
 
+---
 
 ## Voices section
 A `Voice` has a life cycle, and within this section you can manage it. The currently selected `Voice` is highlighted. Using the Keyboard or the Spawn button you create a clone that immediately appears in this section. Each voice can be modified individually as long as it is played back.
@@ -357,6 +371,7 @@ During the Release Phase you have the opportunity to Revive a Voice. The Voice s
 ![alt text](documentation/awsm-voice-revive.png "AWSM - Voice Revive")
 
 
+---
 
 ## Keyboard section
 
@@ -410,17 +425,17 @@ Number of subdivisions per octave.
 
 ![alt text](documentation/awsm-keyboard-config-divisions.png "AWSM - Keyboard Config Divisions")
 
-# Development State
+# State of development
 This is a protoype, a technology demonstrator, nothing stable.
 
 Nevertheless I put quite a lot of effort into this. Everything is build from scratch. It took me over hundred hours to get this project to where it is today. Uncounted the hours I was lost in creating sounds and music with this tool. 
 
 For now no further development is planned. Even if I'd love to try out some more ideas and integrate a bunch of further features, I do not have the time to do so. Maybe I'll mess around with this some time in the future. Don't expect anything to stay or change.
 
-I like to utilize my free time projects to deepen my knowledge and try out new stuff. Both things that are often hard to justify when working at a regular basis and for a paying customer. Do not consider anything of the code as best practice, as long as you are not convinced it is.
+# Developers
+The *AWSM* is raw web technology, a pure vanilla shake, no 3rd party libs used. No dependencies other than a modern browser environment. 
 
-# Technology
-The *AWSM* is raw web technology, a pure vanilla shake, no 3rd party libs used. In theory it does not require a bundler or transpiler. No dependencies other than a modern browser environment. 
+In theory it does not require a build step utilizing a bundler or transpiler. I cried a while when realizing that Firefox currently does not support ES6 module imports within AudioWorklets. It's a shame and I hope this will change some day. For now I had no better idea to resolve and bundle all imports of this component using webpack, the rest of the app stays untouched and is just copied to the dist folder. For development I use Chrome and a dev server that serves directly from the src directory, no need to wait for a build to complete.
 
 Essentially, there are three distinct loosely coupled development realms. The data model and the interpolation logic, the sound generation and the user interface.
 
@@ -430,8 +445,11 @@ The sound generation is almost exclusively realized using a monolithic AudioWork
 
 The user interface is built exclusively on Web Components technology. All elements are custom made and the components are coupled to the model via an propietary event system.
 
+I like to utilize my free time projects to deepen my knowledge and try out new stuff. Both things that are often hard to justify when working at a regular basis and for a paying customer. Do not consider anything of the code as best practice, as long as you are not convinced it is.
 
 ## WaveSpline Algorithm
+At its core it's just a simple algorithm. The general concept would also work with linear interpolation, but exponential interpolation sounds so much smoother. Modifying the exponent in realtime changes the curve steepness dynamically somehow similar to what a filter does.
+
 The exponential interpolation algorithm outputs y for x that always stays within the given min / max boundaries of a 2d point set. 
 
 The interpolation curve is calculate by combining two segments of two x to n degree exponetial functions where x > 0.   
@@ -483,10 +501,16 @@ if x < .5
 if x >= .5
     f2(x) = 1 - ((1-x) * 2) ^ e) / 2
 ```
+## Audio Processing
+The audio processing is decoupled from the rest of the application. The AudioCore manages the playback and state of all audible Voices. Every voice contains a Wave generator that has a optional pitch and gain input that can be connected to the output of another generator. 
+
+The user interface does not support it, but Generators can be reused by multiple voices. This applies to almost all data model classes. Even WaveSplineNodes could be used in multiple WaveSplines. You always have the choice of just referencing something.
+
+The AudioCore manages the Voices, and the VoiceInterface retrieves all necessary WaveSplineProcessors from a global processor pool. Processors are created on demand and automatically garbage collected using simple reference counting.
 
 
 ## Audio Routing
-The *AWSM* produces only a mono output signal. The routing is quite straight forward. Note that even if the UI does not allow it, it is possible to use the output of any generator as input parameter for one or more other generators. Pitch and gain generators are optional.
+The *AWSM* produces only a mono output signal the same signal is copied to all channels. The routing is quite straight forward. Note that even if the UI does not allow it, it is possible to use the output of any generator as input parameter for one or more other generators. Pitch and gain generators are optional.
 ```
 pitch generator => wave generator pitch param
 gain generator => wave generator gain param
@@ -546,18 +570,21 @@ WaveSplineNode
     x, y, e
 
 WaveSplineView
-    frequency, quantizeX, quantizeY
+    frequency, quantizeX, quantizeXThreshold, quantizeY
 
 ```
 
 
 # License
+Feel free to use this tool to make music or to test the limits of your speakers. I encourage this. When redistributing the Software, be sure to understand the underlying license. Since I'm donating a considerable amount of my time to the opensource community, it's important to me that everything that builds on this is also available to everyone.
+
+
 This project is licensed under the GNU General Public License v3.0
 
 Copyright (C) 2022  C. Nicholas Schreiber
 
-See COPYING or contact me for more information.
+See [COPYING](https://rnd7.github.io/awsm/COPYING) for the license text or contact me for more information.
 
-Link to the License Text:
+The license applies to every file within this repository even if not explicitly stated within the source code of every module.
 
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html)
+Official GNU license page: [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html)
