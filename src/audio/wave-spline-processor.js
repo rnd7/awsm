@@ -170,4 +170,4 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
         return this._active
     }
 }
-registerProcessor('wave-spline-processor', WaveSplineProcessor)
+registerProcessor('awsm-wave-spline-processor', WaveSplineProcessor)
