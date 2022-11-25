@@ -21,9 +21,20 @@ export default class AudioCore extends Bindable {
         this._audioContext.resume()
         this._masterOutput = this._audioContext.createGain()
         this._masterOutput.gain.value = .5
-        this._masterOutput.connect(this._audioContext.destination)
         await this._audioContext.audioWorklet.addModule(`audio/wave-spline-processor.js?a=${Math.random()}`).catch(console.error)
-        this._holdInMem = new AudioWorkletNode(this._audioContext, 'wave-spline-processor')
+        await this._audioContext.audioWorklet.addModule(`audio/clipper.js?a=${Math.random()}`).catch(console.error)
+        this._holdInMem = new AudioWorkletNode(this._audioContext, 'awsm-wave-spline-processor')
+        this._clipper = new AudioWorkletNode(this._audioContext, 'awsm-clipper')
+        this._masterOutput.connect(this._clipper)
+        this._clipper.connect(this._audioContext.destination)
+        this._clipper.port.onmessage = (message) => {
+            if (!this._configuration) return
+            if (message.data.type === "clip") {
+                this._configuration.outputClipped = true
+            } else if (message.data.type === "release") {
+                this._configuration.outputClipped = false
+            }
+        }
         this.configuration = configuration
     }
 
@@ -43,12 +54,14 @@ export default class AudioCore extends Bindable {
         if (!this._configuration) return
         SignalProcessor.add(this._configuration, Configuration.MASTER_VOLUME_CHANGE, this.bound(this._onVolumeChange))
         SignalProcessor.add(this._configuration, Configuration.VOICES_CHANGE, this.bound(this._onVoicesChange))
+        SignalProcessor.add(this._configuration, Configuration.SPEAKER_PROTECTION_CHANGE, this.bound(this._onSpeakerProtectionChange))
         SignalProcessor.add(this._configuration, Voices.CHANGE, this.bound(this._onVoicesChange))
     }
     _removeConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.remove(this._configuration, Configuration.MASTER_VOLUME_CHANGE, this.bound(this._onVolumeChange))
         SignalProcessor.remove(this._configuration, Configuration.VOICES_CHANGE, this.bound(this._onVoicesChange))
+        SignalProcessor.remove(this._configuration, Configuration.SPEAKER_PROTECTION_CHANGE, this.bound(this._onSpeakerProtectionChange))
         SignalProcessor.remove(this._configuration, Voices.CHANGE, this.bound(this._onVoicesChange))
     }
 
@@ -59,6 +72,13 @@ export default class AudioCore extends Bindable {
     _onVoicesChange(e,t) {
         this._update()
        
+    }
+    _onSpeakerProtectionChange(e, t) {
+        if (this._configuration.speakerProtection) {
+            this._clipper.port.postMessage({type: "enable"})
+        } else {
+            this._clipper.port.postMessage({type: "disable"})
+        }
     }
 
     _adjustGain() {
