@@ -31,6 +31,8 @@ export default class Configuration extends ModelBase {
     static KEYBOARD_MODE_CHANGE = Symbol("KEYBOARD_MODE_CHANGE")
     static DEFAULT_VOICE_CHANGE = Symbol("DEFAULT_GENERATOR_CHANGE")
     static GRAVEYARD_VOICE_CHANGE = Symbol("GRAVEYARD_VOICE_CHANGE")
+    static SPEAKER_PROTECTION_CHANGE = Symbol("SPEAKER_PROTECTION_CHANGE")
+    static OUTPUT_CLIPPED_CHANGE = Symbol("OUTPUT_CLIPPED_CHANGE")
 
     constructor({
         voices = null,
@@ -45,7 +47,8 @@ export default class Configuration extends ModelBase {
         keyboardTranspose = -2,
         masterTempo = 120,
         masterVolume = .75,
-        keyboardMode = POLYPHON
+        keyboardMode = POLYPHON,
+        speakerProtection = true
     }) {
         super(...arguments)
         this.defaultVoice = defaultVoice
@@ -61,6 +64,8 @@ export default class Configuration extends ModelBase {
         this.masterTempo = masterTempo
         this.masterVolume = masterVolume
         this.keyboardMode = keyboardMode
+        this.speakerProtection = speakerProtection
+        this.outputClipped = false
     }
     
     set masterVolume(value) {
@@ -299,6 +304,26 @@ export default class Configuration extends ModelBase {
     get graveyardVoice() {
         return this._graveyardVoice
     }
+
+    set speakerProtection(value) {
+        if (this._speakerProtection === value) return
+        this._speakerProtection = value
+        SignalProcessor.send(this, Configuration.SPEAKER_PROTECTION_CHANGE)
+    }
+
+    get speakerProtection() {
+        return this._speakerProtection
+    }   
+
+    set outputClipped(value) {
+        if (this._outputClipped === value) return
+        this._outputClipped = value
+        SignalProcessor.send(this, Configuration.OUTPUT_CLIPPED_CHANGE)
+    }
+
+    get outputClipped() {
+        return this._outputClipped
+    }   
 
     panic() {
         // this.masterVolume = 0
