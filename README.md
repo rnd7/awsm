@@ -1,48 +1,93 @@
 # AWSM
-The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes, what I call, dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal ordered unitless time value pairs as parametric exponential interpolated one dimensional spline that you can modify in realtime. I wonder if no one has come up with something like this, but I could not find anything directly related. Let me know if you stumbled upon similar projects.
+The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes what I call dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal-ordered unitless time-value pairs as parametrically exponentially interpolated one-dimensional spline that you can manipulate in real-time while playing. I wonder if nobody came up with something like this, but I couldn't find anything directly related. I'm curious, let me know if you stumbled upon similar projects.
 
 ## Purpose
-This is not a production ready music instrument! Some crucial features are missing, there are probably some bugs and you can expect audio clicks and glitches under some conditions. It's still a proof of concept and always a personal playground. But yes, you can use it to make music.
+This is not a production-ready music instrument! Some key features are missing, there are likely some bugs, and you can expect audio clicks and glitches under certain conditions. It's still a proof of concept and will always be a personal playground. But yes, you can make music with it.
 
 ## Tryout
 
-The software is only tested on MacOS using Chrome and Firefox. In theory it is cross platform. It will probably not work with outdated or esoteric browsers. 
+The software is only tested on MacOS with Chrome and Firefox. In theory, it's cross platform. It probably won't work with outdated or esoteric browsers. 
 
-It is designed to support touch interaction and should work on some mobile devices. At least I could run it on a Android device. I had not time to test this extensively, so expect some bugs. I recommend using a desktop or laptop.
+It's designed to support touch interaction and should work on some mobile devices. At least I could run it on a Android device. I haven't had time to test this extensively, so expect some issues. I recommend using a desktop or laptop.
 
-**Beware:** You can scrap your speakers with this tool. You can literally melt the coil. Use it on your own risk! Make sure the `Wave` generator waveform always crosses zero within a sane amount of time.
+**Caution:** You can scrap your speakers with this tool. You can literally melt the coil. Use it on your own risk! Make sure that Protection is activated and that the Wave generator waveform always crosses zero within a reasonable amount of time.
 
-Click the link below to try out the AWSM synthesizer in your browser. 
+Click the link below to try the AWSM synthesizer in your browser. 
 
-[AWSM - AwesomeWaveSplineMachine](https://rnd7.github.io/awsm/dist/index.html)
+🚀 [AWSM - AwesomeWaveSplineMachine](https://rnd7.github.io/awsm/dist/index.html)
+
+For more information consider one of the following links.
+
+📚 [User Guide](#user-guide)
+
+🏗 [Developer Guide](#developer-guide) 
+
+🏛 [License](#license) 
 
 ## Motivation
 
-Curiosity and the joy of developing software that acts as tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations the previous approach had. Perhaps finally sophisticated realtime audio in the browser. I wanted to give it a try. It felt like it was time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in the vector graphics program.
+Curiosity and the joy in developing software that serves as a tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations of the previous approach, perhaps finally sophisticated real-time audio in the browser. I wanted to give it a try. It seemed to be the time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in a vector graphics program.
+
+# User guide
+
+[Back to top](#awsm)
+
+The following is an overview of how to use the AwesomeWaveSplineMachine.
+
+## Table of contents 
+
+All the sections are listed top to bottom in the table of contents. Use the links to jump to a section.
+
+| Link   | Description  |
+|---|---|
+|[Concept](#concept) | What I thought and how it works |
+|[User Interface](#user-interface) | Overview of the user interface |
+|[Header section](#header-section) | The header section provides access to global parameters and functions. |
+|[WaveSpline section](#wavespline-section) | In the `WaveSpline` section you can edit the waveform of the selected `Generator`. Click and drag the `WaveSplineNodes` around, longpress to add a new one. Use the list view on the right to remove a node. |
+|[Generator section](#generator-section) | A `Generator` is someting that outputs an signal, it does not have to be audible. The generator section shows the parameters of the selected `Generator` you can configure how the waveform is interpreted and played back.  |
+|[Voice section](#voice-section)|Everything that can be played is a `Voice`. The voice section lets you configure all aspects of the selected `Voice` and lets you toggle between the `Generators`. Each `Voice` might utilize up to three `Generators`. Wave, Pitch and Gain. |
+| [Voices section](#voices-section)| Use the voices section to toggle between `Voices`. You will find all voices that are currently played back in this section, and you might click kill to stop them. |
+| [Keyboard section](#keyboard-section)|Use the keyboard to spawn new voices or to change the pitch of the active `Voice`. |
+
+---
 
 ## Concept
-No sines, squares, triangles or sawtooths. I always liked the idea of manipulating the waveform directly. As mentioned this is not my first approach to this idea. I know, it takes more than an fancy oscillator to make a synthesizer fun to play with, but this was the starting point.
 
-I was thinking of something to create microtonal soundscapes, sustained clusters and evil bass sounds. That seems to me to be a suitable area of application for this form of synthesis.
+[Back to table of contents](#table-of-contents)
 
-Expect *AWSM* to work like a polyphonic drone synth. Therefore, although that is configurable, voices are sustained per default.
+No sines, squares, triangles or sawtooths. I always liked the idea of manipulating the waveform directly. As mentioned this is not my first approach to this idea. I know it takes more than a fancy oscillator to make a synthesizer fun to play with, but that was the starting point.
 
-Every single note that is played can be controlled individually. A Voice is accessible throughout its entire life cycle. The waveform and parameters of each Voice are independently configurable. The principle of having a discrete parametric preset as template for a voice is softened. Voices float and evolve.
+I was thinking of something to create microtonal soundscapes, sustained clusters and evil bass sounds. That seems to be a suitable field of application for this form of synthesis.
+
+Expect *AWSM* to work like a polyphonic drone synth. Therefore, although that is configurable, voices are sustained per default. You have to actively kill them.
+
+Every single note that is played can be controlled individually. A Voice is accessible throughout its entire life cycle. The waveform and parameters of each Voice are independently configurable. The principle of having a discrete parametric preset as template for a instrument or a sound is softened. Voices float and evolve.
 
 There is no filter section. For a similar effect you might want to try fiddling with the exponent settings or try moving around the WaveSplineNodes.
 
-Time, amplitude, frequency, duration, wavelength, tempo, note value, measures, all the musical units are the same. This is not true, but these are tightly coupled. To account for this enlightenment WaveSplines are unitless and universal, might be quantized and are optionally bound to a master tempo. There is no distinction between VCO or LFO. The frequency range is just prevented from being zero and exceeding the upper end of the audible spectrum. 
+Time, amplitude, frequency, duration, wavelength, tempo, note value, measures, all the musical units are the same. That's not true, but these are tightly coupled. To account for this enlightenment WaveSplines are unitless and universal, might be quantized and are optionally bound to a master tempo. There is no distinction between VCO or LFO. The frequency range is just prevented from being zero and exceeding the upper end of the audible spectrum. 
 
 I like the principle of rhythmic sequencing without notes or steps. Similar to some modular synths, simple sequences can be created using a gain WaveSpline. Each voice can alsp be melodically sequenced using a seperate pitch WaveSpline, roughly comparable to what an arpeggiator does.
 
-While I understand the principle of the octave as somehow universal, the subdivision seems wise, but not without alternatives. Why not try to divide it by five. The virtual keyboard can be configured accordingly. I also already mentioned mircotonality,
+While I understand the principle of the octave as somehow universal, the common subdivisions seem to be a wise choice, but not without alternatives. Why not try to divide it by five. The virtual keyboard can be configured accordingly. I also already mentioned mircotonality,
 
-# User guide
-This is a screenshot of default state of the user interface. Basically what you see when you start the Applications. Naming is random and will vary.
+---
+
+## User interface
+
+[Back to table of contents](#table-of-contents)
+
+This is a screenshot of default state of the user interface. Basically what you see when you start the application. Naming is random and will vary. The application is quite consistent regarding its user interface, so what you see is almost everything you have to deal with. The user interface elements are grouped into different sections.
+
 
 ![alt text](documentation/awsm-default-state.png "AWSM - Default state")
 
-## Header section
+
+---
+
+## Header section  
+[Back to table of contents](#table-of-contents)
+
 You find some global settings in the header section.
 
 ![alt text](documentation/awsm-header-section.png "AWSM - Header section")
@@ -61,6 +106,13 @@ Global mix output volume value. All Wave Generator outputs are mixed and multipl
 ![alt text](documentation/awsm-header-main-out.png "AWSM - Header Main Out")
 
 
+### Protection
+If active the audio output is muted if no zero crossing occurs within a period of 10 seconds. The indicator will start to blink in this case. As soon as a the audio signal crosses zero again the output is continued. I strongly suggest not disabling this feature, but you can by clicking the toggle. The image shows the toggle in its active state.
+
+
+![alt text](documentation/awsm-header-protection.png "AWSM - Header Main Out")
+
+
 ### Panic
 Releases all voices. `Release` values are still taken into account.
 
@@ -68,8 +120,12 @@ Releases all voices. `Release` values are still taken into account.
 
 ---
 
-## WaveSpline section
+## WaveSpline section 
+[Back to table of contents](#table-of-contents)
+
+
 Within this section you can modify the waveforms by dragging the `WaveSplineNodes` around on the canvas or using the rotary controllers in the `WaveSplineNode` list.
+
 
 ![alt text](documentation/awsm-wave-spline-section.png "AWSM - WaveSpline section")
 
@@ -100,32 +156,35 @@ When the `WaveSpline` type is `Nodes`.
 
 ![alt text](documentation/awsm-wave-spline-node-exponential.png "AWSM - Exponential WaveSpline Node")
 
-### WaveSplineNode Time
+### Time
 The temporal position of the `WaveSplineNode` within the waveform. The same as dragging a node from left to right on the canvas.
 
 ![alt text](documentation/awsm-wave-spline-node-time.png "AWSM - WaveSpline Node Time")
 
-### WaveSplineNode Value
+### Value
 The value of the `WaveSplineNode` within the waveform at the given time. This can either be the amplitude or the pitch and is the same as dragging a node up or down.
 
 ![alt text](documentation/awsm-wave-spline-node-value.png "AWSM - WaveSpline Node Value")
 
-### WaveSplineNode Exponent
+### Exponent
 Only applies for `WaveSplines` of type `Nodes`. Use it to choose the righthand exponent individually per `WaveSplineNode`. Choose a value of 1 for linear interpolation.
 
 ![alt text](documentation/awsm-wave-spline-node-exponent.png "AWSM - WaveSpline Node Exponent")
 
-### WaveSpline Node Remove
+### Remove
 Delete a `WaveSplineNode`.
 
 ![alt text](documentation/awsm-wave-spline-node-remove.png "AWSM - WaveSpline Node Remove")
 
 ---
 
-## Generator section
+## Generator section 
+[Back to table of contents](#table-of-contents)
+
 Configure how the `WaveSpline` is interpreted. Always shows the values of the selected `Generator` within the active `Voice`
 
 ![alt text](documentation/awsm-generator-section.png "AWSM - Generator Section")
+
 
 ### WaveSplineSettings
 Change `WaveSpline` specific values. Depending on the selected `WaveSpline` type the view differs.
@@ -138,7 +197,7 @@ WaveSpline Settings for `WaveSpline` of type `Nodes` or `Step`.
 
 ![alt text](documentation/awsm-generator-settings-simple.png "AWSM - Generator Settings Step / Nodes")
 
-### WaveSplineSettings Type
+### Type
 `Click` to open a modal. Choose between three different types of WaveSpline. `Spline` uses exponential interpolation. All nodes share the same exponent value. `Nodes` is basically the same as `Spline` but with individual exponent settings per Node. `Step` does not interpolate between the nodes, useful to create pitch sequences for example, not particular suitable for audio output.
 
 ![alt text](documentation/awsm-generator-settings-type.png "AWSM - Generator Settings Type")
@@ -148,20 +207,20 @@ The modal that opens up next to the button will look like this. The currently se
 ![alt text](documentation/awsm-generator-settings-type-modal.png "AWSM - Generator Settings Type Modal")
 
 
-### WaveSplineSettings Exponent
+### Exponent
 Only applicable for `WaveSplines` of type `Spline`. Sets the exponent used by all nodes of the `WaveSpline`. A value of 1 equals linear Interpolation, a value around 2 is similar to a sine wave. Values lower than 1 produce spikes, higher values tend towards a square wave.
 
 ![alt text](documentation/awsm-generator-settings-exponent.png "AWSM - Generator Settings Exponent")
 
-### WaveSplineSettings Phase
-Shift the phase of the `WaveSpline`. Might be useful to carefully align the waveforms of multiple voices.
+### Phase
+Shift the phase of the `WaveSpline`. Useful to carefully align the waveforms of multiple voices.
 
 ![alt text](documentation/awsm-generator-settings-phase.png "AWSM - Generator Settings Phase")
 
 ### WaveSplineView
-`WaveSplines` are unitless, so the view determines the way it is rendered as audio. 
+`WaveSplines` are unitless, so the view determines the way it is rendered as audio, pitch or gain signal. 
 
-The view when Time Grid value is zero which equals infinity.
+The view when Time Grid value is zero which equals infinity, which means no raster.
 
 ![alt text](documentation/awsm-wave-spline-view-compact.png "AWSM - WaveSpline View")
 
@@ -169,7 +228,7 @@ When using a non zero Time Grid value.
 
 ![alt text](documentation/awsm-wave-spline-view-extended.png "AWSM - WaveSpline Extended")
 
-### WaveSplineView Time Unit
+### Time Unit
 The Time Unit changes the input method of the Timing control. You can choose between `Frequency`, `Common`, `Note` and `Measure` depending on your preferences. Note that only `Frequency` is independent from the global `Tempo`, while all other options are bound to it and will be scaled when changing the value.
 
 ![alt text](documentation/awsm-wave-spline-view-time-unit.png "AWSM - WaveSpline Time Unit")
@@ -178,7 +237,7 @@ The modal that pops up lets you select the desired value. The current selection 
 
 ![alt text](documentation/awsm-wave-spline-view-time-unit-modal.png "AWSM - WaveSpline Time Unit")
 
-### WaveSpline View Frequency
+### Frequency
 Depending on the selected Time Unit the control changes to allow the manual input of a frequency respectively a note values. The keyboard section changes the frequency value of the `Wave` generator within the active `Voice`.
 
 This is the input if the selected Time Unit is `Frequency`. Select a frequency. This is the only value that is not bound to the global `Tempo`.
@@ -198,24 +257,27 @@ This is the input if the selected Time Unit is `Measures`. Duration in Bars. Bou
 
 ![alt text](documentation/awsm-wave-spline-view-measures.png "AWSM - WaveSpline Measures")
 
-### WaveSpline View Time Grid
+### Time Grid
 Quantize time. Define the subdivisions per `WaveSpline` cycle. A value of zero turns of temporal quantization. Primarily to create Pitch sequences. In theory also acts as sample rate converter for audible signals.
 
 ![alt text](documentation/awsm-wave-spline-view-time-grid.png "AWSM - WaveSpline Time Grid")
 
-### WaveSpline View Time Offset
+### Time Offset
 Only visible for non zero Time Grids. Use this to shift the quantized `WaveSpline` left and right. Useful to carefully align the pitch waveform of multiple voices.
 
 ![alt text](documentation/awsm-wave-spline-view-time-offset.png "AWSM - WaveSpline Time Offset")
 
-### WaveSpline View Value Grid
+### Value Grid
 Quantize value. A value of zero turns of value quantization. Useful if you want pitch steps for example. Acts like a bitrate reducer when applied to a `Wave` Generator. 
 
 ![alt text](documentation/awsm-wave-spline-view-value-grid.png "AWSM - WaveSpline Value Grid")
 
+
 ---
 
-## Voice section
+## Voice section  
+[Back to table of contents](#table-of-contents)
+
 The currently selected voice can be configured in this section. You can manage the generators and parametes of the envelope for example.
 
 ![alt text](documentation/awsm-voice-section.png "AWSM - WaveSpline Voice Section")
@@ -225,13 +287,13 @@ The currently selected voice can be configured in this section. You can manage t
 
 The Wave Generator is used to generate the audio output. Both Pitch and Gain Generators can be connected to modify its parameters.
 
-Beware. Be sure that the WaveSpline crosses zero and the frequencies are not to low in order to prevent damage to your speakers.
+Especially if you decide to disable `Protection` be sure that the `WaveSpline` crosses zero and the frequencies are not too low in order to prevent damaging your speakers.
 
 The Wave Generator is selected by default. This is what it looks like in its highlighted state.
 
 ![alt text](documentation/awsm-wave-generator.png "AWSM - Wave Generator")
 
-### Pitch
+### Pitch Generator
 `Click` to select the Pitch Generator. The Pitch generator is optional and not connected per default. The view changes as soon as the Generator is connected.
 
 Primary use is melodic sequencing. Might also be used for frequency modulation.
@@ -245,12 +307,12 @@ View when connected.
 ![alt text](documentation/awsm-pitch-generator-connected.png "AWSM - Wave Generator Connected")
 
 ### Pitch Connect
-Click to create and connect a new WaveSpline Generator that changes the pitch of the Wave Generator within the selected Voice.
+Click to create and connect a new WaveSpline Generator that changes the pitch of the Wave Generator of the selected Voice.
 
 ![alt text](documentation/awsm-generator-connect.png "AWSM - Pitch Generator Connect")
 
 ### Pitch Disconnect
-Click to disconnect and remove the Pitch Generator of the selected Voice.
+Only visible when connected. Click to disconnect and remove the Pitch Generator of the selected Voice.
 
 ![alt text](documentation/awsm-generator-disconnect.png "AWSM - Pitch Generator Connect")
 
@@ -259,7 +321,7 @@ A multiplier that determines how much octaves the Pitch Generator covers. Negati
 
 ![alt text](documentation/awsm-pitch-generator-octaves.png "AWSM - Pitch Generator Octaves")
 
-### Gain
+### Gain Generator
 Click to select the Gain Generator. The Gain generator is optional and not connected per default. The view changes as soon as the Generator is connected.
 
 Use this to add rhytm or for amplitude modulation purposes.
@@ -279,7 +341,7 @@ Click to create and connect a new WaveSpline Generator that affects the amplitud
 ![alt text](documentation/awsm-generator-connect.png "AWSM - Pitch Generator Connect")
 
 ### Gain Disconnect
-Click to disconnect and remove the Pitch Generator of the selected Voice.
+Only visible when connected. Click to disconnect and remove the Pitch Generator of the selected Voice.
 
 ![alt text](documentation/awsm-generator-disconnect.png "AWSM - Pitch Generator Connect")
 
@@ -290,22 +352,22 @@ Configure the envelope and the mix volume of the selected voice.
 
 ![alt text](documentation/awsm-voice-settings.png "AWSM - Voice Settings")
 
-### Voice Settings Attack
+### Attack
 Attack time. Time it takes to reach the volume when a voice is spawned or revived.
 
 ![alt text](documentation/awsm-voice-settings-attack.png "AWSM - Voice Settings Attack")
 
-### Voice Settings Sustain
+### Sustain
 Sustain Time. Per default the Sustain time is infinite. If you choose a value the voice is automatically killed after the given time. The sustain period starts after the Attack time, or whenever the sustain value is changed.
 
 ![alt text](documentation/awsm-voice-settings-sustain.png "AWSM - Voice Settings Sustain")
 
-### Voice Settings Release
+### Release
 The time a voice is faded out after being killed. Also applies when the Panic button is pressed.
 
 ![alt text](documentation/awsm-voice-settings-release.png "AWSM - Voice Settings Release")
 
-### Voice Settings Volume
+### Volume
 Additonally to the Gain generator and the envelope setting the Volume value is finally multiplied with the Wave Generator output. Use this to change overall Volume per Voice.
 
 ![alt text](documentation/awsm-voice-settings-volume.png "AWSM - Voice Settings Volume")
@@ -317,29 +379,32 @@ Click this button to spawn a new Voice by cloning the values of the currently se
 
 ---
 
-## Voices section
-A `Voice` has a life cycle, and within this section you can manage it. The currently selected `Voice` is highlighted. Using the Keyboard or the Spawn button you create a clone that immediately appears in this section. Each voice can be modified individually as long as it is played back.
+## Voices section 
+[Back to table of contents](#table-of-contents)
 
-Voices contain the Wave Generator and optional Pitch and Gain generators. Select a Voice by clicking on it.
+A `Voice` has a life cycle, and within this section you can manage it. The currently selected `Voice` is highlighted. Using the `Keyboard` or by clicking the `Spawn` button you create a clone that immediately appears in this section. Each `Voice` can be modified individually as long as it is played back.
 
-Since Voices are sustained by default you might end up with a bunch of voices while playing on the keyboard. Either choose a Sustain time, kill Voices manually or click the Panic button to get rid of them all.
+Voices contain the `Wave` generator and optional `Pitch` and `Gain` generators. Select a `Generator` by clicking on it.
 
-The Ether is something like a default voice and only acts as template to spawn new voices. The Grave holds the last voice that died while being selected. Everything you hear is listed right of the grave.
+Since Voices are sustained by default you might end up with a bunch of voices while playing on the keyboard. Either choose a `Sustain` time, `Kill` Voices manually or click the `Panic` button to get rid of them all.
+
+The `Ether` is the default `Voice` and acts as template to spawn new voices. The `Grave` holds the last `Voice` that died while being selected. Everything you hear is listed right of the grave in the audible voices section.
 
 
 ![alt text](documentation/awsm-voices-section.png "AWSM - Voices")
 
+
 ### Ether
-Click to select the Voice from the Ether. Basically a non audible Voice that acts as default. Select this, if you want to configure a voice before it is played. After configuring you can play the voice using the Keyboard or the Spawn button. 
+Click to select the `Voice` from the `Ether`. Basically a non audible `Voice` that acts as default template. Select this, if you want to configure a voice before it is played. After configuring you can play the voice using the Keyboard or the Spawn button. 
 
-The Ether Voice never changes unintentionally. 
+The `Ether` never changes unintentionally. 
 
-In this graphics is the selected state of the Ether Voice as you find it when starting the application.
+In this graphics is the selected state of the `Ether` as you find it when starting the application.
 
 ![alt text](documentation/awsm-ether.png "AWSM - Ether")
 
 ### Grave
-Similar to the Ether the Grave Voice is non audible. Everytime a selected Voice is killed and died, either manually or by reaching its Sustain time, it ends up in the Grave. Use it to respawn a Voice that died.
+Similar to the `Ether` the `Voice` in the `Grave` is non audible. Everytime a selected `Voice` is killed and died, either manually or by reaching its `Sustain` time, it ends up in the `Grave`. Use it to respawn a Voice that died.
 
 ![alt text](documentation/awsm-grave.png "AWSM - Grave")
 
@@ -348,20 +413,20 @@ All voices that are currently active and produce some audio signal are listed he
 
 
 ### Audible Voice
-Click to select a Voice. The view changes to display the selected voice. Basically the same as the Ether and Grave Voices, but currently active and producing audio output.
+Click to select the `Voice`. The view changes to display the selected `Voice`. Basically the same as the `Ether` and `Grave` Voices, but currently active and presumably producing some audio output.
 
 Every Voice has an Attack, Hold and Release state.
 
-Voice while living
+Audible `Voice` while living
 
 ![alt text](documentation/awsm-voice-active.png "AWSM - Voice Active")
 
-Voice when killed
+Audible `Voice` when killed
 
 ![alt text](documentation/awsm-voice-killed.png "AWSM - Voice Killed")
 
 ### Audible Voice Kill
-As soon as you click the kill button the Voice is released and the Voice view changes. After the Release time the Voice is removed from the Audible Voices section. If it was selected while being removed it will show up in the grave, otherwise it is gone.
+As soon as you click the kill button the `Voice` is released and the view changes. After the `Release` time the `Voice` is removed from the audible voices section. If it was selected while being removed it will show up in the `Grave`, otherwise it is gone.
 
 ![alt text](documentation/awsm-voice-kill.png "AWSM - Voice Kill")
 
@@ -374,6 +439,7 @@ During the Release Phase you have the opportunity to Revive a Voice. The Voice s
 ---
 
 ## Keyboard section
+[Back to table of contents](#table-of-contents)
 
 ![alt text](documentation/awsm-keyboard-section.png "AWSM - Voice Revive")
 
@@ -383,6 +449,7 @@ You might choose from two different Keyboard Modes. `Poly` will spawn a new Voic
 
 ![alt text](documentation/awsm-keyboard-mode.png "AWSM - Keyboard Mode")
 
+The following modal pops up when clicking the select button. In this case `Poly` is selected.
 
 ![alt text](documentation/awsm-keyboard-mode-modal.png "AWSM - Keyboard Mode")
 
@@ -425,14 +492,10 @@ Number of subdivisions per octave.
 
 ![alt text](documentation/awsm-keyboard-config-divisions.png "AWSM - Keyboard Config Divisions")
 
-# State of development
-This is a protoype, a technology demonstrator, nothing stable.
+# Developer guide
 
-Nevertheless I put quite a lot of effort into this. Everything is build from scratch. It took me over hundred hours to get this project to where it is today. Uncounted the hours I was lost in creating sounds and music with this tool. 
+[Back to top](#awsm)
 
-For now no further development is planned. Even if I'd love to try out some more ideas and integrate a bunch of further features, I do not have the time to do so. Maybe I'll mess around with this some time in the future. Don't expect anything to stay or change.
-
-# Developers
 The *AWSM* is raw web technology, a pure vanilla shake, no 3rd party libs used. No dependencies other than a modern browser environment. 
 
 In theory it does not require a build step utilizing a bundler or transpiler. I cried a while when realizing that Firefox currently does not support ES6 module imports within AudioWorklets. It's a shame and I hope this will change some day. For now I had no better idea to resolve and bundle all imports of this component using webpack, the rest of the app stays untouched and is just copied to the dist folder. For development I use Chrome and a dev server that serves directly from the src directory, no need to wait for a build to complete.
@@ -447,7 +510,27 @@ The user interface is built exclusively on Web Components technology. All elemen
 
 I like to utilize my free time projects to deepen my knowledge and try out new stuff. Both things that are often hard to justify when working at a regular basis and for a paying customer. Do not consider anything of the code as best practice, as long as you are not convinced it is.
 
-## WaveSpline Algorithm
+## State of development
+This is a protoype, a technology demonstrator, nothing stable.
+
+Nevertheless I put quite a lot of effort into this. Everything was built from scratch. It took me over hundred hours to get this project to where it is today. Uncounted the hours I was lost in creating sounds and music with this tool. 
+
+For now no further development is planned. Even if I'd love to try out some more ideas and integrate a bunch of further features, I do not have the time to do so. Maybe I'll mess around with this some time in the future. Don't expect anything to stay or change.
+
+I think some crucial features are missing. The list is long, but here are a few of the features I would love to add.
+
+- ~~Speaker Protection~~
+- Selection and transformation of multiple WaveSplineNodes at once
+- Local storage of multiple configurations using IndexedDB API
+- WaveSplineProcessor WASM implementation
+- Referencing option when connecting generators
+- WaveSpline referencing
+- Implement more interpolation algorithms
+- MIDI support
+- Stereo panning for Voices
+- Automate everything
+
+## Exponential WaveSpline Algorithm
 At its core it's just a simple algorithm. The general concept would also work with linear interpolation, but exponential interpolation sounds so much smoother. Modifying the exponent in realtime changes the curve steepness dynamically somehow similar to what a filter does.
 
 The exponential interpolation algorithm outputs y for x that always stays within the given min / max boundaries of a 2d point set. 
@@ -517,8 +600,8 @@ gain generator => wave generator gain param
 wave generator => ASR / volume
 ASR / volume => voice out
 voice out => mix
-mix => main out
-main out
+mix => protection
+protection => main out
 ```
 
 ## User Interface Component Hierarchy
@@ -576,6 +659,9 @@ WaveSplineView
 
 
 # License
+
+[Back to top](#awsm)
+
 Feel free to use this tool to make music or to test the limits of your speakers. I encourage this. When redistributing the Software, be sure to understand the underlying license. Since I'm donating a considerable amount of my time to the opensource community, it's important to me that everything that builds on this is also available to everyone.
 
 
