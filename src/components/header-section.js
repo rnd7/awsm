@@ -6,6 +6,7 @@ import Logo from "./logo.js"
 import { TEMPO } from "../elements/rotary-combo-driver/tempo.js"
 import { LINEAR } from "../elements/rotary-scale/linear.js"
 import Button from "../elements/button.js"
+import Toggle from "../elements/toggle.js"
 
 export default class HeaderSection extends WebComponent {
     static style = 'components/header-section.css'
@@ -42,6 +43,12 @@ export default class HeaderSection extends WebComponent {
         this._h1ContainerEl.append(this._masterVolumeControl)
 
 
+        this._clipToggle = Toggle.create()
+        this._clipToggle.classList.add("clip")
+        this._clipToggle.label = "Protection"
+        this._clipToggle.addEventListener(Toggle.TRIGGER_EVENT, this.bound(this._onClipToggleTrigger))
+        this._h1ContainerEl.append(this._clipToggle)
+
         this._panicButton = Button.create()
         this._panicButton.classList.add("panic")
         this._panicButton.label = "Panic"
@@ -73,29 +80,48 @@ export default class HeaderSection extends WebComponent {
     _addConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.add(this._configuration, Configuration.MASTER_TEMPO_CHANGE, this.bound(this._onTempoChange))
+        SignalProcessor.add(this._configuration, Configuration.SPEAKER_PROTECTION_CHANGE, this.bound(this._onSpeakerProtectionChange))
+        SignalProcessor.add(this._configuration, Configuration.OUTPUT_CLIPPED_CHANGE, this.bound(this._onOutputClippedChange))
         SignalProcessor.add(this._configuration, Configuration.MASTER_VOLUME_CHANGE, this.bound(this._onMasterVolumeChange))
     }
 
     _removeConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.remove(this._configuration, Configuration.MASTER_TEMPO_CHANGE, this.bound(this._onTempoChange))
+        SignalProcessor.remove(this._configuration, Configuration.SPEAKER_PROTECTION_CHANGE, this.bound(this._onSpeakerProtectionChange))
+        SignalProcessor.remove(this._configuration, Configuration.OUTPUT_CLIPPED_CHANGE, this.bound(this._onOutputClippedChange))
         SignalProcessor.remove(this._configuration, Configuration.MASTER_VOLUME_CHANGE, this.bound(this._onMasterVolumeChange))
     }
 
+    _onSpeakerProtectionChange(e,t) { 
+        this._clipToggle.active = this._configuration.speakerProtection 
+        if (!this._configuration.speakerProtection) this._clipToggle.blink = false
+        else if (this._configuration.outputClipped) this._clipToggle.blink = true
+    }
+
+    _onOutputClippedChange(e,t) { 
+        if (this._configuration.speakerProtection && this._configuration.outputClipped) this._clipToggle.blink = true
+        else this._clipToggle.blink = false
+    }
+
     _onTempoChange(e,t) { 
-        this._tempoControl.value = this._configuration.masterTempo // this._configuration.activeWaveSplineView.quantizeX
+        this._tempoControl.value = this._configuration.masterTempo
     }
 
     _onTempoControlChange(e) { 
-        this._configuration.masterTempo = this._tempoControl.value // this._quantizeYControl.value 
+        this._configuration.masterTempo = this._tempoControl.value
     }
 
     _onMasterVolumeChange(e,t) { 
-        this._masterVolumeControl.value = this._configuration.masterVolume // this._configuration.activeWaveSplineView.quantizeX
+        this._masterVolumeControl.value = this._configuration.masterVolume
     }
 
     _onMasterVolumeControlChange(e) { 
-        this._configuration.masterVolume = this._masterVolumeControl.value // this._quantizeYControl.value 
+        this._configuration.masterVolume = this._masterVolumeControl.value
+    }
+
+    _onClipToggleTrigger(e) {
+        this._configuration.speakerProtection = !this._configuration.speakerProtection
     }
 
     _onPanicButtonTrigger(e) {
@@ -106,6 +132,7 @@ export default class HeaderSection extends WebComponent {
         if (!this._configuration) return
         this._onMasterVolumeChange()
         this._onTempoChange()
+        this._onSpeakerProtectionChange()
     }
 
     destroy() {
