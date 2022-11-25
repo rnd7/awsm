@@ -12,7 +12,7 @@ export default class WaveSplineProcessorInterface extends Bindable {
         
         this._audioContext = audioContext
 
-        this._waveSplineProcessor = new AudioWorkletNode(this._audioContext, 'wave-spline-processor')
+        this._waveSplineProcessor = new AudioWorkletNode(this._audioContext, 'awsm-wave-spline-processor')
 
         this._frequencyParam = this._waveSplineProcessor.parameters.get('frequency')
         this._gainParam = this._waveSplineProcessor.parameters.get('gain')
