@@ -29,7 +29,7 @@ function bundleWorklet() {
 async function build() {
     console.log("Build AWSM")
     try {
-        console.info("Remoce dir")
+        console.info("Remove dir")
         await fs.remove('./dist')
         console.info("Copy files")
         await fs.copy('./src', './dist')
