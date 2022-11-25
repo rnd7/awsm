@@ -32,7 +32,7 @@ Curiosity and the joy in developing software that serves as a tool for creative 
 
 [Back to top](#awsm)
 
-The following is an overview of how to use the AwesomeWaveSplineMachine.
+The following is an overview of how to use the AwesomeWaveSplineMachine. For those who don't want to read this. Learning by doing should also work.
 
 ## Table of contents 
 
@@ -77,7 +77,7 @@ While I understand the principle of the octave as somehow universal, the common 
 
 [Back to table of contents](#table-of-contents)
 
-This is a screenshot of default state of the user interface. Basically what you see when you start the application. Naming is random and will vary. The application is quite consistent regarding its user interface, so what you see is almost everything you have to deal with. The user interface elements are grouped into different sections.
+This is a screenshot of default state of the user interface. Basically what you see when you start the application. Naming is random and will vary. The application is quite consistent regarding its user interface, so what you see is almost everything you have to deal with. The user interface elements are grouped into different sections. Except for the header and the keyboard these are labeled on the bottom right corner. You will find the corresponding section in the table of content.
 
 
 ![alt text](documentation/awsm-default-state.png "AWSM - Default state")
