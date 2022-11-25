@@ -10,7 +10,7 @@
         "WebAudioAPI"
     ],
     "type": "module",
-    "version": "0.1.57",
+    "version": "0.1.58",
     "scripts": {
         "build": "node scripts/build.js"
     },
