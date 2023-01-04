@@ -5,7 +5,6 @@ import Generator from "./generator.js"
 import Voice from "./voice.js"
 import WaveSplineNode from "./wave-spline-node.js"
 import WaveSplineView from "./wave-spline-view.js"
-import WaveSpline from "./wave-spline.js"
 import ModelBase from "./model-base.js"
 import noteFrequencyConversion from "../music/note-frequency-conversion.js"
 import { POLYPHON } from "./voice-mode.js"
@@ -44,7 +43,7 @@ export default class Configuration extends ModelBase {
         keyboardKeys = 16,
         keyboardDivisions = 12,
         keyboardFrequency = 440,
-        keyboardTranspose = -2,
+        keyboardTranspose = -2 * 12,
         masterTempo = 120,
         masterVolume = .75,
         keyboardMode = POLYPHON,
@@ -57,7 +56,7 @@ export default class Configuration extends ModelBase {
         this.activeGenerator = activeGenerator
         this.activeGeneratorCategory = activeGeneratorCategory
         this.activeVoice = activeVoice
-        this.keyboardKeys = keyboardKeys 
+        this.keyboardKeys = keyboardKeys
         this.keyboardDivisions = keyboardDivisions
         this.keyboardFrequency = keyboardFrequency
         this.keyboardTranspose = keyboardTranspose
@@ -67,7 +66,7 @@ export default class Configuration extends ModelBase {
         this.speakerProtection = speakerProtection
         this.outputClipped = false
     }
-    
+
     set masterVolume(value) {
         if (this._masterVolume == value) return
         this._masterVolume = value
@@ -76,7 +75,7 @@ export default class Configuration extends ModelBase {
 
     get masterVolume() {
         return this._masterVolume
-    }   
+    }
 
 
     set masterTempo(value) {
@@ -84,12 +83,12 @@ export default class Configuration extends ModelBase {
         const previousTempo = this._masterTempo
         this._masterTempo = value
         if (this._voices) {
-            this._voices.generators.forEach((generator)=>{
-               this._updateGeneratorTempo(previousTempo, generator)
+            this._voices.generators.forEach((generator) => {
+                this._updateGeneratorTempo(previousTempo, generator)
             })
         }
         if (this._defaultVoice) {
-            this._defaultVoice.generators.forEach((generator)=>{
+            this._defaultVoice.generators.forEach((generator) => {
                 this._updateGeneratorTempo(previousTempo, generator)
             })
         }
@@ -98,12 +97,12 @@ export default class Configuration extends ModelBase {
 
     get masterTempo() {
         return this._masterTempo
-    }   
+    }
 
     _updateGeneratorTempo(previousTempo, generator) {
         if (
             generator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_NOTE
-            || generator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON
+            || generator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON
         ) {
             const generatorNote = noteFrequencyConversion(generator.waveSplineView.frequency, previousTempo)
             generator.waveSplineView.frequency = noteFrequencyConversion(generatorNote, this._masterTempo)
@@ -112,7 +111,7 @@ export default class Configuration extends ModelBase {
             generator.waveSplineView.frequency = noteFrequencyConversion(generatorMeasures, this._masterTempo)
         }
     }
-    
+
     set keyboardKeys(value) {
         if (this._keyboardKeys == value) return
         this._keyboardKeys = value
@@ -122,19 +121,18 @@ export default class Configuration extends ModelBase {
 
     get keyboardKeys() {
         return this._keyboardKeys
-    }   
-    
+    }
+
     set keyboardDivisions(value) {
         if (this._keyboardDivisions == value) return
         this._keyboardDivisions = value
         SignalProcessor.send(this, Configuration.KEYBOARD_DIVISIONS_CHANGE)
         SignalProcessor.send(this, Configuration.KEYBOARD_CHANGE)
-
     }
 
     get keyboardDivisions() {
         return this._keyboardDivisions
-    }   
+    }
 
     set keyboardFrequency(value) {
         if (this._keyboardFrequency == value) return
@@ -145,9 +143,9 @@ export default class Configuration extends ModelBase {
 
     get keyboardFrequency() {
         return this._keyboardFrequency
-    }   
+    }
 
-    
+
     set keyboardTranspose(value) {
         if (this._keyboardTranspose == value) return
         this._keyboardTranspose = value
@@ -157,7 +155,7 @@ export default class Configuration extends ModelBase {
 
     get keyboardTranspose() {
         return this._keyboardTranspose
-    }   
+    }
 
 
     set keyboardMode(value) {
@@ -168,9 +166,9 @@ export default class Configuration extends ModelBase {
 
     get keyboardMode() {
         return this._keyboardMode
-    }   
+    }
 
-    
+
     set activeWaveSplineNode(value) {
         if (this._activeWaveSplineNode === value) return
         this._activeWaveSplineNode = instantiate(value, WaveSplineNode, false)
@@ -196,7 +194,7 @@ export default class Configuration extends ModelBase {
     _addVoicesListeners() {
         if (!this._voices) return
         SignalProcessor.add(this._voices, SignalProcessor.WILDCARD, this.bound(this._onVoicesChange))
-   
+
     }
 
     _removeVoicesListeners() {
@@ -207,7 +205,7 @@ export default class Configuration extends ModelBase {
     _onVoicesChange(e, t) {
         if (
             this._activeVoice
-            && !this.voices.hasVoice(this._activeVoice) 
+            && !this.voices.hasVoice(this._activeVoice)
             && this._defaultVoice !== this._activeVoice
         ) {
             this.graveyardVoice = this._activeVoice
@@ -225,7 +223,7 @@ export default class Configuration extends ModelBase {
     get activeGeneratorCategory() {
         return this._activeGeneratorCategory
     }
-    
+
     set activeVoice(value) {
         if (this._activeVoice === value) return
         this._removeActiveVoiceListeners()
@@ -241,13 +239,13 @@ export default class Configuration extends ModelBase {
     _addActiveVoiceListeners() {
         if (!this._activeVoice) return
         SignalProcessor.add(this._activeVoice, SignalProcessor.WILDCARD, this.bound(this._onActiveVoiceGeneratorChange))
-        
+
     }
 
     _removeActiveVoiceListeners() {
         if (!this._activeVoice) return
         SignalProcessor.remove(this._activeVoice, SignalProcessor.WILDCARD, this.bound(this._onActiveVoiceGeneratorChange))
-        
+
     }
 
     _onActiveVoiceGeneratorChange(e, t) {
@@ -313,7 +311,7 @@ export default class Configuration extends ModelBase {
 
     get speakerProtection() {
         return this._speakerProtection
-    }   
+    }
 
     set outputClipped(value) {
         if (this._outputClipped === value) return
@@ -323,10 +321,9 @@ export default class Configuration extends ModelBase {
 
     get outputClipped() {
         return this._outputClipped
-    }   
+    }
 
     panic() {
-        // this.masterVolume = 0
         this._voices.releaseAll()
     }
 
@@ -337,6 +334,6 @@ export default class Configuration extends ModelBase {
         if (this._activeGenerator) obj.activeGenerator = this._activeGenerator.toObject()
         if (this._activeWaveSplineNode) obj.activeWaveSplineNode = this._activeWaveSplineNode.toObject()
         return obj
-      
+
     }
 }

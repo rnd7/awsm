@@ -1,4 +1,3 @@
-import Bindable from "../data/bindable.js"
 import SignalProcessor from "../events/signal-processor.js"
 import instantiate from "./instantiate.js"
 import ModelBase from "./model-base.js"
@@ -9,7 +8,7 @@ export default class Generator extends ModelBase {
 
     static WAVESPLINE_CHANGE = Symbol("WAVESPLINE_CHANGE")
     static WAVESPLINEVIEW_CHANGE = Symbol("WAVESPLINEVIEW_CHANGE")
-    
+
     constructor({
         waveSpline = null,
         waveSplineView = null
@@ -31,15 +30,17 @@ export default class Generator extends ModelBase {
     get waveSpline() {
         return this._waveSpline
     }
-    
+
     _addWaveSplineListeners() {
         if (!this._waveSpline) return
         SignalProcessor.add(this._waveSpline, SignalProcessor.WILDCARD, this.bound(this._onWaveSplineChange))
     }
+
     _removeWaveSplineListeners() {
         if (!this._waveSpline) return
         SignalProcessor.remove(this._waveSpline, SignalProcessor.WILDCARD, this.bound(this._onWaveSplineChange))
     }
+
     _onWaveSplineChange(e, t) {
         SignalProcessor.send(this, e)
     }
@@ -60,21 +61,24 @@ export default class Generator extends ModelBase {
         if (!this._waveSplineView) return
         SignalProcessor.add(this._waveSplineView, SignalProcessor.WILDCARD, this.bound(this._onWaveSplineViewChange))
     }
+
     _removeWaveSplineViewListeners() {
         if (!this._waveSplineView) return
         SignalProcessor.remove(this._waveSplineView, SignalProcessor.WILDCARD, this.bound(this._onWaveSplineViewChange))
     }
+
     _onWaveSplineViewChange(e, t) {
         SignalProcessor.send(this, e)
     }
-    
-    
+
+
     toObject() {
         const obj = {}
         if (this._waveSpline) obj.waveSpline = this._waveSpline.toObject()
         if (this._waveSplineView) obj.waveSplineView = this._waveSplineView.toObject()
         return obj
     }
+
     destroy() {
         super.destroy()
     }

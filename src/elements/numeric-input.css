@@ -1,11 +1,13 @@
 :host {
     overflow: hidden;
 }
+
 .container {
     display: flex;
     flex: 1;
     overflow: hidden;
 }
+
 input {
     box-sizing: border-box;
     display: flex;
@@ -17,9 +19,10 @@ input {
     background: #202020;
     color: #E0E0E0;
 
-    
+
 }
-input:focus{
+
+input:focus {
     outline: none;
-    background: #181818; /**/
+    background: #181818;
 }

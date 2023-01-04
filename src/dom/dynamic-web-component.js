@@ -7,7 +7,7 @@ export default class DynamicWebComponent extends WebComponent {
         this._dedicatedWidth = 0
         this._dedicatedHeight = 0
         this._resizeObserver = new ResizeObserver((entries) => {
-            if (entries.length) {
+            if (entries.length) {
                 this._dedicatedWidth = entries[0].contentRect.width
                 this._dedicatedHeight = entries[0].contentRect.height
                 this.resize()
@@ -23,7 +23,7 @@ export default class DynamicWebComponent extends WebComponent {
     get dedicatedHeight() {
         return this._dedicatedHeight
     }
-    
+
     resize() {
         // implement in subclass
     }

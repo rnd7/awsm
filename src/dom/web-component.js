@@ -8,7 +8,7 @@ export default class WebComponent extends HTMLElement {
     constructor() {
         super()
         this._binding = new Binding(this)
-        this.attachShadow({mode: 'open'})
+        this.attachShadow({ mode: 'open' })
     }
 
     bound(fn) {
@@ -16,7 +16,7 @@ export default class WebComponent extends HTMLElement {
     }
 
     from(opts) {
-        Object.keys(opts).forEach((key)=>{
+        Object.keys(opts).forEach((key) => {
             this[key] = opts[key]
         })
     }
@@ -39,22 +39,20 @@ export default class WebComponent extends HTMLElement {
     fetchStyle(url) {
         this.removeStyle()
         return new Promise((resolve, reject) => {
-          this._styleEl = document.createElement('link');
-          this._styleEl.type = 'text/css';
-          this._styleEl.rel = 'stylesheet';
-          this._styleEl.onload = () => resolve();
-          this._styleEl.onerror = () => reject();
-          this._styleEl.href = url;
-          this.shadowRoot.append(this._styleEl)
-          //let headScript = document.querySelector('script');
-          //headScript.parentNode.insertBefore(link, headScript);
+            this._styleEl = document.createElement('link');
+            this._styleEl.type = 'text/css'
+            this._styleEl.rel = 'stylesheet'
+            this._styleEl.onload = () => resolve()
+            this._styleEl.onerror = () => reject()
+            this._styleEl.href = url
+            this.shadowRoot.append(this._styleEl)
         })
     }
 
     render() {
         if (this._renderFlag) return
         this._renderFlag = true
-        this._animationFrameHandle = requestAnimationFrame(()=>{
+        this._animationFrameHandle = requestAnimationFrame(() => {
             this.renderCallback()
             this._renderFlag = false
         })
@@ -103,7 +101,7 @@ export default class WebComponent extends HTMLElement {
             if (createCallback) createCallback(comp)
             containerElement.append(comp)
         }
-        list.forEach((item, index)=>{
+        list.forEach((item, index) => {
             containerElement.children[index].from(item)
         })
     }

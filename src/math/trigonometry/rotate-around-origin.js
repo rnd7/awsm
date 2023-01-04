@@ -8,5 +8,5 @@ export default function rotateAroundOrigin(origin, point, rad) {
         y: (cos * dy) - (sin * dx) + origin.y
     }
 }
-  
+
 

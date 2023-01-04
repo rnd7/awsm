@@ -9,7 +9,7 @@ import WaveSplineNode from "../model/wave-spline-node.js"
 export default class WaveSplineProcessorInterface extends Bindable {
     constructor(audioContext, generator) {
         super()
-        
+
         this._audioContext = audioContext
 
         this._waveSplineProcessor = new AudioWorkletNode(this._audioContext, 'awsm-wave-spline-processor')
@@ -22,9 +22,9 @@ export default class WaveSplineProcessorInterface extends Bindable {
         this._quantizeTimeParam = this._waveSplineProcessor.parameters.get('quantizeTime')
         this._quantizeTimeThresholdParam = this._waveSplineProcessor.parameters.get('quantizeTimeThreshold')
         this._quantizeValueParam = this._waveSplineProcessor.parameters.get('quantizeValue')
-        
+
         this.generator = generator
-        
+
     }
 
     set generator(value) {
@@ -97,11 +97,11 @@ export default class WaveSplineProcessorInterface extends Bindable {
     _onQuantizeYChange() {
         this._updateQuantizeY()
     }
-    
+
     _onFrequencyChange() {
         this._updateFrequency()
     }
-    
+
     _onWaveSplineNodesChange() {
         this._updateWaveSplineDataset()
     }
@@ -144,14 +144,14 @@ export default class WaveSplineProcessorInterface extends Bindable {
     _updateQuantizeY() {
         this._quantizeValueParam.setValueAtTime(this._generator.waveSplineView.quantizeY, this._audioContext.currentTime)
     }
-        
+
     _updateWaveSplineView() {
         this._updateFrequency()
         this._updateQuantizeX()
         this._updateQuantizeXThreshold()
         this._updateQuantizeY()
     }
-     
+
     get gainInput() {
         return this._gainParam
     }
@@ -165,17 +165,16 @@ export default class WaveSplineProcessorInterface extends Bindable {
     }
 
     connect() {
-        // ie. audioContext.destination
         return this._waveSplineProcessor.connect(...arguments)
     }
     disconnect() {
         return this._waveSplineProcessor.disconnect(...arguments)
-        
+
     }
 
-    destroy() { 
+    destroy() {
         this._removeGeneratorListeners()
-        
+
         this._frequencyParam.cancelScheduledValues(this._audioContext.currentTime)
         this._gainParam.cancelScheduledValues(this._audioContext.currentTime)
         this._pitchParam.cancelScheduledValues(this._audioContext.currentTime)
@@ -189,7 +188,7 @@ export default class WaveSplineProcessorInterface extends Bindable {
         this._waveSplineProcessor.port.close()
         this._waveSplineProcessor.disconnect()
         this._waveSplineProcessor = null
-        
+
         this._audioContext = null
         this._generator = null
         this._frequencyParam = null

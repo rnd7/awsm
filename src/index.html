@@ -1,52 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>AWSM</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="AWSM - Awesome WaveSpline Machine. Software synthesizer and personal WaveSpline synthesis playground.">
-        <style>
-            html {
-                padding: 0;
-                height: 100%;
-                display: flex;
-            }
-            body {
-                margin: 0;
-                height: 100%;
-                width: 100%;
-                max-width: 100%;
-                min-width: 100%;
-                overflow: hidden;
-                background-color: #101010;
 
-                background-image: url('assets/background.svg');
-            }
-            * {
-                -webkit-touch-callout:none;
-                -webkit-user-select:none;
-                -moz-user-select:none;
-                -ms-user-select:none;
-                user-select:none;
-            }
-            input, textarea /*.contenteditable?*/ {
-                -webkit-touch-callout:default;
-                -webkit-user-select:text;
-                -moz-user-select:text;
-                -ms-user-select:text;
-                user-select:text;
-            }
+<head>
+    <title>AWSM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="AWSM - Awesome WaveSpline Machine. Software synthesizer and personal WaveSpline synthesis playground.">
+    <style>
+        html {
+            padding: 0;
+            height: 100%;
+            display: flex;
+        }
 
-            awsm-awsm {
-                height: 100%;
-                display: flex;
-            }
-           
-        </style>
-    </head>
-    <body>
-        <script type="module">
-            import AWSM from './components/awsm.js'
-            document.body.append(AWSM.create())
-        </script>
-    </body>
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            overflow: hidden;
+            background-color: #101010;
+            background-image: url('assets/background.svg');
+        }
+
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input,
+        textarea {
+            -webkit-touch-callout: default;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        awsm-awsm {
+            height: 100%;
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module">
+        import AWSM from './components/awsm.js'
+        document.body.append(AWSM.create())
+    </script>
+</body>
+
 </html>

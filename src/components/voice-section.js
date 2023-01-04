@@ -4,6 +4,7 @@ import Configuration from "../model/configuration.js"
 import VoiceSettings from "./voice-settings.js"
 import { VoiceListItem } from "./voice-list-item.js"
 import Voices from "../model/voices.js"
+import SectionLabel from "../elements/section-label.js"
 
 export default class VoiceSection extends WebComponent {
     static style = 'components/voice-section.css'
@@ -14,6 +15,7 @@ export default class VoiceSection extends WebComponent {
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
+
         this._voiceSettingsContainer = document.createElement('div')
         this._voiceSettingsContainer.classList.add("voice-row", "voice-settings-row")
         this._containerEl.append(this._voiceSettingsContainer)
@@ -21,9 +23,24 @@ export default class VoiceSection extends WebComponent {
         this._voiceSettings = VoiceSettings.create()
         this._voiceSettingsContainer.append(this._voiceSettings)
 
+        this._voicesContainer = document.createElement('div')
+        this._voicesContainer.classList.add("voices-container")
+        this._containerEl.append(this._voicesContainer)
+
+        this._voicesLabel = SectionLabel.create()
+        this._voicesLabel.text = "Voices"
+        this._voicesContainer.append(this._voicesLabel)
+
+        this._voiceSection = document.createElement('div')
+        this._voiceSection.classList.add("voices")
+        this._voicesContainer.append(this._voiceSection)
+
         this._voiceRowEl = document.createElement('div')
         this._voiceRowEl.classList.add("voice-row", "voice-selection-row")
-        this._containerEl.append(this._voiceRowEl)
+        this._voicesContainer.append(this._voiceRowEl)
+
+
+
 
         this._voicesContainerEl = document.createElement('div')
         this._voicesContainerEl.classList.add('voices')
@@ -36,7 +53,7 @@ export default class VoiceSection extends WebComponent {
 
     async _init() {
         await this.fetchStyle(VoiceSection.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -73,15 +90,15 @@ export default class VoiceSection extends WebComponent {
         SignalProcessor.remove(this._configuration, Voices.CHANGE, this.bound(this._onVoicesChange))
     }
 
-    _onDefaultVoiceChange(e,t) {
+    _onDefaultVoiceChange(e, t) {
         this._updateDefaultVoice()
     }
 
-    _onActiveVoiceChange(e,t) {
+    _onActiveVoiceChange(e, t) {
         this.render()
     }
 
-    _onGraveyardVoiceChange(e,t) {
+    _onGraveyardVoiceChange(e, t) {
         this.render()
     }
 
@@ -94,7 +111,7 @@ export default class VoiceSection extends WebComponent {
     }
 
     renderCallback() {
-        let list = this._configuration.voices.voices.map((voice)=>{
+        let list = this._configuration.voices.voices.map((voice) => {
             return {
                 voice,
                 active: this._configuration.activeVoice === voice,
@@ -115,7 +132,7 @@ export default class VoiceSection extends WebComponent {
             removable: false,
             category: "Ether"
         })
-        
+
         this.manageContainer(this._voicesContainerEl, list, VoiceListItem)
     }
 

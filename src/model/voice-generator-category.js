@@ -1,3 +1,3 @@
 export const PITCH = "pitch"
 export const GAIN = "gain"
-export const WAVE= "wave"
+export const WAVE = "wave"

@@ -1,120 +1,69 @@
-import RotaryCombo from "../elements/rotary-combo.js"
-import SignalProcessor from "../events/signal-processor.js"
-import Configuration from "../model/configuration.js"
-import Logo from "./logo.js"
-import { TEMPO } from "../elements/rotary-combo-driver/tempo.js"
-import { LINEAR } from "../elements/rotary-scale/linear.js"
-import Button from "../elements/button.js"
-import Toggle from "../elements/toggle.js"
-import DynamicWebComponent from "../dom/dynamic-web-component.js"
-import GlobalSettingsModal from "./global-settings-modal.js"
+import WebComponent from "../dom/web-component.js";
+import Button from "../elements/button.js";
+import RotaryCombo from "../elements/rotary-combo.js";
+import { TEMPO } from "../elements/rotary-combo-driver/tempo.js";
+import { LINEAR } from "../elements/rotary-scale/linear.js";
+import Toggle from "../elements/toggle.js";
+import Configuration from "../model/configuration.js";
+import SignalProcessor from "../events/signal-processor.js";
 
-export default class HeaderSection extends DynamicWebComponent {
-    static style = 'components/header-section.css'
+export default class GlobalSettingsModal extends WebComponent {
+
+    static style = 'components/global-settings-modal.css'
+
     constructor() {
         super()
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
-        this._logo = Logo.create()
-        this._containerEl.append(this._logo)
-
-        this._h1ContainerEl = document.createElement('div')
-        this._h1ContainerEl.classList.add('h-container')
-        this._containerEl.append(this._h1ContainerEl)
-
-
         this._tempoControl = RotaryCombo.create()
         this._tempoControl.driver = TEMPO
         this._tempoControl.scale = LINEAR
         this._tempoControl.label = "Tempo"
+        this._tempoControl.labelColor = '#202020'
         this._tempoControl.step = 1
         this._tempoControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTempoControlChange))
-        this._h1ContainerEl.append(this._tempoControl)
+        this._containerEl.append(this._tempoControl)
 
-
-        this._spacerEl = document.createElement('div')
-        this._spacerEl.classList.add('spacer')
-        this._h1ContainerEl.append(this._spacerEl)
 
         this._masterVolumeControl = RotaryCombo.create()
         this._masterVolumeControl.classList.add("right-align")
         this._masterVolumeControl.label = "Main Out"
+        this._masterVolumeControl.labelColor = '#202020'
         this._masterVolumeControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onMasterVolumeControlChange))
-        this._h1ContainerEl.append(this._masterVolumeControl)
+        this._containerEl.append(this._masterVolumeControl)
 
 
         this._clipToggle = Toggle.create()
         this._clipToggle.classList.add("clip")
         this._clipToggle.label = "Protection"
         this._clipToggle.addEventListener(Toggle.TRIGGER_EVENT, this.bound(this._onClipToggleTrigger))
-        this._h1ContainerEl.append(this._clipToggle)
+        this._containerEl.append(this._clipToggle)
 
         this._panicButton = Button.create()
         this._panicButton.classList.add("panic")
         this._panicButton.label = "Panic"
         this._panicButton.addEventListener(Button.TRIGGER_EVENT, this.bound(this._onPanicButtonTrigger))
-        this._h1ContainerEl.append(this._panicButton)
-
-
-        this._buttonEl = document.createElement('button')
-        this._buttonEl.textContent = "Settings"
-        this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
-
-        this._indicatorEl = document.createElement('div')
-        this._indicatorEl.classList.add("indicator")
-        this._modalContent = GlobalSettingsModal.create()
-
-        this._configuration = null
+        this._containerEl.append(this._panicButton)
         this._init()
-
     }
 
     async _init() {
-        await this.fetchStyle(HeaderSection.style)
+        await this.fetchStyle(GlobalSettingsModal.style)
         requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
+        this.render()
     }
 
     set configuration(value) {
         if (this._configuration === value) return
         this._removeConfigurationListeners()
         this._configuration = value
-        this._modalContent.configuration = this._configuration
         this._addConfigurationListeners()
         this._updateAll()
     }
 
     get configuration() {
         return this._configuration
-    }
-
-    _onPointerUp(e) {
-        if (e.target === this._buttonEl) {
-            requestAnimationFrame(() => {
-                this._buttonEl.append(this._modalContent)
-                const referenceRect = this._modalContent.getBoundingClientRect()
-                this._modalContent.style.zIndex = 1000
-                this._modalContent.style.top = `${70}px`
-                this._modalContent.style.left = `${-5}px`
-
-                this._indicatorEl.style.bottom = `${-5}px`
-                this._indicatorEl.style.left = `${-5}px`
-                this._indicatorEl.style.width = `${60}px`
-                this._indicatorEl.style.height = `${60}px`
-                this._buttonEl.append(this._indicatorEl)
-            })
-
-            this._ignore = e
-            document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
-        }
-    }
-
-    _onGlobalPointerUp(e) {
-        if (e !== this._ignore && !e.path.includes(this._modalContent)) {
-            this._modalContent.remove()
-            this._indicatorEl.remove()
-            document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
-        }
     }
 
     _addConfigurationListeners() {
@@ -175,44 +124,13 @@ export default class HeaderSection extends DynamicWebComponent {
         this._onSpeakerProtectionChange()
     }
 
-    resize() {
-        this.render()
-    }
-
-    renderCallback() {
-        if (this.dedicatedWidth < 470) {
-            if (this._h1ContainerEl.parentNode) {
-                this._h1ContainerEl.remove()
-            }
-            if (!this._buttonEl.parentNode) {
-                this._containerEl.append(this._buttonEl)
-            }
-        } else {
-            if (this._buttonEl.parentNode) {
-                this._buttonEl.remove()
-            }
-            if (!this._h1ContainerEl.parentNode) {
-                this._containerEl.append(this._h1ContainerEl)
-            }
-        }
-    }
-
     destroy() {
         this._removeConfigurationListeners()
-
-        this._logo.destroy()
-
-        this._tempoControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTempoControlChange))
-        this._tempoControl.destroy()
-        this._tempoControl = null
-
-        this._masterVolumeControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onMasterVolumeControlChange))
-        this._masterVolumeControl.destroy()
-        this._masterVolumeControl = null
 
         this._containerEl.remove()
         this._configuration = null
         super.destroy()
-
     }
+
+
 }

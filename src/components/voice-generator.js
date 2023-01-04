@@ -2,7 +2,6 @@ import Button from "../elements/button.js"
 import Label from "../elements/label.js"
 import WebComponent from "../dom/web-component.js"
 import SignalProcessor from "../events/signal-processor.js"
-import Generator from "../model/generator.js"
 import WaveSplineView from "../model/wave-spline-view.js"
 import { getNote } from "../music/notes.js"
 import noteFrequencyConversion from "../music/note-frequency-conversion.js"
@@ -68,6 +67,11 @@ export default class VoiceGenerator extends WebComponent {
         this._init()
     }
 
+    async _init() {
+        await this.fetchStyle(VoiceGenerator.style)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
+    }
+
     set content(value) {
         if (this._content === value) return
         if (this._content) this._content.remove()
@@ -81,11 +85,6 @@ export default class VoiceGenerator extends WebComponent {
 
     get content() {
         return this._content
-    }
-
-    async _init() {
-        await this.fetchStyle(VoiceGenerator.style)
-        this.shadowRoot.append(this._containerEl)
     }
 
     set removable(value) {
@@ -105,7 +104,7 @@ export default class VoiceGenerator extends WebComponent {
     get label() {
         return this._label
     }
- 
+
     set active(value) {
         if (this._active === value) return
         this._active = value
@@ -114,7 +113,7 @@ export default class VoiceGenerator extends WebComponent {
     get active() {
         return this._active
     }
- 
+
     set masterTempo(value) {
         if (this._masterTempo === value) return
         this._masterTempo = value
@@ -133,7 +132,7 @@ export default class VoiceGenerator extends WebComponent {
     }
     get generator() {
         return this._generator
-    } 
+    }
 
     _addGeneratorListeners() {
         if (!this._generator) return
@@ -147,14 +146,14 @@ export default class VoiceGenerator extends WebComponent {
 
     _onPointerDown(e) {
         this.dispatchEvent(new CustomEvent(
-            VoiceGenerator.SELECT_EVENT, 
+            VoiceGenerator.SELECT_EVENT,
             {
                 detail: {
                     generator: this._generator
                 },
                 bubbles: true,
                 cancelable: false,
-                composed: true, 
+                composed: true,
             }
         ))
     }
@@ -165,7 +164,7 @@ export default class VoiceGenerator extends WebComponent {
             {
                 bubbles: true,
                 cancelable: false,
-                composed: true, 
+                composed: true,
             }
         ))
     }
@@ -175,7 +174,7 @@ export default class VoiceGenerator extends WebComponent {
             {
                 bubbles: true,
                 cancelable: false,
-                composed: true, 
+                composed: true,
             }
         ))
     }
@@ -183,8 +182,8 @@ export default class VoiceGenerator extends WebComponent {
     _onFrequencyChange(e, t) {
         this.render()
     }
-   
-    _updateAll(){
+
+    _updateAll() {
         this._onFrequencyChange()
     }
     renderCallback() {
@@ -192,7 +191,7 @@ export default class VoiceGenerator extends WebComponent {
             this._frequencyEl.text = `${this._generator.waveSplineView.frequency.toFixed(2)} Hz`
             let note = getNote(this._generator.waveSplineView.frequency)
             if (note.note) {
-                this._noteEl.text = `${note.note}${note.octave||''}`
+                this._noteEl.text = `${note.note}${note.octave || ''}`
             } else {
                 this._noteEl.text = ""
             }
@@ -201,20 +200,20 @@ export default class VoiceGenerator extends WebComponent {
             let inverse = fromFraction(fraction)
             if (inverse === noteValue) {
                 this._noteValueEl.text = fraction
-            } else if (inverse > 0 && Math.round(inverse*64) === Math.round(noteValue*64)){
+            } else if (inverse > 0 && Math.round(inverse * 64) === Math.round(noteValue * 64)) {
                 this._noteValueEl.text = `≈ ${fraction}`
             } else {
                 this._noteValueEl.text = ''
             }
-            const duration = 1/this._generator.waveSplineView.frequency 
+            const duration = 1 / this._generator.waveSplineView.frequency
             if (duration >= 1) {
                 this._durationEl.text = `${duration.toFixed(2)} s`
-            } else if (duration >= 1/1e3) {
+            } else if (duration >= 1 / 1e3) {
                 this._durationEl.text = `${(duration * 1e3).toFixed(2)} ms`
-            } else if (duration >= 1/1e6) {
+            } else if (duration >= 1 / 1e6) {
                 this._durationEl.text = `${(duration * 1e6).toFixed(2)} µs`
             }
-            
+
         } else {
             this._frequencyEl.text = ""
             this._noteEl.text = ""
@@ -222,7 +221,7 @@ export default class VoiceGenerator extends WebComponent {
             this._durationEl.text = ""
         }
 
-        
+
 
         if (this._removable && !this._buttonContainer.parentElement) {
             this._containerEl.append(this._buttonContainer)
@@ -237,7 +236,7 @@ export default class VoiceGenerator extends WebComponent {
             this._createButton.classList.remove("hidden")
             this._removeButton.classList.add("hidden")
         }
-       
+
         this._labelEl.text = `${this._label}`
         if (this._active) this._containerEl.classList.add("active")
         else this._containerEl.classList.remove("active")

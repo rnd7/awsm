@@ -1,10 +1,5 @@
- 
-import Bindable from "../data/bindable.js"
 import SignalProcessor from "../events/signal-processor.js"
 import ModelBase from "./model-base.js"
-import WaveSpline from "./wave-spline.js"
-
-
 
 export default class WaveSplineView extends ModelBase {
     static FREQUENCY_CHANGE = Symbol("FREQUENCY_CHANGE")
@@ -36,12 +31,13 @@ export default class WaveSplineView extends ModelBase {
         this.quantizeYThreshold = quantizeYThreshold
         this.timeUnit = timeUnit
     }
-    
+
     set timeUnit(value) {
-        if (this._timeUnit === value) return 
+        if (this._timeUnit === value) return
         this._timeUnit = value
         SignalProcessor.send(this, WaveSplineView.TIME_UNIT_CHANGE)
     }
+
     get timeUnit() {
         return this._timeUnit
     }
@@ -52,13 +48,14 @@ export default class WaveSplineView extends ModelBase {
         this._frequency = value
         SignalProcessor.send(this, WaveSplineView.FREQUENCY_CHANGE)
     }
+
     get frequency() {
         return this._frequency
     }
 
     set quantizeX(value) {
         if (this._quantizeX === value) return
-        this._quantizeX = value 
+        this._quantizeX = value
         SignalProcessor.send(this, WaveSplineView.QUANTIZE_X_CHANGE)
     }
     get quantizeX() {
@@ -70,15 +67,17 @@ export default class WaveSplineView extends ModelBase {
         this._quantizeY = value
         SignalProcessor.send(this, WaveSplineView.QUANTIZE_Y_CHANGE)
     }
+
     get quantizeY() {
         return this._quantizeY
     }
-    
+
     set quantizeXThreshold(value) {
         if (this._quantizeXThreshold === value) return
-        this._quantizeXThreshold = value 
+        this._quantizeXThreshold = value
         SignalProcessor.send(this, WaveSplineView.QUANTIZE_X_THRESHOLD_CHANGE)
     }
+
     get quantizeXThreshold() {
         return this._quantizeXThreshold
     }
@@ -88,10 +87,11 @@ export default class WaveSplineView extends ModelBase {
         this._quantizeYThreshold = value
         SignalProcessor.send(this, WaveSplineView.QUANTIZE_Y_THRESHOLD_CHANGE)
     }
+
     get quantizeYThreshold() {
         return this._quantizeYThreshold
     }
-    
+
 
     toObject() {
         return {

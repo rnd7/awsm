@@ -25,24 +25,28 @@ export default class VoicePitchGenerator extends VoiceGenerator {
         this._updatePitchScale()
         this.render()
     }
+
     get voice() {
         return this._voice
-    } 
+    }
+
     _addVoiceListeners() {
         if (!this._voice) return
         SignalProcessor.add(this._voice, Voice.PITCH_CHANGE, this.bound(this._onPitchGeneratorChange))
         SignalProcessor.add(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onPitchScaleChange))
     }
+
     _removeVoiceListeners() {
         if (!this._voice) return
         SignalProcessor.remove(this._voice, Voice.PITCH_CHANGE, this.bound(this._onPitchGeneratorChange))
         SignalProcessor.remove(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onPitchScaleChange))
     }
+
     _onPitchGeneratorChange(e, t) {
         this.generator = this._voice.pitch
     }
 
-    _onPitchScaleChange() {
+    _onPitchScaleChange() {
         this._updatePitchScale()
     }
 

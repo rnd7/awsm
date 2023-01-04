@@ -14,9 +14,9 @@ export const WAVE_SPLINE_EXPONENT = {
         return float
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_EXPONENT, max:MAX_EXPONENT}}))
+        return minmax(transformScale(x, { from: { min: MIN_EXPONENT, max: MAX_EXPONENT } }))
     },
     denormalize: (x) => {
-        return transformScale(x, {to:{min:MIN_EXPONENT, max:MAX_EXPONENT}})
-    } 
+        return transformScale(x, { to: { min: MIN_EXPONENT, max: MAX_EXPONENT } })
+    }
 }

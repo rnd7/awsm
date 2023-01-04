@@ -69,21 +69,21 @@ export default class AudioCore extends Bindable {
         this._adjustGain()
     }
 
-    _onVoicesChange(e,t) {
+    _onVoicesChange(e, t) {
         this._update()
-       
+
     }
     _onSpeakerProtectionChange(e, t) {
         if (this._configuration.speakerProtection) {
-            this._clipper.port.postMessage({type: "enable"})
+            this._clipper.port.postMessage({ type: "enable" })
         } else {
-            this._clipper.port.postMessage({type: "disable"})
+            this._clipper.port.postMessage({ type: "disable" })
         }
     }
 
     _adjustGain() {
         this._masterOutput.gain.cancelScheduledValues(this._audioContext.currentTime)
-        this._masterOutput.gain.linearRampToValueAtTime(this._configuration.masterVolume / (Math.pow(this._voiceInterfaces.size,.4)+1), this._audioContext.currentTime + .01)
+        this._masterOutput.gain.linearRampToValueAtTime(this._configuration.masterVolume / (Math.pow(this._voiceInterfaces.size, .4) + 1), this._audioContext.currentTime + .01)
     }
 
     _update() {
@@ -92,7 +92,7 @@ export default class AudioCore extends Bindable {
             if (!this._voiceInterfaces.has(voice)) {
                 const voiceInterface = new VoiceInterface(this._audioContext, this._masterOutput, this._generatorPool, voice)
                 this._voiceInterfaces.set(
-                    voice, 
+                    voice,
                     voiceInterface
                 )
                 this._addVoiceListeners(voice)
@@ -110,7 +110,7 @@ export default class AudioCore extends Bindable {
         if (!voice) return
         SignalProcessor.remove(voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
     }
-    
+
     _onVoiceStateChange(e, t) {
         if (t.state === DEAD) {
             this._removeVoiceListeners(t)

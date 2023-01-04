@@ -29,7 +29,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._hContainerEl = document.createElement('div')
         this._hContainerEl.classList.add('h-container')
         this._containerEl.append(this._hContainerEl)
-    
+
         this._xRotaryCombo = RotaryCombo.create()
         this._xRotaryCombo.driver = UNIT_VALUE
         this._xRotaryCombo.label = "Time"
@@ -53,16 +53,16 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._removeButton.label = "Remove"
         this._removeButton.addEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveButttonTrigger))
         this._hContainerEl.append(this._removeButton)
-        
+
         this._waveSplineNode = null
         this._active = null
-        
+
         this._init()
     }
 
     async _init() {
         await this.fetchStyle(WaveSplineNodeListItem.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -149,7 +149,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._yRotaryCombo.value = this._waveSplineNode.y
     }
 
-    _updateAll(){
+    _updateAll() {
         this._onWaveSplineNodeEChange()
         this._onWaveSplineNodeXChange()
         this._onWaveSplineNodeYChange()
@@ -162,7 +162,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         if (this._exponent) this._eRotaryCombo.classList.remove("hidden")
         else this._eRotaryCombo.classList.add("hidden")
     }
-    
+
     destroy() {
         this._removeWaveSplineNodeListeners()
         this._waveSplineNode = null

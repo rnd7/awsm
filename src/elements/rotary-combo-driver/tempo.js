@@ -3,7 +3,7 @@ import transformScale from "../../math/transform-scale.js"
 
 const MIN_TEMPO = 1
 const MAX_TEMPO = 250
-export const TEMPO = { 
+export const TEMPO = {
     stringify: (x) => {
         return `${Math.round(x)}bpm`
     },
@@ -14,9 +14,9 @@ export const TEMPO = {
         return int
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_TEMPO, max:MAX_TEMPO}}))
+        return minmax(transformScale(x, { from: { min: MIN_TEMPO, max: MAX_TEMPO } }))
     },
     denormalize: (x) => {
-        return Math.round(transformScale(x, {to:{min:MIN_TEMPO, max:MAX_TEMPO}}))
-    } 
+        return Math.round(transformScale(x, { to: { min: MIN_TEMPO, max: MAX_TEMPO } }))
+    }
 }

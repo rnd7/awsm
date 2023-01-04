@@ -32,24 +32,24 @@ export default class Rotary extends DynamicWebComponent {
         this._continuous = false
 
         this._svgRotationIndicator =
-        
 
-        this._containerEl = document.createElement('div')
+
+            this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
         this._containerEl.addEventListener('pointerdown', this.bound(this._onPointerDown))
 
         this._canvasEl = document.createElement('canvas')
-        this._canvasEl.oncontextmenu = ()=>(false)
+        this._canvasEl.oncontextmenu = () => (false)
         this._context = this._canvasEl.getContext('2d')
         this._containerEl.append(this._canvasEl)
 
         this._init()
-       
+
     }
 
     async _init() {
         await this.fetchStyle(Rotary.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -62,14 +62,14 @@ export default class Rotary extends DynamicWebComponent {
         e.preventDefault()
         this._containerEl.setPointerCapture(e.pointerId)
         this._active = true
-        
+
         this._containerEl.removeEventListener('pointerdown', this.bound(this._onPointerDown))
         this._containerEl.addEventListener('pointermove', this.bound(this._onPointerMoveWhileDown))
         this._containerEl.addEventListener('pointerup', this.bound(this._onPointerUp))
         this._containerEl.addEventListener('pointercancel', this.bound(this._onPointerCancel))
         this.dispatchEvent(
             new CustomEvent(
-                Rotary.SET_LOCK, 
+                Rotary.SET_LOCK,
                 {
                     bubbles: true,
                     cancelable: false,
@@ -84,7 +84,7 @@ export default class Rotary extends DynamicWebComponent {
     }
 
     _onPointerMoveWhileDown(e) {
-        this._pointerRelativeX += e.movementX 
+        this._pointerRelativeX += e.movementX
         this._pointerRelativeY += e.movementY
         const dist = calculateDistance(this._pointerRelativeX, this._pointerRelativeY)
         if (dist < 5) {
@@ -97,7 +97,7 @@ export default class Rotary extends DynamicWebComponent {
             this._pointerRelativeX,
             this._pointerRelativeY,
         )
-       
+
         let delta = 0
         if (this._lastValue) {
             delta = calculateAngleDelta(this._lastValue, angle)
@@ -105,12 +105,12 @@ export default class Rotary extends DynamicWebComponent {
         this._lastValue = angle
         let targetValue
         const angleRange = degreeToRadians(this._maxAngle - this._minAngle)
-           
+
         if (this._continuous) {
-            targetValue = this._position + delta/angleRange
-            targetValue = (targetValue +1) % 1
+            targetValue = this._position + delta / angleRange
+            targetValue = (targetValue + 1) % 1
         } else {
-            targetValue = this._position + delta/angleRange
+            targetValue = this._position + delta / angleRange
             targetValue = minmax(targetValue, 0, 1)
         }
         this._changeValue(targetValue)
@@ -129,7 +129,7 @@ export default class Rotary extends DynamicWebComponent {
         this._active = false
         this.dispatchEvent(
             new CustomEvent(
-                Rotary.LOCK_RELEASE, 
+                Rotary.LOCK_RELEASE,
                 {
                     bubbles: false,
                     cancelable: false,
@@ -150,7 +150,7 @@ export default class Rotary extends DynamicWebComponent {
             this._value = scaled
             this.dispatchEvent(
                 new CustomEvent(
-                    Rotary.VALUE_CHANGE_EVENT, 
+                    Rotary.VALUE_CHANGE_EVENT,
                     {
                         bubbles: false,
                         cancelable: false,
@@ -210,7 +210,7 @@ export default class Rotary extends DynamicWebComponent {
 
     renderCallback() {
 
-        if (this._context.canvas.width != this.dedicatedWidth || this._context.canvas.height != this.dedicatedHeight) {
+        if (this._context.canvas.width != this.dedicatedWidth || this._context.canvas.height != this.dedicatedHeight) {
             this._context.canvas.width = this.dedicatedWidth
             this._context.canvas.height = this.dedicatedHeight
         }
@@ -218,9 +218,9 @@ export default class Rotary extends DynamicWebComponent {
         const angleRange = this._maxAngle - this._minAngle
         const startAngle = this._minAngle + this._rotate
 
-        let cx = this._context.canvas.width/2
-        let cy = this._context.canvas.height/2
-        let maxRadius = Math.min(this._context.canvas.height, this._context.canvas.width)/2
+        let cx = this._context.canvas.width / 2
+        let cy = this._context.canvas.height / 2
+        let maxRadius = Math.min(this._context.canvas.height, this._context.canvas.width) / 2
 
         this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height)
 
@@ -237,9 +237,9 @@ export default class Rotary extends DynamicWebComponent {
         this._context.fill()
         const knobIndicatorSize = maxRadius * this._knobIndicator
         const indicatorPos = rotateAroundOrigin(
-            {x: maxRadius, y: maxRadius},
-            {x: maxRadius + maxRadius * this._knobRadius - knobIndicatorSize * 2, y: maxRadius},
-            (Math.PI * 2)-degreeToRadians(startAngle+angleRange*this._position)
+            { x: maxRadius, y: maxRadius },
+            { x: maxRadius + maxRadius * this._knobRadius - knobIndicatorSize * 2, y: maxRadius },
+            (Math.PI * 2) - degreeToRadians(startAngle + angleRange * this._position)
         )
 
         // knob indicator
@@ -251,10 +251,10 @@ export default class Rotary extends DynamicWebComponent {
         // scale 
         this._context.fillStyle = "#e0e0e0"
         drawTorusSegment(
-            this._context, 
-            cx, cy, 
-            maxRadius * this._scaleRadius, maxRadius * (1-this._scaleSize), 
-            degreeToRadians(startAngle), degreeToRadians(startAngle+angleRange*this._position) 
+            this._context,
+            cx, cy,
+            maxRadius * this._scaleRadius, maxRadius * (1 - this._scaleSize),
+            degreeToRadians(startAngle), degreeToRadians(startAngle + angleRange * this._position)
         )
         this._context.fill()
     }

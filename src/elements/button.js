@@ -7,10 +7,10 @@ export default class Button extends WebComponent {
 
     constructor() {
         super()
-       
+
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
-        
+
         this._buttonEl = document.createElement('button')
         this._buttonEl.addEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
@@ -20,7 +20,7 @@ export default class Button extends WebComponent {
 
     async _init() {
         await this.fetchStyle(Button.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -44,7 +44,7 @@ export default class Button extends WebComponent {
 
     _onPointerUp(e) {
         if (this._down) this.dispatchEvent(
-            new CustomEvent(Button.TRIGGER_EVENT,  {
+            new CustomEvent(Button.TRIGGER_EVENT, {
                 bubbles: true,
                 cancelable: false,
                 composed: true
@@ -55,7 +55,7 @@ export default class Button extends WebComponent {
 
     renderCallback() {
         this._buttonEl.textContent = this._label
-       
+
     }
 
     destroy() {

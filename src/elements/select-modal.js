@@ -16,21 +16,21 @@ export default class SelectModal extends WebComponent {
 
     async _init() {
         await this.fetchStyle(SelectModal.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
     _onContainerPointerUp(e) {
         this._value = e.target.value
         this.dispatchEvent(
-            new CustomEvent(SelectModal.VALUE_CHANGE_EVENT,  {
+            new CustomEvent(SelectModal.VALUE_CHANGE_EVENT, {
                 bubbles: true,
                 cancelable: false,
                 composed: true
             })
         )
     }
-    
+
     set options(value) {
         if (this._options === value) return
         this._options = value
@@ -51,14 +51,14 @@ export default class SelectModal extends WebComponent {
     }
 
     get label() {
-        const option = this._options.find((option)=>{return option.value === this._value})
+        const option = this._options.find((option) => { return option.value === this._value })
         if (option) return option.label
         return "none"
     }
 
 
     renderCallback() {
-        this.manageContainer(this._containerEl, this._options.map((option)=>{
+        this.manageContainer(this._containerEl, this._options.map((option) => {
             return {
                 ...option,
                 active: option.value === this._value

@@ -5,8 +5,8 @@ export default class Label extends WebComponent {
     static style = 'elements/label.css'
     constructor() {
         super()
-       
-       
+
+
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
@@ -16,7 +16,7 @@ export default class Label extends WebComponent {
 
     async _init() {
         await this.fetchStyle(Label.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -30,8 +30,22 @@ export default class Label extends WebComponent {
         return this._text
     }
 
+    set color(value) {
+        if (this._color === value) return
+        this._color = value
+        this.render()
+    }
+
+    get color() {
+        return this._color
+    }
 
     renderCallback() {
+        if (this._color) {
+            this._containerEl.style.color = this._color
+        } else {
+            this._containerEl.style.removeProperty('color')
+        }
         this._containerEl.textContent = this._text
     }
 

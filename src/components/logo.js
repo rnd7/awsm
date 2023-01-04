@@ -6,10 +6,10 @@ export default class Logo extends WebComponent {
 
     constructor() {
         super()
-        
+
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
-        
+
         this._nameEl = document.createElement('div')
         this._nameEl.classList.add('name')
         this._nameEl.textContent = 'AWSM'
@@ -19,7 +19,7 @@ export default class Logo extends WebComponent {
 
     async _init() {
         await this.fetchStyle(Logo.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 

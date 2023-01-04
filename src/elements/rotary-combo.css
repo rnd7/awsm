@@ -4,21 +4,25 @@
     overflow: hidden;
     gap: 5px;
 }
+
 awsm-numeric-input {
     display: flex;
     width: 60px;
     flex: 1;
 }
+
 .panel {
     display: flex;
     flex-direction: column;
 }
+
 awsm-rotary {
     display: flex;
     height: 60px;
     width: 60px;
 }
+
 .label {
     width: 60px;
     height: 15px;
-} 
+}

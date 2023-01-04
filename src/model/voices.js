@@ -22,7 +22,7 @@ export default class Voices extends ModelBase {
     }
 
     get generators() {
-        return new Set(this._voices.map(voice=>voice.generators).flat())
+        return new Set(this._voices.map(voice => voice.generators).flat())
     }
 
     get voices() {
@@ -31,35 +31,35 @@ export default class Voices extends ModelBase {
 
     set voices(value) {
         this.clearVoices(true)
-        value.forEach(voice=>{
+        value.forEach(voice => {
             this.addVoice(voice, true)
         })
         SignalProcessor.send(this, Voices.CHANGE)
     }
 
     releaseAll() {
-        this._voices.forEach(voice=>{
+        this._voices.forEach(voice => {
             voice.state = RELEASE
         })
     }
 
     hasVoice(value) {
-        return this._voices.find(voice=>{
+        return this._voices.find(voice => {
             return voice === value
         })
     }
 
     clearVoices(silent = false) {
         if (this._voices) {
-            this._voices.forEach((voice)=>{
+            this._voices.forEach((voice) => {
                 this._removeVoiceListeners(voice)
-            }) 
+            })
         }
         this._voices = []
         if (!silent) SignalProcessor.send(this, Voices.CHANGE)
     }
 
-    addVoice(value, silent=false) {
+    addVoice(value, silent = false) {
         let voice = instantiate(value, Voice)
         this._voices.push(voice)
         this._addVoiceListeners(voice)
@@ -69,7 +69,7 @@ export default class Voices extends ModelBase {
 
     removeVoice(value) {
         this._removeVoiceListeners(value)
-        this._voices = this._voices.filter((voice)=>{
+        this._voices = this._voices.filter((voice) => {
             return voice !== value
         })
         SignalProcessor.send(this, Voices.CHANGE)
@@ -88,7 +88,7 @@ export default class Voices extends ModelBase {
     _onVoiceGeneratorChange(e, t) {
         SignalProcessor.send(this, e)
     }
-    
+
     toObject() {
         const obj = {}
         if (this._voices) obj.voices = this._voices.map(voice => voice.toObject())

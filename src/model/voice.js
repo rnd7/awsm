@@ -1,4 +1,3 @@
-import Bindable from "../data/bindable.js"
 import SignalProcessor from "../events/signal-processor.js"
 import Generator from "./generator.js"
 import instantiate from "./instantiate.js"
@@ -47,9 +46,8 @@ export default class Voice extends ModelBase {
         this.startTime = startTime
         this.stopTime = stopTime
         this.state = IDLE
-        
-    }
 
+    }
 
     get state() {
         return this._state
@@ -106,6 +104,7 @@ export default class Voice extends ModelBase {
         this._startTime = value
         SignalProcessor.send(this, Voice.START_TIME_CHANGE)
     }
+
     get startTime() {
         return this._startTime
     }
@@ -115,6 +114,7 @@ export default class Voice extends ModelBase {
         this._stopTime = value
         SignalProcessor.send(this, Voice.STOP_TIME_CHANGE)
     }
+
     get stopTime() {
         return this._stopTime
     }
@@ -157,9 +157,9 @@ export default class Voice extends ModelBase {
 
 
     get generators() {
-        return [this._wave, this._gain, this._pitch, this._time].filter(e=>e)
+        return [this._wave, this._gain, this._pitch, this._time].filter(e => e)
     }
-    
+
 
     set pitch(value) {
         if (this._pitch === value) return
@@ -172,7 +172,7 @@ export default class Voice extends ModelBase {
     get pitch() {
         return this._pitch
     }
-    
+
 
     set gain(value) {
         if (this._gain === value) return
@@ -195,9 +195,9 @@ export default class Voice extends ModelBase {
     get time() {
         return this._time
     }
-    
 
-    
+
+
     toObject() {
         const obj = {}
         if (this._wave) obj.wave = this._wave.toObject()

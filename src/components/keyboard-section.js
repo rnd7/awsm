@@ -1,7 +1,5 @@
 import Keyboard from "../elements/keyboard.js"
-import Modal from "../elements/modal.js"
 import Select from "../elements/select.js"
-import WebComponent from "../dom/web-component.js"
 import SignalProcessor from "../events/signal-processor.js"
 import { DEFAULT_VOICE } from "../model/default-voice.js"
 import Configuration from "../model/configuration.js"
@@ -11,9 +9,10 @@ import { TRANSPOSE } from "../elements/rotary-combo-driver/transpose.js"
 import { DEAD, IDLE } from "../model/voice-state.js"
 import WaveSplineView from "../model/wave-spline-view.js"
 import { MONOPHON, POLYPHON } from "../model/voice-mode.js"
+import DynamicWebComponent from "../dom/dynamic-web-component.js"
 
 
-export default class KeyboardSection extends WebComponent {
+export default class KeyboardSection extends DynamicWebComponent {
     static style = 'components/keyboard-section.css'
 
     constructor() {
@@ -26,6 +25,7 @@ export default class KeyboardSection extends WebComponent {
         this._containerEl.append(this._controlEl)
 
         this._modeSelectElement = Select.create()
+        this._modeSelectElement.vertical = "top"
         this._modeSelectElement.label = "Mode"
         this._modeSelectElement.options = [
             {
@@ -34,18 +34,18 @@ export default class KeyboardSection extends WebComponent {
             },
             {
                 label: "Poly",
-                value: POLYPHON            
+                value: POLYPHON
             }
         ]
         this._modeSelectElement.addEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onModeSelectChange))
-       
+
         this._controlEl.append(this._modeSelectElement)
 
         this._keyboard = Keyboard.create()
         this._keyboard.addEventListener(Keyboard.NOTE_ON_EVENT, this.bound(this._onKeyDown), false)
         this._containerEl.append(this._keyboard)
 
-         
+
         this._settingsEl = document.createElement('div')
         this._settingsEl.classList.add("settings")
         this._containerEl.append(this._settingsEl)
@@ -54,32 +54,70 @@ export default class KeyboardSection extends WebComponent {
         this._transposeRotaryCombo.label = "Transpose"
         this._transposeRotaryCombo.driver = TRANSPOSE
         this._transposeRotaryCombo.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTransposeComboChange), false)
-        this._settingsEl.append(this._transposeRotaryCombo)
-        
+
+        this._settingContainerEl = document.createElement("div")
+        this._settingContainerEl.classList.add("settings-container")
+        this._settingsEl.append(this._settingContainerEl)
+
         this._buttonEl = document.createElement('button')
         this._buttonEl.textContent = "Config"
         this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
-        this._settingsEl.append(this._buttonEl)
+        this._settingContainerEl.append(this._buttonEl)
 
+        this._indicatorEl = document.createElement('div')
+        this._indicatorEl.classList.add("indicator")
         this._modalContent = KeyboardSectionSettingsModal.create()
-    
-        this._modal = Modal.create()
-        this._modal.reference = this._buttonEl
-        this._modal.content = this._modalContent
-        
+
+
         this._configuration
         this._init()
     }
 
     async _init() {
         await this.fetchStyle(KeyboardSection.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
+        this.render()
+    }
+
+    _onPointerDown(e) {
+        this._down = true
     }
 
     _onPointerUp(e) {
-        this._modal.visible = true
+
+        if (e.target === this._buttonEl) {
+            requestAnimationFrame(() => {
+                this._buttonEl.append(this._modalContent)
+                const referenceRect = this._modalContent.getBoundingClientRect()
+                this._modalContent.style.zIndex = 1000
+                this._modalContent.style.bottom = `${70}px`
+                this._modalContent.style.right = `${-5}px`
+
+                this._indicatorEl.style.bottom = `${-5}px`
+                this._indicatorEl.style.left = `${-5}px`
+                this._indicatorEl.style.width = `${60}px`
+                this._indicatorEl.style.height = `${60}px`
+                this._settingContainerEl.append(this._indicatorEl)
+            })
+            this.dispatchEvent(
+                new CustomEvent(Select.TRIGGER_EVENT, {
+                    bubbles: true,
+                    cancelable: false,
+                    composed: true
+                })
+            )
+            this._ignore = e
+            document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
+        }
     }
 
+    _onGlobalPointerUp(e) {
+        if (e !== this._ignore && !e.path.includes(this._modalContent)) {
+            this._modalContent.remove()
+            this._indicatorEl.remove()
+            document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
+        }
+    }
     _onTransposeComboChange(e) {
         this._configuration.keyboardTranspose = this._transposeRotaryCombo.value
     }
@@ -133,12 +171,12 @@ export default class KeyboardSection extends WebComponent {
         if (
             this._configuration.keyboardMode === MONOPHON
             && this._configuration.activeVoice
-            && (this._configuration.activeVoice.state !== IDLE 
+            && (this._configuration.activeVoice.state !== IDLE
                 && this._configuration.activeVoice.state !== DEAD
             )
         ) {
             this._configuration.activeVoice.wave.waveSplineView.frequency = e.detail.frequency
-        
+
         } else {
             let voice = null
             if (this._configuration.activeVoice) {
@@ -174,9 +212,9 @@ export default class KeyboardSection extends WebComponent {
         SignalProcessor.add(this._configuration, Configuration.KEYBOARD_MODE_CHANGE, this.bound(this._onKeyboardModeChange))
         SignalProcessor.add(this._configuration, Configuration.KEYBOARD_DIVISIONS_CHANGE, this.bound(this._onKeyboardDivisionsChange))
         SignalProcessor.add(this._configuration, Configuration.KEYBOARD_FREQUENCY_CHANGE, this.bound(this._onKeyboardFrequencyChange))
-        SignalProcessor.add(this._configuration, Configuration.KEYBOARD_KEYS_CHANGE, this.bound(this._onKeyboardKeysChange)) 
+        SignalProcessor.add(this._configuration, Configuration.KEYBOARD_KEYS_CHANGE, this.bound(this._onKeyboardKeysChange))
         SignalProcessor.add(this._configuration, Configuration.KEYBOARD_TRANSPOSE_CHANGE, this.bound(this._onKeyboardTransposeChange))
-    
+
     }
     _removeConfigurationListeners() {
         if (!this._configuration) return
@@ -189,21 +227,39 @@ export default class KeyboardSection extends WebComponent {
         SignalProcessor.remove(this._configuration, Configuration.KEYBOARD_TRANSPOSE_CHANGE, this.bound(this._onKeyboardTransposeChange))
     }
 
-    _onActiveVoiceChange(e,t) {
+    _onActiveVoiceChange(e, t) {
         this._updateFrequency()
     }
 
-    _onFrequencyChange(e,t) {
+    _onFrequencyChange(e, t) {
         this._updateFrequency()
     }
 
     _updateFrequency() {
         this._keyboard.highlight = this._configuration.activeVoice.wave.waveSplineView.frequency
     }
-    
 
-    _onKeyboardModeChange(e,t) {
+
+    _onKeyboardModeChange(e, t) {
         this._modeSelectElement.value = this._configuration.keyboardMode
+    }
+
+    resize() {
+        this.render()
+    }
+
+    renderCallback() {
+        if (this.dedicatedWidth < 640) {
+            this._modalContent.showTranspose = true
+            if (this._transposeRotaryCombo.parentNode) {
+                this._transposeRotaryCombo.remove()
+            }
+        } else {
+            this._modalContent.showTranspose = false
+            if (!this._transposeRotaryCombo.parentNode) {
+                this._settingsEl.insertBefore(this._transposeRotaryCombo, this._settingContainerEl)
+            }
+        }
     }
 
     destroy() {

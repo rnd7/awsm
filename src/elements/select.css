@@ -1,11 +1,7 @@
-:host {
-    overflow: hidden;
-}
-
 .container {
+    position: relative;
     display: flex;
     flex: 1;
-    overflow: hidden;
 }
 
 button {
@@ -23,8 +19,13 @@ button {
     padding: 5px;
 }
 
+.indicator {
+    position: absolute;
+    border: 5px solid #808080;
+}
+
 button awsm-label {
-    display: flex; 
+    display: flex;
 }
 
 button:focus {

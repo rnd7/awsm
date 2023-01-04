@@ -3,10 +3,10 @@ import transformScale from "../../math/transform-scale.js"
 
 const MIN_MEASURES = 1
 const MAX_MEASURES = 16
-export const MEASURES = { 
+export const MEASURES = {
     stringify: (x) => {
-        if (x<MIN_MEASURES) return `< ${MIN_MEASURES}`
-        if (x>MAX_MEASURES) return `> ${MAX_MEASURES}`
+        if (x < MIN_MEASURES) return `< ${MIN_MEASURES}`
+        if (x > MAX_MEASURES) return `> ${MAX_MEASURES}`
         if (Math.round(x) != x) return `≈ ${Math.round(x)}`
         return `${Math.round(x)}`
     },
@@ -17,9 +17,9 @@ export const MEASURES = {
         return int
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_MEASURES, max:MAX_MEASURES}}))
+        return minmax(transformScale(x, { from: { min: MIN_MEASURES, max: MAX_MEASURES } }))
     },
     denormalize: (x) => {
-        return Math.round(transformScale(x, {to:{min:MIN_MEASURES, max:MAX_MEASURES}}))
+        return Math.round(transformScale(x, { to: { min: MIN_MEASURES, max: MAX_MEASURES } }))
     }
 }

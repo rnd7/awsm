@@ -1,16 +1,24 @@
 # AWSM
-The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes what I call dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal-ordered unitless time-value pairs as parametrically exponentially interpolated one-dimensional spline that you can manipulate in real-time while playing. I wonder if nobody came up with something like this, but I couldn't find anything directly related. I'm curious, let me know if you stumbled upon similar projects.
+The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes what I call dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal-ordered unitless time-value pairs as parametrically exponentially interpolated one-dimensional spline that you can manipulate in real-time while playback. 
+
+I wonder if nobody came up with something like this, but I couldn't find anything directly related. I'm curious, let me know if you stumbled upon similar projects.
+
+A screenshot of the *AwesomeWaveSplineMachine* in action. You can try it yourself, check the link below.
+
+![alt text](documentation/awsm-showcase-small.png "AWSM - Header section")
 
 ## Purpose
-This is not a production-ready music instrument! Some key features are missing, there are likely some bugs, and you can expect audio clicks and glitches under certain conditions. It's still a proof of concept and will always be a personal playground. But yes, you can make music with it.
+This is not a production-ready music instrument! Some key features are missing, likely there are some bugs, and you can expect audio clicks and glitches under certain conditions. It's a prototype, a proof of concept and my personal playground. But yes, you can make music with it.
 
-## Tryout
+## Try it out. It's free.
+
+The *AwesomeWaveSplineMachine* runs in your Browser. Check out the link below.
 
 The software is only tested on MacOS with Chrome and Firefox. In theory, it's cross platform. It probably won't work with outdated or esoteric browsers. 
 
-It's designed to support touch interaction and should work on some mobile devices. At least I could run it on a Android device. I haven't had time to test this extensively, so expect some issues. I recommend using a desktop or laptop.
+It's designed to support touch interaction and should work on some mobile devices. At least I could run it on some Android devices. I haven't had the time to test this extensively, so expect some issues. I recommend using a desktop or laptop.
 
-**Caution:** You can scrap your speakers with this tool. You can literally melt the coil. Use it on your own risk! Make sure that Protection is activated and that the Wave generator waveform always crosses zero within a reasonable amount of time.
+**Caution:** You can scrap your speakers with this tool. You can literally melt the coil. Use it at your own risk! Make sure that Protection is activated and that the Wave Generator waveform always crosses zero within a reasonable amount of time.
 
 Click the link below to try the AWSM synthesizer in your browser. 
 
@@ -24,9 +32,8 @@ For more information consider one of the following links.
 
 🏛 [License](#license) 
 
-## Motivation
+Have fun, make noise, let me know what you think.
 
-Curiosity and the joy in developing software that serves as a tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations of the previous approach, perhaps finally sophisticated real-time audio in the browser. I wanted to give it a try. It seemed to be the time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in a vector graphics program.
 
 # User guide
 
@@ -48,6 +55,7 @@ All the sections are listed top to bottom in the table of contents. Use the link
 |[Voice section](#voice-section)|Everything that can be played is a `Voice`. The voice section lets you configure all aspects of the selected `Voice` and lets you toggle between the `Generators`. Each `Voice` might utilize up to three `Generators`. Wave, Pitch and Gain. |
 | [Voices section](#voices-section)| Use the voices section to toggle between `Voices`. You will find all voices that are currently played back in this section, and you might click kill to stop them. |
 | [Keyboard section](#keyboard-section)|Use the keyboard to spawn new voices or to change the pitch of the active `Voice`. |
+| [Mobile Devices](#mobile-devices)|In order to support small screen sizes the UI is responsive. The layout changes and some settings are relocated. |
 
 ---
 
@@ -492,9 +500,33 @@ Number of subdivisions per octave.
 
 ![alt text](documentation/awsm-keyboard-config-divisions.png "AWSM - Keyboard Config Divisions")
 
+---
+
+## Mobile devices
+[Back to table of contents](#table-of-contents)
+
+Mobile device support is limited. I guess it will work on some devices. On small screens the layout changes. Instead of a list of all `WaveSplineNodes` you only see the currently selected `WaveSplineNode` below the canvas. You can scroll through the different sections, the position of the header and the keyboard section stays fixed.
+
+### Landscape
+I recommend choosing landscape orientation, since the most important features are better accessible. You can scroll down to view the other sections.
+
+![alt text](documentation/awsm-mobile-landscape.png "AWSM - Mobile device landscape")
+
+### Portrait
+While you still can use the application in portrait orientation, I have to admit it does not look beautiful. The header settings are relocated into the `Settings` modal and you probably want to reduce the number of keyboard keys in the `Keyboard Config Panel` to make it easier to use them. 
+
+![alt text](documentation/awsm-mobile-portrait.png "AWSM - Mobile device portrait")
+
+
 # Developer guide
 
 [Back to top](#awsm)
+
+## Motivation
+
+Curiosity and the joy in developing software that serves as a tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations of the previous approach, perhaps finally sophisticated real-time audio in the browser. I wanted to give it a try. It seemed to be the time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in a vector graphics program.
+
+## Technology
 
 The *AWSM* is raw web technology, a pure vanilla shake, no 3rd party libs used. No dependencies other than a modern browser environment. 
 
@@ -520,6 +552,7 @@ For now no further development is planned. Even if I'd love to try out some more
 I think some crucial features are missing. The list is long, but here are a few of the features I would love to add.
 
 - ~~Speaker Protection~~
+- ~~Improve support for smartphones and other small screen size devices~~
 - Selection and transformation of multiple WaveSplineNodes at once
 - Local storage of multiple configurations using IndexedDB API
 - WaveSplineProcessor WASM implementation
@@ -529,6 +562,7 @@ I think some crucial features are missing. The list is long, but here are a few 
 - MIDI support
 - Stereo panning for Voices
 - Automate everything
+- Electron wrapper
 
 ## Exponential WaveSpline Algorithm
 At its core it's just a simple algorithm. The general concept would also work with linear interpolation, but exponential interpolation sounds so much smoother. Modifying the exponent in realtime changes the curve steepness dynamically somehow similar to what a filter does.
@@ -563,8 +597,6 @@ x^2
 ```
 Combined interpolation curve
 ```
-
- 
    a  a
    |     a
    |       a 
@@ -581,7 +613,7 @@ Pseudo code algorithm including transformation
 ``` 
 if x < .5
     f(x) = ((x * 2) ^ e) / 2   
-if x >= .5
+else
     f2(x) = 1 - ((1-x) * 2) ^ e) / 2
 ```
 ## Audio Processing
@@ -662,7 +694,7 @@ WaveSplineView
 
 [Back to top](#awsm)
 
-Feel free to use this tool to make music or to test the limits of your speakers. I encourage this. When redistributing the Software, be sure to understand the underlying license. Since I'm donating a considerable amount of my time to the opensource community, it's important to me that everything that builds on this is also available to everyone.
+Feel free to use this tool to make music or to test the limits of your speakers. I encourage this. When redistributing the software, be sure to understand the underlying license. Since I'm donating a considerable amount of my time to the opensource community, it's important to me that everything that builds on this is also available to everyone.
 
 
 This project is licensed under the GNU General Public License v3.0
