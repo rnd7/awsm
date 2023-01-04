@@ -11,7 +11,7 @@ export const UNIT_VALUE = {
         return float
     },
     normalize: (x) => {
-        return  minmax(x)
+        return minmax(x)
     },
     denormalize: (x) => {
         return x

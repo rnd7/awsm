@@ -1,24 +1,79 @@
 :host {
     overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
 }
+
 .container {
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
     flex: 1;
     overflow: hidden;
     gap: 10px;
     background-color: #101010;
 }
+
+.config-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.parameter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.config-container.scroll,
+.parameter-container.scroll {
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.parameter-container::-webkit-scrollbar,
+.config-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.parameter-container::-webkit-scrollbar-track,
+.config-container::-webkit-scrollbar-track {
+    background: #101010;
+}
+
+.parameter-container::-webkit-scrollbar-thumb,
+.config-container::-webkit-scrollbar-thumb {
+    background-color: #606060;
+    border-radius: 0px;
+    border: 2px solid #101010;
+}
+
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #181818;
+}
+
+.settings-content-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    background-color: #181818;
+}
+
 awsm-wave-spline-section {
-        
     display: flex;
     flex: 1;
 }
+
 awsm-voice-section {
-    
     display: flex;
 }
 
 awsm-keyboard-section {
     display: flex;
+    height: 80px;
 }

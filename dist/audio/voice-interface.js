@@ -1,7 +1,6 @@
 import SignalProcessor from "../events/signal-processor.js"
 import Bindable from "../data/bindable.js"
 import Voice from "../model/voice.js"
-import WaveSplineProcessorInterface from "./wave-spline-processor-interface.js"
 import { IDLE, ATTACK, DEAD, HOLD, RELEASE } from "../model/voice-state.js"
 
 export default class VoiceInterface extends Bindable {
@@ -26,7 +25,7 @@ export default class VoiceInterface extends Bindable {
         this.voice = voice
         this.outputBus = outputBus
 
-        
+
     }
 
     set outputBus(value) {
@@ -55,7 +54,7 @@ export default class VoiceInterface extends Bindable {
             this._volumeNode.disconnect(this._outputBus)
         }
     }
-    
+
 
     set voice(value) {
         this._removeVoiceListeners()
@@ -78,7 +77,7 @@ export default class VoiceInterface extends Bindable {
         SignalProcessor.add(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onVoicePitchScaleChange))
         SignalProcessor.add(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.add(this._voice, Voice.SUSTAIN_CHANGE, this.bound(this._onVoiceSustainChange))
-       
+
     }
 
     _removeVoiceListeners() {
@@ -90,8 +89,8 @@ export default class VoiceInterface extends Bindable {
         SignalProcessor.remove(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onVoicePitchScaleChange))
         SignalProcessor.remove(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.remove(this._voice, Voice.SUSTAIN_CHANGE, this.bound(this._onVoiceSustainChange))
-       
-       
+
+
     }
 
     _onVoiceSustainChange() {
@@ -101,7 +100,7 @@ export default class VoiceInterface extends Bindable {
             if (this.voice.sustain != Number.MAX_SAFE_INTEGER) {
                 this._stateChangeTimeout = setTimeout(this.bound(this._onSustainTimeout), this._voice.sustain * 1000)
             }
-        } 
+        }
     }
 
     _onVoiceWaveChange() {
@@ -128,7 +127,7 @@ export default class VoiceInterface extends Bindable {
         } else {
             this._gainGenerator = null
         }
-        
+
     }
 
     _onVoicePitchChange() {
@@ -137,7 +136,7 @@ export default class VoiceInterface extends Bindable {
             this._generatorPool.release(this._pitchGenerator.generator)
         }
         if (this._voice && this._voice.pitch) {
-            this._pitchGenerator = this._generatorPool.retrieve(this.voice.pitch) //new WaveSplineGenerator(this._audioContext, )
+            this._pitchGenerator = this._generatorPool.retrieve(this.voice.pitch)
             this._pitchGenerator.connect(this._waveGenerator.pitchInput)
         } else {
             this._pitchGenerator = null
@@ -155,7 +154,7 @@ export default class VoiceInterface extends Bindable {
         } else if (this._voice.state === HOLD) {
             this._volumeNode.gain.cancelScheduledValues(this._audioContext.currentTime)
             this._volumeNode.gain.setValueAtTime(this._volumeNode.gain.value || 0, this._audioContext.currentTime)
-            this._volumeNode.gain.linearRampToValueAtTime(this._voice.volume, this._audioContext.currentTime+.01)
+            this._volumeNode.gain.linearRampToValueAtTime(this._voice.volume, this._audioContext.currentTime + .01)
         }
 
     }
@@ -168,8 +167,8 @@ export default class VoiceInterface extends Bindable {
         this._onVoiceGainChange()
         this._onVoicePitchChange()
         this._onVoicePitchScaleChange()
-        
-        
+
+
     }
 
     _onVoiceStateChange() {
@@ -209,7 +208,7 @@ export default class VoiceInterface extends Bindable {
     }
 
 
-    destroy() { 
+    destroy() {
         if (this._stateChangeTimeout) this._stateChangeTimeout = clearTimeout(this._stateChangeTimeout)
         if (this._pitchGenerator) {
             this._pitchGenerator.disconnect(this._waveGenerator.pitchInput)
@@ -234,5 +233,5 @@ export default class VoiceInterface extends Bindable {
         this._outputBus = null
         super.destroy()
     }
-  
+
 }

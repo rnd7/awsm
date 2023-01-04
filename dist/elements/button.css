@@ -1,12 +1,13 @@
-
 :host {
     overflow: hidden;
 }
+
 .container {
     display: flex;
     flex: 1;
     overflow: hidden;
 }
+
 button {
     background-color: #202020;
     color: #E0E0E0;
@@ -20,6 +21,7 @@ button {
     border: none;
     padding: 5px;
 }
+
 button:focus {
     border: none;
 }

@@ -4,23 +4,23 @@ var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: ./src/math/numerical/interpolate-linear.js
 function interpolateLinear(a, b, q) {
-    return a * (1-q) + b * q
+    return a * (1 - q) + b * q
 }
 
 ;// CONCATENATED MODULE: ./src/math/quantize.js
-function quantize(value, quantize=0, threshold=0) {
+function quantize(value, quantize = 0, threshold = 0) {
     if (!quantize) return value
     let t = threshold * .5 + .5
-    return ((t + value * quantize)|0) / quantize
-    
+    return ((t + value * quantize) | 0) / quantize
+
 }
 ;// CONCATENATED MODULE: ./src/model/wave-spline-type.js
 const EXPONENTIAL_SPLINE = "exponential-spline"
 const STEP = "step"
 const EXPONENTIAL_NODE_SPLINE = "exponential-node-spline"
 ;// CONCATENATED MODULE: ./src/math/wrap-value.js
-function wrapValue(a, n = 1) { 
-    return ( a % n + n ) % n 
+function wrapValue(a, n = 1) {
+    return (a % n + n) % n
 }
 ;// CONCATENATED MODULE: ./src/math/numerical/interpolate-exponetial.js
 
@@ -28,7 +28,7 @@ function wrapValue(a, n = 1) {
 function interpolateExponential(a, b, e, x) {
     if (e == 1) return interpolateLinear(a.y, b.y, x) // is linear
     if (x < .5) return interpolateLinear(a.y, b.y, Math.pow((x * 2), e) / 2)
-    return interpolateLinear(a.y, b.y, 1 - Math.pow(((1-x) * 2), e) / 2)
+    return interpolateLinear(a.y, b.y, 1 - Math.pow(((1 - x) * 2), e) / 2)
 }
 ;// CONCATENATED MODULE: ./src/math/spline/exponential-spline-solver.js
 
@@ -41,17 +41,17 @@ function exponentialSplineSolver(nodes, x, e = null) {
     const wrappedTime = wrapValue(x)
     let left
     let right
-    for (let i=0; i<len; i++) {
+    for (let i = 0; i < len; i++) {
         let node = nodes[i]
         if (node.x > wrappedTime) {
             right = node
-            left = nodes[(i-1+len)%len]
+            left = nodes[(i - 1 + len) % len]
             break
         }
     }
     if (!right) {
         right = nodes[0]
-        left = nodes[len-1]
+        left = nodes[len - 1]
     }
     if (left.x == right.x) return (left.y + right.y) / 2
     if (e === null) e = left.e
@@ -66,13 +66,13 @@ function stepSplineSolver(nodes, x) {
     if (!len) return 0
     if (len == 1) return nodes[0].y
     const wrappedTime = x % 1
-    for (let i=0; i<len; i++) {
+    for (let i = 0; i < len; i++) {
         let node = nodes[i]
         if (node.x > wrappedTime) {
-            return nodes[(i-1+len)%len].y
+            return nodes[(i - 1 + len) % len].y
         }
     }
-    return nodes[len-1].y
+    return nodes[len - 1].y
 }
 ;// CONCATENATED MODULE: ./src/math/spline/wave-spline-solver.js
 
@@ -110,7 +110,7 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
             minValue: 0,
             maxValue: 1,
             automationRate: "a-rate",
-        },{
+        }, {
             name: 'frequency',
             defaultValue: 440,
             minValue: 0,
@@ -132,13 +132,13 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
             name: 'quantizeValue',
             defaultValue: 0,
             minValue: 0,
-            maxValue: 0xFFFFFF+1,
+            maxValue: 0xFFFFFF + 1,
             automationRate: "k-rate",
         }, {
             name: 'quantizeTime',
             defaultValue: 0,
             minValue: 0,
-            maxValue: 0xFFFFFF+1,
+            maxValue: 0xFFFFFF + 1,
             automationRate: "k-rate",
         }, {
             name: 'quantizeTimeThreshold',
@@ -178,7 +178,6 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
 
     _onWaveSplineData(waveSpline) {
         let time = currentTime
-        //const startOffset = 256/sampleRate
         if (this._splines.length == 0) {
             this._splines.push({
                 ...waveSpline,
@@ -200,7 +199,7 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
     }
 
     process(inputs, outputs, parameters) {
-        const timeBase = currentTime - this._startTime
+        this._debugTime = currentTime
         const output = outputs[0]
         const gainParam = parameters.gain
         const pitchParam = parameters.pitch
@@ -210,13 +209,13 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
         const quantizeTimeThresholdParam = parameters.quantizeTimeThreshold
         const quantizeValueParam = parameters.quantizeValue
 
-        const sampleDuration = 1/sampleRate
+        const sampleDuration = 1 / sampleRate
 
         for (let channel = 0; channel < output.length; channel++) {
             for (let sample = 0; sample < output[channel].length; sample++) {
                 if (channel == 0) {
                     if (this._splines) {
-                        const gain = gainParam.length > 1 ? gainParam[sample]:gainParam[0] 
+                        const gain = gainParam.length > 1 ? gainParam[sample] : gainParam[0]
                         const frequency = frequencyParam.length > 1 ? frequencyParam[sample] : frequencyParam[0]
                         const pitch = pitchParam.length > 1 ? pitchParam[sample] : pitchParam[0]
                         const pitchScale = pitchScaleParam.length > 1 ? pitchScaleParam[sample] : pitchScaleParam[0]
@@ -224,33 +223,33 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
                         const quantizeTime = quantizeTimeParam.length > 1 ? quantizeTimeParam[sample] : quantizeTimeParam[0]
                         const quantizeTimeThreshold = quantizeTimeThresholdParam.length > 1 ? quantizeTimeThresholdParam[sample] : quantizeTimeThresholdParam[0]
                         const quantizeValue = quantizeValueParam.length > 1 ? quantizeValueParam[sample] : quantizeValueParam[0]
-                        
+
 
                         const sampleTime = currentTime + sample * sampleDuration
-                        const waveDuration = 1/pitchedFrequency 
-                        const sampleIncrement = sampleDuration/waveDuration
-                        this._time = (this._time + sampleIncrement)%1
+                        const waveDuration = 1 / pitchedFrequency
+                        const sampleIncrement = sampleDuration / waveDuration
+                        this._time = (this._time + sampleIncrement) % 1
 
                         let quantizedTime = quantize(this._time, quantizeTime, quantizeTimeThreshold)
                         let value = 0
                         if (this._splines.length == 1) {
                             value = quantize(
-                                waveSplineSolver(this._splines[0], quantizedTime, this._splines[0].phase), 
+                                waveSplineSolver(this._splines[0], quantizedTime, this._splines[0].phase),
                                 quantizeValue
                             ) * 2 - 1
                         } else if (this._splines.length > 1) {
                             let splineA = this._splines[0]
                             let splineB = this._splines[1]
-                            let q = (sampleTime-splineB.time) / this._transitionTime
-                            if (q<=0) {
+                            let q = (sampleTime - splineB.time) / this._transitionTime
+                            if (q <= 0) {
                                 value = quantize(waveSplineSolver(splineA, quantizedTime, splineA.phase), quantizeValue) * 2 - 1
-                            } else if (q>=1) {
+                            } else if (q >= 1) {
                                 value = quantize(waveSplineSolver(splineB, quantizedTime, splineB.phase), quantizeValue) * 2 - 1
                                 this._splines.shift()
                             } else {
                                 const valueA = quantize(waveSplineSolver(splineA, quantizedTime, splineA.phase), quantizeValue) * 2 - 1
                                 const valueB = quantize(waveSplineSolver(splineB, quantizedTime, splineB.phase), quantizeValue) * 2 - 1
-                                
+
                                 value = interpolateLinear(valueA, valueB, q)
                             }
                         }

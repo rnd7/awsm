@@ -2,11 +2,11 @@
     display: flex;
     flex: 1;
     flex-direction: row;
-    overflow: hidden;
     gap: 10px;
     padding: 10px;
     background-color: #303030;
 }
+
 .hidden {
     display: none;
 }

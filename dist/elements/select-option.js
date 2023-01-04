@@ -15,7 +15,7 @@ export default class SelectOption extends WebComponent {
 
     async _init() {
         await this.fetchStyle(SelectOption.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -32,7 +32,7 @@ export default class SelectOption extends WebComponent {
         this._label = value
         this.render()
     }
-    get label(){
+    get label() {
         return this._label
     }
 
@@ -41,7 +41,7 @@ export default class SelectOption extends WebComponent {
         this._active = value
         this.render()
     }
-    get active(){
+    get active() {
         return this._active
     }
 

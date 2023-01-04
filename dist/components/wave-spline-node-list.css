@@ -1,6 +1,7 @@
 :host {
     overflow: hidden;
 }
+
 .container {
     display: flex;
     flex: 1;
@@ -9,10 +10,8 @@
     overflow-y: auto;
     background-color: #181818;
     gap: 10px;
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30px" width="120px"><text x="110px" y="18px" font-size="15" font-weight="bold" font-family="sans-serif" text-anchor="end" fill="%23303030">WaveSpline</text></svg>');
-
+    min-height: 100px;
+    min-width: 350px;
 }
 
 .container {
@@ -23,11 +22,14 @@
 .container::-webkit-scrollbar {
     width: 10px;
 }
+
 .container::-webkit-scrollbar-track {
     background: #101010;
 }
+
 .container::-webkit-scrollbar-thumb {
     background-color: #606060;
     border-radius: 0px;
-    border: 2px solid #101010;;
+    border: 2px solid #101010;
+    ;
 }

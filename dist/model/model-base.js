@@ -1,6 +1,5 @@
-import Bindable from "../data/bindable.js";
-import SignalProcessor from "../events/signal-processor.js";
-import RandomNameService from "../string/random-name-service.js";
+import Bindable from "../data/bindable.js"
+import SignalProcessor from "../events/signal-processor.js"
 
 export default class ModelBase extends Bindable {
     static _nameGenerator = null
@@ -16,7 +15,7 @@ export default class ModelBase extends Bindable {
     static NAME_GENERATOR_CHANGE = Symbol("NAME_GENERATOR_CHANGE")
     static NAME_CHANGE = Symbol("NAME_CHANGE")
 
-    constructor({name = ""}) {
+    constructor({ name = "" }) {
         super()
         this.name = name
         this._ensureName()
@@ -43,7 +42,7 @@ export default class ModelBase extends Bindable {
         return this._name
     }
 
-    destroy() {
+    destroy() {
         SignalProcessor.remove(ModelBase, ModelBase.NAME_GENERATOR_CHANGE, this.bound(this._onNameGeneratorChange))
         this._name = ""
         super.destroy()

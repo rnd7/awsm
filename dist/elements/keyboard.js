@@ -9,29 +9,29 @@ export default class Keyboard extends WebComponent {
     static NOTE_OFF_EVENT = "note-off"
 
     static style = 'elements/keyboard.css'
-   
+
     constructor() {
         super()
         this._value = ''
-       
+
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
         this._containerEl.addEventListener("pointerdown", this.bound(this._onPointerDown), false)
         this._containerEl.addEventListener("pointerup", this.bound(this._onPointerUp), false)
-        
+
         this._keys = 12
         this._divisions = 12
         this._frequency = 440
         this._transpose = -2
         this._highlight = 0
-       
+
         this._init()
     }
 
     async _init() {
         await this.fetchStyle(Keyboard.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -44,7 +44,7 @@ export default class Keyboard extends WebComponent {
     get highlight() {
         return this._highlight
     }
-    
+
     _updateHighlight() {
         this.render()
     }
@@ -97,7 +97,7 @@ export default class Keyboard extends WebComponent {
         this._transpose = value
         this.render()
     }
-    
+
     get transpose() {
         return this._transpose
     }
@@ -105,7 +105,7 @@ export default class Keyboard extends WebComponent {
     _onPointerDown(e) {
         if (!e.target.frequency) return
         this.dispatchEvent(
-            new CustomEvent(Keyboard.NOTE_ON_EVENT,  {
+            new CustomEvent(Keyboard.NOTE_ON_EVENT, {
                 bubbles: true,
                 cancelable: false,
                 composed: true,
@@ -119,10 +119,10 @@ export default class Keyboard extends WebComponent {
     _onPointerUp(e) {
         if (!e.target.frequency) return
         this.dispatchEvent(
-            new CustomEvent(Keyboard.NOTE_OFF_EVENT,  {
+            new CustomEvent(Keyboard.NOTE_OFF_EVENT, {
                 bubbles: true,
                 cancelable: false,
-                composed: true, 
+                composed: true,
                 detail: {
                     frequency: e.target.frequency
                 }
@@ -132,12 +132,12 @@ export default class Keyboard extends WebComponent {
 
     _generateKeys(from, keys = 12, divisions = 12, transpose = 0) {
         const list = []
-        const range = keys + (transpose * divisions)
-        for(let i = transpose * divisions; i<range; i++) {
-            const frequency = from * Math.pow(2, i/divisions) 
+        const range = keys + (transpose)
+        for (let i = transpose; i < range; i++) {
+            const frequency = from * Math.pow(2, i / divisions)
             const note = getNote(frequency)
-            note.division = (i - transpose * divisions)%divisions
-            note.step = Math.floor((i - transpose * divisions)/divisions)
+            note.division = (i - transpose) % divisions
+            note.step = Math.floor((i - transpose) / divisions)
             note.highlight = (Math.round(frequency * 1000) === Math.round(this._highlight * 1000))
             if (note.color === 0) {
                 note.backgroundColor = '#E0E0E0'
@@ -148,13 +148,13 @@ export default class Keyboard extends WebComponent {
             } else {
                 let from = 0xb0
                 let to = 0x80
-                let color = Math.floor((from + (to-from) * note.division / divisions) )
+                let color = Math.floor((from + (to - from) * note.division / divisions))
                 note.backgroundColor = `rgb(${color},${color},${color})`
                 note.textColor = '#101010'
             }
 
             if (note.note) {
-                note.noteName = `${note.note}${note.octave||''}`
+                note.noteName = `${note.note}${note.octave || ''}`
             } else {
                 let octave = getOctave(frequency)
                 if (octave !== null) {
@@ -169,7 +169,7 @@ export default class Keyboard extends WebComponent {
     }
 
     renderCallback() {
-        const keys = this._generateKeys(this.frequency, this._keys, this._divisions, this._transpose )
+        const keys = this._generateKeys(this.frequency, this._keys, this._divisions, this._transpose)
         this.manageContainer(this._containerEl, keys, KeyboardKey)
     }
 

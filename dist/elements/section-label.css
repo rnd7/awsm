@@ -1,0 +1,18 @@
+:host {
+    overflow: hidden;
+    width: 100%;
+}
+
+.container {
+    overflow: hidden;
+    border: none;
+}
+
+.label {
+    color: #606060;
+    font-family: sans-serif;
+    font-size: 10px;
+    line-height: 10px;
+    margin: 10px;
+    font-weight: bold;
+}

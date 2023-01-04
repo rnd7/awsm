@@ -1,18 +1,11 @@
 .container {
     display: flex;
     flex: 1;
-    flex-direction: column;
-    overflow: hidden;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
     padding: 10px;
     background-color: #303030;
-}
-.h-container {
-
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-    gap: 10px;
 }
 
 .hidden {

@@ -8,7 +8,7 @@ export default class SignalProcessor {
         if (!target || !event || !listener) {
             throw "Invalid parameters"
             return
-        } 
+        }
         let listeners = SignalProcessor._targets.get(target)
         if (listeners === undefined) {
             listeners = new Map()
@@ -26,36 +26,36 @@ export default class SignalProcessor {
         if (!target || !event || !listener) {
             throw "Invalid parameters"
             return
-        } 
+        }
         let listeners = SignalProcessor._targets.get(target)
         if (!listeners) return
         let listenersForEvent = listeners.get(event)
         if (!listenersForEvent) return
         listenersForEvent.delete(listener)
         if (!listenersForEvent.size)
-        listeners.delete(event)
+            listeners.delete(event)
     }
 
-    static send(target, event) {
+    static send(target, event) {
         if (!target || !event) {
             throw "Invalid parameters"
             return
-        } 
+        }
         let listeners = SignalProcessor._targets.get(target)
         if (!listeners) return
         let listenersForEvent = listeners.get(event)
         if (listenersForEvent) {
-            setTimeout(()=>{
-                listenersForEvent.forEach((listener)=>{
+            setTimeout(() => {
+                listenersForEvent.forEach((listener) => {
                     listener(event, target)
                 })
             })
         }
-       
+
         let wildcardListeners = listeners.get(SignalProcessor.WILDCARD)
         if (wildcardListeners) {
-            setTimeout(()=>{
-                wildcardListeners.forEach((listener)=>{
+            setTimeout(() => {
+                wildcardListeners.forEach((listener) => {
                     listener(event, target)
                 })
             })

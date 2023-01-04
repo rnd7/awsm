@@ -16,7 +16,7 @@ export default class RotaryCombo extends WebComponent {
         this._step = 0
 
         this._driver = UNIT_VALUE
-         
+
         this.appendStyle(RotaryCombo.style)
 
         this._containerEl = document.createElement('div')
@@ -28,7 +28,7 @@ export default class RotaryCombo extends WebComponent {
 
         this._panelEl = document.createElement('div')
         this._panelEl.classList.add("panel")
-        
+
         this._labelEl = Label.create()
         this._labelEl.classList.add("label")
         this._panelEl.append(this._labelEl)
@@ -44,17 +44,17 @@ export default class RotaryCombo extends WebComponent {
 
     async _init() {
         await this.fetchStyle(RotaryCombo.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
     _changeValue(value) {
-        if (this._step) value = Math.round(value*(1/this._step)) * this._step
+        if (this._step) value = Math.round(value * (1 / this._step)) * this._step
         if (this._value == value) return
         this.value = value
         this.dispatchEvent(
             new CustomEvent(
-                RotaryCombo.VALUE_CHANGE_EVENT, 
+                RotaryCombo.VALUE_CHANGE_EVENT,
                 {
                     bubbles: false,
                     cancelable: false,
@@ -63,7 +63,7 @@ export default class RotaryCombo extends WebComponent {
             )
         )
     }
-    
+
     set driver(value) {
         if (this._driver === value) return
         this._driver = value
@@ -85,7 +85,7 @@ export default class RotaryCombo extends WebComponent {
     set continuous(value) {
         this._rotary.continuous = value
     }
-    
+
     get continuous() {
         return this._rotary.continuous
     }
@@ -95,10 +95,18 @@ export default class RotaryCombo extends WebComponent {
         this._label = value
         this._labelEl.text = this._label
     }
+
     get label() {
         return this._labelEl.text
     }
 
+    set labelColor(value) {
+        this._labelEl.color = value
+    }
+
+    get labelColor() {
+        return this._labelEl.color
+    }
 
     get normalizedValue() {
         return this._driver.normalize(this._value)
@@ -115,14 +123,16 @@ export default class RotaryCombo extends WebComponent {
         this._input.value = this._driver.stringify(this._value)
         this._rotary.value = this.normalizedValue
     }
+
     get value() {
         return this._value
     }
-    
+
     set step(value) {
         if (this._step === value) return
         this._step = value
     }
+
     get step() {
         return this._step
     }

@@ -12,6 +12,7 @@ import VoiceGainGenerator from "./voice-gain-generator.js"
 import { SUSTAIN } from "../elements/rotary-combo-driver/sustain.js"
 import { GAIN, PITCH, WAVE } from "../model/voice-generator-category.js"
 import Button from "../elements/button.js"
+import SectionLabel from "../elements/section-label.js"
 
 export default class VoiceSettings extends WebComponent {
     static style = 'components/voice-settings.css'
@@ -21,23 +22,31 @@ export default class VoiceSettings extends WebComponent {
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
+        this._voiceLabel = SectionLabel.create()
+        this._voiceLabel.text = "Voice"
+        this._containerEl.append(this._voiceLabel)
+
+        this._contentContainerEl = document.createElement('div')
+        this._contentContainerEl.classList.add('content-container')
+        this._containerEl.append(this._contentContainerEl)
+
         this._waveGeneratorComp = VoiceWaveGenerator.create()
         this._waveGeneratorComp.label = "Wave"
-        this._containerEl.append(this._waveGeneratorComp)
+        this._contentContainerEl.append(this._waveGeneratorComp)
 
         this._pitchGeneratorComp = VoicePitchGenerator.create()
         this._pitchGeneratorComp.label = "Pitch"
         this._pitchGeneratorComp.removable = true
-        this._containerEl.append(this._pitchGeneratorComp)
+        this._contentContainerEl.append(this._pitchGeneratorComp)
 
         this._gainGeneratorComp = VoiceGainGenerator.create()
         this._gainGeneratorComp.label = "Gain"
         this._gainGeneratorComp.removable = true
-        this._containerEl.append(this._gainGeneratorComp)
+        this._contentContainerEl.append(this._gainGeneratorComp)
 
         this._voiceSetttingsEl = document.createElement('div')
         this._voiceSetttingsEl.classList.add('voice-settings')
-        this._containerEl.append(this._voiceSetttingsEl)
+        this._contentContainerEl.append(this._voiceSetttingsEl)
 
         this._attackCombo = RotaryCombo.create()
         this._attackCombo.label = "Attack"
@@ -65,16 +74,16 @@ export default class VoiceSettings extends WebComponent {
 
         this._voiceLauncherEl = document.createElement('div')
         this._voiceLauncherEl.classList.add('voice-launcher')
-        this._containerEl.append(this._voiceLauncherEl)
+        this._contentContainerEl.append(this._voiceLauncherEl)
 
         this._spawnButton = Button.create()
         this._spawnButton.label = "Spawn"
         this._spawnButton.addEventListener(Button.TRIGGER_EVENT, this.bound(this._onSpawnButtonTrigger))
         this._voiceLauncherEl.append(this._spawnButton)
 
-        this._containerEl.addEventListener(VoiceGainGenerator.SELECT_EVENT, this.bound(this._onGeneratorSelected))
-        this._containerEl.addEventListener(VoiceGainGenerator.CREATE_EVENT, this.bound(this._onGeneratorCreate))
-        this._containerEl.addEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
+        this._contentContainerEl.addEventListener(VoiceGainGenerator.SELECT_EVENT, this.bound(this._onGeneratorSelected))
+        this._contentContainerEl.addEventListener(VoiceGainGenerator.CREATE_EVENT, this.bound(this._onGeneratorCreate))
+        this._contentContainerEl.addEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
 
         this._voices
 
@@ -83,9 +92,9 @@ export default class VoiceSettings extends WebComponent {
 
     async _init() {
         await this.fetchStyle(VoiceSettings.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
     }
-   
+
     set configuration(value) {
         if (this._configuration === value) return
         this._removeConfigurationListeners()
@@ -105,7 +114,7 @@ export default class VoiceSettings extends WebComponent {
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_GENERATOR_CATEGORY_CHANGE, this.bound(this._onActiveGeneratorCategoryChange))
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_VOICE_CHANGE, this.bound(this._onActiveVoiceChange))
         SignalProcessor.add(this._configuration, Configuration.MASTER_TEMPO_CHANGE, this.bound(this._onMasterTempoChange))
-        
+
     }
     _removeConfigurationListeners() {
         if (!this._configuration) return
@@ -115,21 +124,21 @@ export default class VoiceSettings extends WebComponent {
         SignalProcessor.remove(this._configuration, Configuration.MASTER_TEMPO_CHANGE, this.bound(this._onMasterTempoChange))
     }
 
-    _onMasterTempoChange(e,t) {
+    _onMasterTempoChange(e, t) {
         this._updateMasterTempo()
     }
-    
-    _onActiveGeneratorChange(e,t) {
+
+    _onActiveGeneratorChange(e, t) {
         this.render()
     }
 
-    _onActiveGeneratorCategoryChange(e,t) {
+    _onActiveGeneratorCategoryChange(e, t) {
         this.render()
     }
 
-    _onActiveVoiceChange(e,t) {
+    _onActiveVoiceChange(e, t) {
         this.activeVoice = this._configuration.activeVoice
- 
+
     }
 
     _updateMasterTempo() {
@@ -214,21 +223,21 @@ export default class VoiceSettings extends WebComponent {
 
 
     _onGeneratorSelected(e) {
-        if ( e.target === this._waveGeneratorComp) this._configuration.activeGeneratorCategory = WAVE
-        else if ( e.target === this._gainGeneratorComp) this._configuration.activeGeneratorCategory = GAIN
-        else if ( e.target === this._pitchGeneratorComp) this._configuration.activeGeneratorCategory = PITCH
+        if (e.target === this._waveGeneratorComp) this._configuration.activeGeneratorCategory = WAVE
+        else if (e.target === this._gainGeneratorComp) this._configuration.activeGeneratorCategory = GAIN
+        else if (e.target === this._pitchGeneratorComp) this._configuration.activeGeneratorCategory = PITCH
     }
 
     _onGeneratorRemove(e) {
-        if(e.target === this._pitchGeneratorComp) {
+        if (e.target === this._pitchGeneratorComp) {
             this._configuration.activeVoice.pitch = null
-        } else if(e.target === this._gainGeneratorComp) {
+        } else if (e.target === this._gainGeneratorComp) {
             this._configuration.activeVoice.gain = null
         }
     }
 
     _onAttackComboChange() {
-        this._activeVoice.attack = this._attackCombo.value 
+        this._activeVoice.attack = this._attackCombo.value
     }
 
     _updateAttack() {
@@ -236,7 +245,7 @@ export default class VoiceSettings extends WebComponent {
     }
 
     _onSustainComboChange() {
-        this._activeVoice.sustain = this._sustainCombo.value 
+        this._activeVoice.sustain = this._sustainCombo.value
     }
 
     _updateSustain() {
@@ -244,15 +253,16 @@ export default class VoiceSettings extends WebComponent {
     }
 
     _onReleaseComboChange() {
-        this._activeVoice.release = this._releaseCombo.value 
+        this._activeVoice.release = this._releaseCombo.value
     }
+
     _updateRelease() {
         this._releaseCombo.value = this._activeVoice.release
 
     }
 
     _onVolumeComboChange(e) {
-        this._activeVoice.volume = this._volumeCombo.value 
+        this._activeVoice.volume = this._volumeCombo.value
     }
 
     _updateVolume() {
@@ -266,22 +276,22 @@ export default class VoiceSettings extends WebComponent {
 
 
     _onGeneratorCreate(e) {
-        if(e.target === this._waveGeneratorComp) {
+        if (e.target === this._waveGeneratorComp) {
             if (this._activeVoice.wave) {
                 this._activeVoice.wave.active = true
             } else {
                 this._activeVoice.wave = {
                     waveSpline: {
-                        nodes:  [
+                        nodes: [
                             {
-                                x: .25, y: 0, e: 1, 
+                                x: .25, y: 0, e: 1,
                             },
                             {
-                                x: .75, y: 1,  e: 1
+                                x: .75, y: 1, e: 1
                             }
                         ],
                         e: 2.3025
-                    }, 
+                    },
                     waveSplineView: {
                         frequency: 440,
                         quantizeX: 0,
@@ -290,44 +300,44 @@ export default class VoiceSettings extends WebComponent {
                 }
                 this._configuration.activeGenerator = this._activeVoice.wave
             }
-           
-        } else if(e.target === this._pitchGeneratorComp) {
+
+        } else if (e.target === this._pitchGeneratorComp) {
             if (this._activeVoice.pitch) {
                 this._activeVoice.pitch.active = true
             } else {
                 this._activeVoice.pitch = {
                     waveSpline: {
-                        nodes:  [
+                        nodes: [
                             {
-                                x: 0, y: .5, e: 1, 
+                                x: 0, y: .5, e: 1,
                             }
                         ]
-                    }, 
+                    },
                     waveSplineView: {
                         timeUnit: WaveSplineView.TIME_UNIT_MEASURES,
-                        frequency: noteFrequencyConversion(1,this._configuration.masterTempo),
+                        frequency: noteFrequencyConversion(1, this._configuration.masterTempo),
                         quantizeX: 16,
                         quantizeY: 24,
                     }
                 }
                 this._configuration.activeGenerator = this._activeVoice.pitch
             }
-        } else if(e.target === this._gainGeneratorComp) {
+        } else if (e.target === this._gainGeneratorComp) {
             if (this._activeVoice.gain) {
                 this._activeVoice.gain.active = true
             } else {
                 this._activeVoice.gain = {
                     waveSpline: {
-                        nodes:  [
-                            { 
-                                x: 0, y: .5, e: 1, 
+                        nodes: [
+                            {
+                                x: 0, y: .5, e: 1,
                             },
                         ],
                         e: 1.6180
-                    }, 
+                    },
                     waveSplineView: {
                         timeUnit: WaveSplineView.TIME_UNIT_COMMON,
-                        frequency: noteFrequencyConversion(1/16,this._configuration.masterTempo),
+                        frequency: noteFrequencyConversion(1 / 16, this._configuration.masterTempo),
                         quantizeX: 0,
                         quantizeY: 0,
                     }
@@ -338,7 +348,6 @@ export default class VoiceSettings extends WebComponent {
 
     }
 
-
     renderCallback() {
         if (this._configuration && this._configuration.activeVoice) {
             this._waveGeneratorComp.active = this._configuration.activeGeneratorCategory === WAVE
@@ -348,16 +357,16 @@ export default class VoiceSettings extends WebComponent {
         } else {
             this._containerEl.classList.remove('visible')
         }
-      
+
     }
 
     destroy() {
         this._removeVoiceListeners()
         this._removeConfigurationListeners()
 
-        this._containerEl.removeEventListener(VoiceGainGenerator.SELECT_EVENT, this.bound(this._onGeneratorSelected))
-        this._containerEl.removeEventListener(VoiceGainGenerator.CREATE_EVENT, this.bound(this._onGeneratorCreate))
-        this._containerEl.removeEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
+        this._contentContainerEl.removeEventListener(VoiceGainGenerator.SELECT_EVENT, this.bound(this._onGeneratorSelected))
+        this._contentContainerEl.removeEventListener(VoiceGainGenerator.CREATE_EVENT, this.bound(this._onGeneratorCreate))
+        this._contentContainerEl.removeEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
 
         this._waveGeneratorComp.destroy()
         this._pitchGeneratorComp.destroy()
@@ -369,7 +378,7 @@ export default class VoiceSettings extends WebComponent {
 
         this._configuration = null
         this._activeVoice = null
-        
+
         super.destroy()
     }
 }

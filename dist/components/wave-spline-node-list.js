@@ -17,20 +17,22 @@ export default class WaveSplineNodeList extends WebComponent {
         this._containerEl.classList.add('container')
 
         this._containerEl.addEventListener("pointerdown", this.bound(this._onContainerDown), false)
-       
+
         this._containerEl.addEventListener(WaveSplineNodeListItem.REMOVE_EVENT, this.bound(this._onWaveSplineNodeRemove))
-        
+
         this._waveSpline = null
         this._configuration = null
         this._locked = false
-        
+
+        this._compact = false
+
         this._init()
     }
 
 
     async _init() {
         await this.fetchStyle(WaveSplineNodeList.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -50,6 +52,16 @@ export default class WaveSplineNodeList extends WebComponent {
         return this._configuration
     }
 
+    set compact(value) {
+        if (value === this._compact) return
+        this._compact = value
+        this.render()
+    }
+
+    get compact() {
+        return this._compact
+    }
+
     _addConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
@@ -60,12 +72,12 @@ export default class WaveSplineNodeList extends WebComponent {
         SignalProcessor.remove(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
         SignalProcessor.remove(this._configuration, Configuration.ACTIVE_WAVESPLINE_NODE_CHANGE, this.bound(this._onActiveWaveSplineNodeChange))
     }
-    
-    _onActiveGeneratorChange(e,t) {
+
+    _onActiveGeneratorChange(e, t) {
         this._updateActiveGenerator()
     }
 
-    _onActiveWaveSplineNodeChange(e,t) {
+    _onActiveWaveSplineNodeChange(e, t) {
         this._updateActiveWaveSplineNode()
     }
 
@@ -106,15 +118,15 @@ export default class WaveSplineNodeList extends WebComponent {
         SignalProcessor.remove(this._activeGenerator, WaveSpline.PHASE_CHANGE, this.bound(this._onWaveSplinePhaseChange))
     }
 
-    _onWaveSplineTypeChange(e,t) {
+    _onWaveSplineTypeChange(e, t) {
         this.render()
     }
 
-    _onWaveSplinePhaseChange(e,t) {
+    _onWaveSplinePhaseChange(e, t) {
         this.render()
     }
 
-    _onWaveSplineNodesChange(e,t) {
+    _onWaveSplineNodesChange(e, t) {
         if (this._locked) return
         this.render()
     }
@@ -126,48 +138,77 @@ export default class WaveSplineNodeList extends WebComponent {
 
     _addContainerListeners(el) {
         el.addEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
-        el.addEventListener(Rotary.LOCK_RELEASE,  this.bound(this._onRelease))
+        el.addEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
     }
     _removeContainerListeners(el) {
         el.removeEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
         el.removeEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
-        
+
     }
 
     renderCallback() {
-        if (!this._configuration.activeGenerator) return
-        let list = this._configuration.activeGenerator.waveSpline.nodes.map((node)=>{
-            return {
-                waveSplineNode: node, 
-                exponent: this._configuration.activeGenerator.waveSpline.type === EXPONENTIAL_NODE_SPLINE,
-                active: this._configuration.activeWaveSplineNode === node
+        //if (!this._configuration.activeGenerator) return
+        if (this._compact) {
+            let list = []
+            if (
+                this._configuration.activeGenerator
+                && this._configuration.activeWaveSplineNode
+                && this._configuration.activeGenerator.waveSpline.contains(this._configuration.activeWaveSplineNode)
+            ) {
+                list = [{
+                    waveSplineNode: this._configuration.activeWaveSplineNode,
+                    exponent: this._configuration.activeGenerator.waveSpline.type === EXPONENTIAL_NODE_SPLINE,
+                    active: true
+                }]
             }
-        })
-    
-        list.sort((a,b)=>{
-            return (
-                ((a.waveSplineNode.x + this._configuration.activeGenerator.waveSpline.phase)%1)
-                > ((b.waveSplineNode.x + this._configuration.activeGenerator.waveSpline.phase)%1)
-            )? 1: -1
-        })
 
-        this.manageContainer(
-            this._containerEl, 
-            list, 
-            WaveSplineNodeListItem,
-            this.bound(this._addContainerListeners),
-            this.bound(this._removeContainerListeners)
+            this.manageContainer(
+                this._containerEl,
+                list,
+                WaveSplineNodeListItem,
+                this.bound(this._addContainerListeners),
+                this.bound(this._removeContainerListeners)
 
-        )
-        if (this._scrollInPlace) {
-            this._scrollInPlace = false
-            for (let i = 0; i<this._containerEl.childNodes.length; i++) {
-                if (this._containerEl.childNodes[i].waveSplineNode === this._configuration.activeWaveSplineNode) {
-                    this._containerEl.childNodes[i].scrollIntoView()
-                    break;
+            )
+        } else {
+            let list = []
+            if (this._configuration.activeGenerator) {
+                list = this._configuration.activeGenerator.waveSpline.nodes.map((node) => {
+                    return {
+                        waveSplineNode: node,
+                        exponent: this._configuration.activeGenerator.waveSpline.type === EXPONENTIAL_NODE_SPLINE,
+                        active: this._configuration.activeWaveSplineNode === node
+                    }
+                })
+                list.sort((a, b) => {
+                    return (
+                        ((a.waveSplineNode.x + this._configuration.activeGenerator.waveSpline.phase) % 1)
+                        > ((b.waveSplineNode.x + this._configuration.activeGenerator.waveSpline.phase) % 1)
+                    ) ? 1 : -1
+                })
+
+            }
+
+
+            this.manageContainer(
+                this._containerEl,
+                list,
+                WaveSplineNodeListItem,
+                this.bound(this._addContainerListeners),
+                this.bound(this._removeContainerListeners)
+
+            )
+            if (this._scrollInPlace) {
+                this._scrollInPlace = false
+                for (let i = 0; i < this._containerEl.childNodes.length; i++) {
+                    if (this._containerEl.childNodes[i].waveSplineNode === this._configuration.activeWaveSplineNode) {
+                        this._containerEl.childNodes[i].scrollIntoView()
+                        break;
+                    }
                 }
             }
         }
+
     }
 
     _onLock(e) {

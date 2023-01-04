@@ -1,3 +1,3 @@
 export default function degreeToRadians(x) {
-    return x * Math.PI/180
+    return x * Math.PI / 180
 }

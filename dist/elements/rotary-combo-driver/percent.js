@@ -12,9 +12,9 @@ export const PERCENT = {
         return int
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:0, max:100}}))
+        return minmax(transformScale(x, { from: { min: 0, max: 100 } }))
     },
     denormalize: (x) => {
-        return Math.round(transformScale(x, {to:{min:0, max:100}}))
+        return Math.round(transformScale(x, { to: { min: 0, max: 100 } }))
     }
 }

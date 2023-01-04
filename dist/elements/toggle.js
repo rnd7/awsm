@@ -7,10 +7,10 @@ export default class Toggle extends WebComponent {
 
     constructor() {
         super()
-       
+
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
-        
+
         this._buttonEl = document.createElement('button')
         this._buttonEl.addEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
@@ -32,7 +32,7 @@ export default class Toggle extends WebComponent {
 
     async _init() {
         await this.fetchStyle(Toggle.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -72,7 +72,7 @@ export default class Toggle extends WebComponent {
 
     _onPointerUp(e) {
         if (this._down) this.dispatchEvent(
-            new CustomEvent(Toggle.TRIGGER_EVENT,  {
+            new CustomEvent(Toggle.TRIGGER_EVENT, {
                 bubbles: true,
                 cancelable: false,
                 composed: true
@@ -87,7 +87,7 @@ export default class Toggle extends WebComponent {
         else this._indicatorEl.classList.remove("active")
         if (this._blink) this._indicatorEl.classList.add("blink")
         else this._indicatorEl.classList.remove("blink")
-       
+
     }
 
     destroy() {

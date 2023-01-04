@@ -3,10 +3,10 @@ import transformScale from "../../math/transform-scale.js"
 
 const MAX_REQUENCY = 20000
 const MIN_FREQUENCY = 0.01
-export const FREQUENCY = { 
+export const FREQUENCY = {
     stringify: (x) => {
-        if (x<MIN_FREQUENCY) return `< ${MIN_FREQUENCY}`
-        if (x>MAX_REQUENCY) return `> ${MAX_REQUENCY}`
+        if (x < MIN_FREQUENCY) return `< ${MIN_FREQUENCY}`
+        if (x > MAX_REQUENCY) return `> ${MAX_REQUENCY}`
         return `${x.toFixed(2)}Hz`
     },
     parse: (x) => {
@@ -16,9 +16,9 @@ export const FREQUENCY = {
         return float
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_FREQUENCY, max:MAX_REQUENCY}}))
+        return minmax(transformScale(x, { from: { min: MIN_FREQUENCY, max: MAX_REQUENCY } }))
     },
     denormalize: (x) => {
-        return transformScale(x, {to:{min:MIN_FREQUENCY, max: MAX_REQUENCY}})
-    } 
+        return transformScale(x, { to: { min: MIN_FREQUENCY, max: MAX_REQUENCY } })
+    }
 }

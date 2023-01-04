@@ -1,3 +1,6 @@
+const threshold = .75
+const atanUnit = 2 / Math.PI
+const inverseThreshold = 1 - threshold
 class Clipper extends AudioWorkletProcessor {
     constructor(...args) {
         super(...args)
@@ -26,7 +29,7 @@ class Clipper extends AudioWorkletProcessor {
     process(inputs, outputs, parameters) {
         const input = inputs[0]
         const output = outputs[0]
-        const sampleDuration = 1/sampleRate
+        const sampleDuration = 1 / sampleRate
 
         let i = 0
         const len = this._time.length
@@ -35,15 +38,15 @@ class Clipper extends AudioWorkletProcessor {
         }
         if (i != len && !this._clipped) {
             this._clipped = true
-            this.port.postMessage({type: "clip"})
+            this.port.postMessage({ type: "clip" })
         } else if (i == len && this._clipped) {
             this._clipped = false
-            this.port.postMessage({type: "release"})
+            this.port.postMessage({ type: "release" })
         }
 
 
         for (let channel = 0; channel < output.length; channel++) {
-            const matchingInput = input.length >= channel 
+            const matchingInput = input.length > channel
                 && input[channel].length === output[channel].length
             for (let sample = 0; sample < output[channel].length; sample++) {
                 let value = 0
@@ -57,9 +60,15 @@ class Clipper extends AudioWorkletProcessor {
                     this._time[channel] = 0
                 }
                 this._sign[channel] = sign
-               
-                if (this._bypass || !this._clipped) {
-                    output[channel][sample] = value
+
+                if (this._bypass || !this._clipped) {
+                    const absVal = Math.abs(value)
+                    if (absVal > threshold) {
+                        output[channel][sample] = sign * (threshold + (atanUnit * Math.atan((absVal - threshold) / (inverseThreshold))) * (inverseThreshold))
+                        if (Math.abs(value) > 1) console.warn("clip", value, output[channel][sample])
+                    } else {
+                        output[channel][sample] = value
+                    }
                 } else {
                     output[channel][sample] = 0
                 }

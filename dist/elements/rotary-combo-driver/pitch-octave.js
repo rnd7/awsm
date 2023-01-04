@@ -3,7 +3,7 @@ import transformScale from "../../math/transform-scale.js"
 
 const MIN_PITCH_OCTAVE = -4
 const MAX_PITCH_OCTAVE = 4
-export const PITCH_OCTAVE = { 
+export const PITCH_OCTAVE = {
     stringify: (x) => {
         return `${x.toFixed(2)}`
     },
@@ -14,9 +14,9 @@ export const PITCH_OCTAVE = {
         return float
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_PITCH_OCTAVE, max:MAX_PITCH_OCTAVE}}))
+        return minmax(transformScale(x, { from: { min: MIN_PITCH_OCTAVE, max: MAX_PITCH_OCTAVE } }))
     },
     denormalize: (x) => {
-        return transformScale(x, {to:{min:MIN_PITCH_OCTAVE, max:MAX_PITCH_OCTAVE}})
-    } 
+        return transformScale(x, { to: { min: MIN_PITCH_OCTAVE, max: MAX_PITCH_OCTAVE } })
+    }
 }

@@ -3,7 +3,7 @@ import transformScale from "../../math/transform-scale.js"
 
 const MIN_KEYBOARD_DIVISIONS = 1
 const MAX_KEYBOARD_DIVISIONS = 60
-export const KEYBOARD_DIVISIONS = { 
+export const KEYBOARD_DIVISIONS = {
     stringify: (x) => {
         return `${Math.round(x)}`
     },
@@ -14,9 +14,9 @@ export const KEYBOARD_DIVISIONS = {
         return int
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_KEYBOARD_DIVISIONS, max:MAX_KEYBOARD_DIVISIONS}}))
+        return minmax(transformScale(x, { from: { min: MIN_KEYBOARD_DIVISIONS, max: MAX_KEYBOARD_DIVISIONS } }))
     },
     denormalize: (x) => {
-        return Math.round(transformScale(x, {to:{min:MIN_KEYBOARD_DIVISIONS, max:MAX_KEYBOARD_DIVISIONS}}))
+        return Math.round(transformScale(x, { to: { min: MIN_KEYBOARD_DIVISIONS, max: MAX_KEYBOARD_DIVISIONS } }))
     }
 }

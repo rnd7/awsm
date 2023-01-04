@@ -1,16 +1,27 @@
 :host {
     display: flex;
-    overflow: hidden;
 }
+
 .container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.content-container {
     display: flex;
     flex: 1;
     flex-direction: row;
     flex-wrap: wrap;
-    overflow: hidden;
     gap: 10px;
 }
-.voice-settings, .voice-launcher {
+
+.voice-settings {
+    flex-wrap: wrap;
+}
+
+.voice-settings,
+.voice-launcher {
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -18,6 +29,7 @@
     background-color: #303030;
     gap: 10px;
 }
+
 .container.visible {
     display: flex;
 }

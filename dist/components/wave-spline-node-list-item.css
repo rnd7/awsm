@@ -1,8 +1,12 @@
+:host {
+    display: flex;
+}
 
 .container {
     display: flex;
-    gap: 10px;
+    gap: 8.5px;
     padding: 10px;
+    min-width: 0px;
     flex-direction: column;
     background-color: #303030;
     transition: background-color .2s ease-in-out;
@@ -12,11 +16,14 @@
     display: flex;
     gap: 10px;
     flex-direction: row;
+    flex-wrap: wrap;
     overflow: hidden;
 }
+
 .container.active {
     background-color: #606060;
 }
+
 .hidden {
     display: none;
 }

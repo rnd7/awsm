@@ -40,15 +40,11 @@ export default class WaveSplineViewSettings extends WebComponent {
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
-        this._h1ContainerEl = document.createElement('div')
-        this._h1ContainerEl.classList.add('h-container')
-        this._containerEl.append(this._h1ContainerEl)
-
         this._timeUnitSelect = Select.create()
         this._timeUnitSelect.label = "Time unit"
         this._timeUnitSelect.options = TIME_UNITS
         this._timeUnitSelect.addEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onTimeUnitSelectChange))
-        this._h1ContainerEl.append(this._timeUnitSelect)
+        this._containerEl.append(this._timeUnitSelect)
 
 
         this._frequencyControl = RotaryCombo.create()
@@ -57,27 +53,27 @@ export default class WaveSplineViewSettings extends WebComponent {
         this._frequencyControl.label = "Frequency"
         this._frequencyControl.step = .01
         this._frequencyControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onFrequencyControlChange))
-        this._h1ContainerEl.append(this._frequencyControl)
+        this._containerEl.append(this._frequencyControl)
 
         this._quantizeXControl = RotaryCombo.create()
         this._quantizeXControl.driver = QUANTIZATION
         this._quantizeXControl.label = "Time Grid"
         this._quantizeXControl.scale = POW_4
         this._quantizeXControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeXControlChange))
-        this._h1ContainerEl.append(this._quantizeXControl)
+        this._containerEl.append(this._quantizeXControl)
 
         this._quantizeXThresholdControl = RotaryCombo.create()
         this._quantizeXThresholdControl.driver = BIPOLAR
         this._quantizeXThresholdControl.label = "Time offset"
         this._quantizeXThresholdControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeXThresholdControlChange))
-        this._h1ContainerEl.append(this._quantizeXThresholdControl)
+        this._containerEl.append(this._quantizeXThresholdControl)
 
         this._quantizeYControl = RotaryCombo.create()
         this._quantizeYControl.driver = QUANTIZATION
         this._quantizeYControl.label = "Value Grid"
         this._quantizeYControl.scale = POW_4
         this._quantizeYControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeYControlChange))
-        this._h1ContainerEl.append(this._quantizeYControl)
+        this._containerEl.append(this._quantizeYControl)
 
         this._configuration = null
         this._init()
@@ -86,7 +82,7 @@ export default class WaveSplineViewSettings extends WebComponent {
 
     async _init() {
         await this.fetchStyle(WaveSplineViewSettings.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
     }
 
     set configuration(value) {
@@ -150,9 +146,9 @@ export default class WaveSplineViewSettings extends WebComponent {
         this._updateAll()
     }
 
-    _onQuantizeTimeUnitChange(e,t) { 
+    _onQuantizeTimeUnitChange(e, t) {
         if (!this._configuration.activeGenerator) return
-        this._timeUnitSelect.value = this._configuration.activeGenerator.waveSplineView.timeUnit // this._configuration.activeGenerator.waveSplineView.quantizeX
+        this._timeUnitSelect.value = this._configuration.activeGenerator.waveSplineView.timeUnit
         if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_FREQUENCY) {
             this._frequencyControl.driver = FREQUENCY
             this._frequencyControl.step = .01
@@ -160,15 +156,15 @@ export default class WaveSplineViewSettings extends WebComponent {
             this._frequencyControl.label = "Frequency"
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_NOTE) {
             this._frequencyControl.driver = NOTE
-            this._frequencyControl.step = 1/64
+            this._frequencyControl.step = 1 / 64
             this._frequencyControl.scale = LINEAR
             this._frequencyControl.label = "Note"
-        }else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_MEASURES) {
+        } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_MEASURES) {
             this._frequencyControl.driver = MEASURES
             this._frequencyControl.step = 1
             this._frequencyControl.scale = LINEAR
             this._frequencyControl.label = "Measures"
-        }else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON) {
+        } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON) {
             this._frequencyControl.driver = COMMON
             this._frequencyControl.step = 1
             this._frequencyControl.scale = LINEAR
@@ -176,7 +172,7 @@ export default class WaveSplineViewSettings extends WebComponent {
         }
     }
 
-    _onQuantizeXChange(e,t) { 
+    _onQuantizeXChange(e, t) {
         if (!this._configuration.activeGenerator) return
         this._quantizeXControl.value = this._configuration.activeGenerator.waveSplineView.quantizeX
         if (this._configuration.activeGenerator.waveSplineView.quantizeX == 0) {
@@ -186,31 +182,31 @@ export default class WaveSplineViewSettings extends WebComponent {
         }
     }
 
-    _onQuantizeXThresholdChange(e,t) { 
+    _onQuantizeXThresholdChange(e, t) {
         if (!this._configuration.activeGenerator) return
         this._quantizeXThresholdControl.value = this._configuration.activeGenerator.waveSplineView.quantizeXThreshold
     }
 
-    _onQuantizeYChange(e,t) {
+    _onQuantizeYChange(e, t) {
         if (!this._configuration.activeGenerator) return
         this._quantizeYControl.value = this._configuration.activeGenerator.waveSplineView.quantizeY
-        
+
     }
-    
-    _onFrequencyChange(e,t) {
+
+    _onFrequencyChange(e, t) {
         if (!this._configuration.activeGenerator) return
         if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_FREQUENCY) {
             this._frequencyControl.value = this._configuration.activeGenerator.waveSplineView.frequency
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_NOTE) {
-            this._frequencyControl.value = noteFrequencyConversion(this._configuration.activeGenerator.waveSplineView.frequency, this._configuration.masterTempo) 
+            this._frequencyControl.value = noteFrequencyConversion(this._configuration.activeGenerator.waveSplineView.frequency, this._configuration.masterTempo)
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_MEASURES) {
-            this._frequencyControl.value = noteFrequencyConversion(this._configuration.activeGenerator.waveSplineView.frequency, this._configuration.masterTempo) 
+            this._frequencyControl.value = noteFrequencyConversion(this._configuration.activeGenerator.waveSplineView.frequency, this._configuration.masterTempo)
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON) {
             const noteval = noteFrequencyConversion(this._configuration.activeGenerator.waveSplineView.frequency, this._configuration.masterTempo)
-            let commonIndex = COMMON_VALUES.findIndex((value)=>{
-                return Math.round(value*1e3) === Math.round(noteval*1e3)
+            let commonIndex = COMMON_VALUES.findIndex((value) => {
+                return Math.round(value * 1e3) === Math.round(noteval * 1e3)
             })
-            if (commonIndex == -1 && noteval > COMMON_VALUES[COMMON_VALUES.length-1]) commonIndex = COMMON_VALUES.length
+            if (commonIndex == -1 && noteval > COMMON_VALUES[COMMON_VALUES.length - 1]) commonIndex = COMMON_VALUES.length
             this._frequencyControl.value = commonIndex
         }
     }
@@ -224,27 +220,27 @@ export default class WaveSplineViewSettings extends WebComponent {
         if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_FREQUENCY) {
             this._configuration.activeGenerator.waveSplineView.frequency = this._frequencyControl.value
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_NOTE) {
-            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(this._frequencyControl.value, this._configuration.masterTempo) 
+            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(this._frequencyControl.value, this._configuration.masterTempo)
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_MEASURES) {
-            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(this._frequencyControl.value, this._configuration.masterTempo) 
+            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(this._frequencyControl.value, this._configuration.masterTempo)
         } else if (this._configuration.activeGenerator.waveSplineView.timeUnit === WaveSplineView.TIME_UNIT_COMMON) {
-            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(COMMON_VALUES[this._frequencyControl.value], this._configuration.masterTempo) 
+            this._configuration.activeGenerator.waveSplineView.frequency = noteFrequencyConversion(COMMON_VALUES[this._frequencyControl.value], this._configuration.masterTempo)
         }
     }
 
     _onQuantizeXControlChange(e) {
         if (!this._configuration.activeGenerator) return
-        this._configuration.activeGenerator.waveSplineView.quantizeX = this._quantizeXControl.value //this._quantizeXControl.value
+        this._configuration.activeGenerator.waveSplineView.quantizeX = this._quantizeXControl.value
     }
 
     _onQuantizeXThresholdControlChange(e) {
         if (!this._configuration.activeGenerator) return
-        this._configuration.activeGenerator.waveSplineView.quantizeXThreshold = this._quantizeXThresholdControl.value //this._quantizeXControl.value 
+        this._configuration.activeGenerator.waveSplineView.quantizeXThreshold = this._quantizeXThresholdControl.value
     }
 
-    _onQuantizeYControlChange(e) { 
+    _onQuantizeYControlChange(e) {
         if (!this._configuration.activeGenerator) return
-        this._configuration.activeGenerator.waveSplineView.quantizeY = this._quantizeYControl.value // this._quantizeYControl.value 
+        this._configuration.activeGenerator.waveSplineView.quantizeY = this._quantizeYControl.value
     }
 
     _updateAll() {
@@ -274,6 +270,6 @@ export default class WaveSplineViewSettings extends WebComponent {
         this._configuration = null
         this._containerEl.remove()
         super.destroy()
-        
+
     }
 }

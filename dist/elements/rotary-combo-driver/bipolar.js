@@ -3,7 +3,7 @@ import transformScale from "../../math/transform-scale.js"
 
 const MIN_VALUE = -1
 const MAX_VALUE = 1
-export const BIPOLAR = { 
+export const BIPOLAR = {
     stringify: (x) => {
         return `${x.toFixed(2)}`
     },
@@ -14,9 +14,9 @@ export const BIPOLAR = {
         return float
     },
     normalize: (x) => {
-        return minmax(transformScale(x, {from:{min:MIN_VALUE, max:MAX_VALUE}}))
+        return minmax(transformScale(x, { from: { min: MIN_VALUE, max: MAX_VALUE } }))
     },
     denormalize: (x) => {
-        return transformScale(x, {to:{min:MIN_VALUE, max:MAX_VALUE}})
-    } 
+        return transformScale(x, { to: { min: MIN_VALUE, max: MAX_VALUE } })
+    }
 }

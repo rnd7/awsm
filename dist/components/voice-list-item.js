@@ -2,7 +2,7 @@ import WebComponent from "../dom/web-component.js"
 import Button from "../elements/button.js"
 import Label from "../elements/label.js"
 import SignalProcessor from "../events/signal-processor.js"
-import { ATTACK, DEAD, RELEASE } from "../model/voice-state.js"
+import { ATTACK, RELEASE } from "../model/voice-state.js"
 import Voice from "../model/voice.js"
 
 export class VoiceListItem extends WebComponent {
@@ -39,7 +39,7 @@ export class VoiceListItem extends WebComponent {
 
     async _init() {
         await this.fetchStyle(VoiceListItem.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -60,7 +60,7 @@ export class VoiceListItem extends WebComponent {
     get category() {
         return this._category
     }
-    
+
     set active(value) {
         if (this._active === value) return
         this._active = value
@@ -96,12 +96,12 @@ export class VoiceListItem extends WebComponent {
         SignalProcessor.add(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.add(this._voice, Voice.NAME_CHANGE, this.bound(this._onVoiceNameChange))
     }
-    _removeVoiceListeners() { 
+    _removeVoiceListeners() {
         if (!this._voice) return
         SignalProcessor.remove(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.remove(this._voice, Voice.NAME_CHANGE, this.bound(this._onVoiceNameChange))
     }
-  
+
     _onVoiceNameChange() {
         this.render()
     }

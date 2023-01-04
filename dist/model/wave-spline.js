@@ -20,8 +20,8 @@ export default class WaveSpline extends ModelBase {
         this.type = type
         this.phase = phase
         this.e = e
-        
-    } 
+
+    }
 
     set type(value) {
         if (this._type === value) return
@@ -33,12 +33,13 @@ export default class WaveSpline extends ModelBase {
         return this._type
     }
 
-    
+
     set e(value) {
         if (this._e === value) return
         this._e = value
         SignalProcessor.send(this, WaveSpline.E_CHANGE)
     }
+
     get e() {
         return this._e
     }
@@ -49,6 +50,7 @@ export default class WaveSpline extends ModelBase {
         this._phase = value
         SignalProcessor.send(this, WaveSpline.PHASE_CHANGE)
     }
+
     get phase() {
         return this._phase
     }
@@ -57,7 +59,7 @@ export default class WaveSpline extends ModelBase {
 
     set nodes(value) {
         this.clearNodes(true)
-        value.forEach((node)=>{this.addNode(node, true)})
+        value.forEach((node) => { this.addNode(node, true) })
         this.sort()
         SignalProcessor.send(this, WaveSpline.NODES_CHANGE)
     }
@@ -68,12 +70,12 @@ export default class WaveSpline extends ModelBase {
 
     clearNodes(silent = false) {
         if (this._nodes) {
-            this._nodes.forEach((node)=>{
+            this._nodes.forEach((node) => {
                 this._removeNodeListeners(node)
-            }) 
+            })
         }
         this._nodes = []
-        if (!silent) { 
+        if (!silent) {
             SignalProcessor.send(this, WaveSpline.NODES_CHANGE)
         }
     }
@@ -87,7 +89,7 @@ export default class WaveSpline extends ModelBase {
         this.sort()
     }
 
-    addNode(value, silent=false) {
+    addNode(value, silent = false) {
         let node = instantiate(value, WaveSplineNode, true)
         this._nodes.push(node)
         this._addNodeListeners(node)
@@ -100,26 +102,30 @@ export default class WaveSpline extends ModelBase {
 
     removeNode(value) {
         this._removeNodeListeners(value)
-        this._nodes = this._nodes.filter((node)=>{
+        this._nodes = this._nodes.filter((node) => {
             return node !== value
         })
         SignalProcessor.send(this, WaveSpline.NODES_CHANGE)
     }
 
-    _addNodeListeners(node) {
+    _addNodeListeners(node) {
         if (!node) return
         SignalProcessor.add(node, SignalProcessor.WILDCARD, this.bound(this._onNodeChange))
     }
 
-    _removeNodeListeners(node) {
+    _removeNodeListeners(node) {
         if (!node) return
         SignalProcessor.remove(node, SignalProcessor.WILDCARD, this.bound(this._onNodeChange))
     }
 
     sort() {
-        this._nodes.sort((a,b)=>{
-            return (a.x-b.x < 0)?-1:1
+        this._nodes.sort((a, b) => {
+            return (a.x - b.x < 0) ? -1 : 1
         })
+    }
+
+    contains(waveSplineNode) {
+        return this._nodes.includes(waveSplineNode)
     }
 
     toObject() {
@@ -132,12 +138,12 @@ export default class WaveSpline extends ModelBase {
             phase: this.phase
         }
     }
-      
+
     destroy() {
-        this._nodes.forEach((node)=>{
+        this._nodes.forEach((node) => {
             this._removeNodeListeners(node)
             node.destroy()
-        }) 
+        })
         this._nodes = null
         super.destroy()
     }

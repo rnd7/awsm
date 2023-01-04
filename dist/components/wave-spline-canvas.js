@@ -7,7 +7,6 @@ import calculateDistance from "../math/trigonometry/calculate-distance.js"
 import WaveSplineView from "../model/wave-spline-view.js"
 import WaveSpline from "../model/wave-spline.js"
 import WaveSplineNode from "../model/wave-spline-node.js"
-import { EXPONENTIAL_NODE_SPLINE, EXPONENTIAL_SPLINE } from "../model/wave-spline-type.js"
 import { PITCH, WAVE } from "../model/voice-generator-category.js"
 import DynamicWebComponent from "../dom/dynamic-web-component.js"
 
@@ -20,7 +19,7 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
         this._canvasEl = document.createElement('canvas')
-        this._canvasEl.oncontextmenu = ()=>(false)
+        this._canvasEl.oncontextmenu = () => (false)
         this._context = this._canvasEl.getContext('2d', { alpha: false })
 
         this._dedicatedWidth = 0
@@ -43,10 +42,10 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._canvasEl.addEventListener('pointerdown', this.bound(this._onPointerDown))
         this._init()
     }
-    
+
     async _init() {
         await this.fetchStyle(WaveSplineCanvas.style)
-        this.shadowRoot.append(this._containerEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._containerEl) })
         this.render()
     }
 
@@ -63,8 +62,8 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._canvasEl.addEventListener('pointerup', this.bound(this._onPointerUp))
         this._canvasEl.addEventListener('pointercancel', this.bound(this._onPointerCancel))
         this._pointerDownPosition = toLocalPositon(e)
-        this._pointerRelativeX = 0 
-        this._pointerRelativeY = 0 
+        this._pointerRelativeX = 0
+        this._pointerRelativeY = 0
         let list = this._nodeByDist(this._pointerDownPosition)
         this._pointerDownDistance = Number.POSITIVE_INFINITY
         if (list.length) {
@@ -73,7 +72,7 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         } else {
             this._configuration.activeWaveSplineNode = null
         }
-        let minScale = Math.min(this._graphHeight,this._graphWidth)
+        let minScale = Math.min(this._graphHeight, this._graphWidth)
         if (
             this._pointerDownDistance > 10 / minScale
             && !this._pointerDownTimeout
@@ -81,16 +80,16 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
     }
 
     _onPointerMoveWhileDown(e) {
-        this._pointerRelativeX += e.movementX 
+        this._pointerRelativeX += e.movementX
         this._pointerRelativeY += e.movementY
 
         if (
-            this._pointerDownTimeout && 
+            this._pointerDownTimeout &&
             calculateDistance(this._pointerRelativeX, this._pointerRelativeY) > 5
         ) {
             this._pointerDownTimeout = clearTimeout(this._pointerDownTimeout)
         }
-        
+
         if (this._configuration.activeWaveSplineNode) {
             this._configuration.activeWaveSplineNode.x += e.movementX / this._graphWidth
             this._configuration.activeWaveSplineNode.y -= e.movementY / this._graphHeight
@@ -100,11 +99,11 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
 
     _onPointerLongpress(e) {
         if (this._pointerDownTimeout) this._pointerDownTimeout = clearTimeout(this._pointerDownTimeout)
-        if (this._configuration && this._configuration.activeGenerator.waveSplineView) {
+        if (this._configuration && this._configuration.activeGenerator && this._configuration.activeGenerator.waveSplineView) {
 
             const node = this._configuration.activeGenerator.waveSpline.addNode({
-                x: ((this._pointerDownPosition.x-this._xOffset)/this._graphWidth - this._configuration.activeGenerator.waveSpline.phase + 1)%1, 
-                y: 1-(this._pointerDownPosition.y-this._yOffset)/this._graphHeight
+                x: ((this._pointerDownPosition.x - this._xOffset) / this._graphWidth - this._configuration.activeGenerator.waveSpline.phase + 1) % 1,
+                y: 1 - (this._pointerDownPosition.y - this._yOffset) / this._graphHeight
             })
             this._configuration.activeWaveSplineNode = node
         }
@@ -137,19 +136,19 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._canvasEl.removeEventListener('pointercancel', this.bound(this._onPointerCancel))
     }
 
-    _nodeByDist({x, y}) {
-        if (!this._configuration || !this._configuration.activeGenerator.waveSpline) return []
-        let result = this._configuration.activeGenerator.waveSpline.nodes.map((node)=>{
+    _nodeByDist({ x, y }) {
+        if (!this._configuration || !this._configuration.activeGenerator || !this._configuration.activeGenerator.waveSpline) return []
+        let result = this._configuration.activeGenerator.waveSpline.nodes.map((node) => {
             const distance = calculateDistance(
-                ((x-this._graphOffset)/this._graphWidth), 
-                (this._graphHeight-(y-this._graphOffset))/this._graphHeight,
-                (node.x + this._configuration.activeGenerator.waveSpline.phase)%1,
+                ((x - this._graphOffset) / this._graphWidth),
+                (this._graphHeight - (y - this._graphOffset)) / this._graphHeight,
+                (node.x + this._configuration.activeGenerator.waveSpline.phase) % 1,
                 node.y
             )
-            return {node, distance}
+            return { node, distance }
         })
-        result.sort((a,b)=>{
-            return (a.distance-b.distance<0)?-1:1
+        result.sort((a, b) => {
+            return (a.distance - b.distance < 0) ? -1 : 1
         })
         return result
     }
@@ -166,12 +165,12 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
     get configuration() {
         return this._configuration
     }
-    
+
     _addConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_WAVESPLINE_NODE_CHANGE, this.bound(this._onActiveWaveSplineNodeChange))
-     }
+    }
 
     _removeConfigurationListeners() {
         if (!this._configuration) return
@@ -212,9 +211,9 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         SignalProcessor.add(this._activeGenerator, WaveSplineNode.X_CHANGE, this.bound(this._onWaveSplineChange))
         SignalProcessor.add(this._activeGenerator, WaveSplineNode.Y_CHANGE, this.bound(this._onWaveSplineChange))
         SignalProcessor.add(this._activeGenerator, WaveSplineNode.E_CHANGE, this.bound(this._onWaveSplineChange))
-     }
+    }
 
-     _removeActiveGeneratorListeners() {
+    _removeActiveGeneratorListeners() {
         if (!this._activeGenerator) return
         SignalProcessor.remove(this._activeGenerator, WaveSplineView.QUANTIZE_X_CHANGE, this.bound(this._onWaveSplineChange))
         SignalProcessor.remove(this._activeGenerator, WaveSplineView.QUANTIZE_X_THRESHOLD_CHANGE, this.bound(this._onWaveSplineChange))
@@ -229,67 +228,49 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
     }
 
 
-    _onWaveSplineChange(e,t) {
+    _onWaveSplineChange(e, t) {
         this.render()
     }
 
     renderCallback() {
-      
+
         if (this._context.canvas.width != this.dedicatedWidth || this._context.canvas.height != this.dedicatedHeight) {
             this._context.canvas.width = this.dedicatedWidth
             this._context.canvas.height = this.dedicatedHeight
             this._graphWidth = this.dedicatedWidth - this._graphOffset * 2
             this._graphHeight = this.dedicatedHeight - this._graphOffset * 2
         }
-        
+
         this._context.fillStyle = "#181818";
         this._context.fillRect(0, 0, this._context.canvas.width, this._context.canvas.height)
         this._context.fillStyle = "#101010";
         this._context.fillRect(this._xOffset, this._yOffset, this._graphWidth, this._graphHeight)
-        
+
         if (
             this._configuration.activeGeneratorCategory === WAVE
-            || this._configuration.activeGeneratorCategory === PITCH
+            || this._configuration.activeGeneratorCategory === PITCH
         ) this._renderZero()
 
         if (this._configuration && this._configuration.activeGenerator) {
             this._renderPhase()
-
-            /*if (this._configuration.activeGenerator.waveSpline.type === EXPONENTIAL_NODE_SPLINE) {
-                this._oversample = 4
-            } else if (this._configuration.activeGenerator.waveSpline.type === EXPONENTIAL_SPLINE) { 
-                if (this._configuration.activeGenerator.waveSpline.e > .6) {
-                    this._oversample = 1
-                } else if (this._configuration.activeGenerator.waveSpline.e > 0.5) {
-                    this._oversample = 2
-                } else if (this._configuration.activeGenerator.waveSpline.e > 0.4) {
-                    this._oversample = 3
-                } else {
-                    this._oversample = 4
-                }
-            } else {
-                this._oversample = 1
-            }*/
-            
             this._renderRawWaveSpline()
             this._renderWaveSpline()
-            this._configuration.activeGenerator.waveSpline.nodes.forEach((node)=>this._renderNode(node))
+            this._configuration.activeGenerator.waveSpline.nodes.forEach((node) => this._renderNode(node))
         }
     }
 
     _renderNode(node) {
         if (!this._configuration.activeGenerator) return
-        const x = ((node.x + this._configuration.activeGenerator.waveSpline.phase)%1) * this._graphWidth + this._xOffset
+        const x = ((node.x + this._configuration.activeGenerator.waveSpline.phase) % 1) * this._graphWidth + this._xOffset
         let y = node.y * this._graphHeight
         y = this._graphHeight - y
         y += this._yOffset
-        // node
         this._context.beginPath()
         this._context.arc(x, y, this._handleRadius, 0, 2 * Math.PI, false);
-        this._context.fillStyle = (this._configuration.activeWaveSplineNode === node)?"#E0E0E0":"#505050"
+        this._context.fillStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
         this._context.fill()
         this._context.beginPath()
-        this._context.strokeStyle = (this._configuration.activeWaveSplineNode === node)?"#E0E0E0":"#505050"
+        this._context.strokeStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
         this._context.arc(x, y, this._handleStrokeRadius, 0, 2 * Math.PI, false)
         this._context.stroke()
 
@@ -330,16 +311,16 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         ) return
         let lastX = 0
         let lastY = 0
-        
-        for (let i = 0; i<this._graphWidth * this._oversample; i++) {
-            let x = (i/this._oversample) + this._xOffset
+
+        for (let i = 0; i < this._graphWidth * this._oversample; i++) {
+            let x = (i / this._oversample) + this._xOffset
             let y = this._graphHeight - (
                 waveSplineSolver(
-                    this._configuration.activeGenerator.waveSpline, 
-                    i/(this._graphWidth * this._oversample),
+                    this._configuration.activeGenerator.waveSpline,
+                    i / (this._graphWidth * this._oversample),
                     this._configuration.activeGenerator.waveSpline.phase
                 ) * this._graphHeight) + this._yOffset
-            if (i>0) {
+            if (i > 0) {
                 this._context.strokeStyle = "#505050"
                 this._context.beginPath()
                 this._context.moveTo(lastX, lastY)
@@ -355,26 +336,26 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         if (!this._configuration.activeGenerator) return
         let lastX = 0
         let lastY = 0
-        
-        for (let i = 0; i<this._graphWidth * this._oversample; i++) {
-            let x = (i/this._oversample) + this._xOffset
-            let y = this._graphHeight 
+
+        for (let i = 0; i < this._graphWidth * this._oversample; i++) {
+            let x = (i / this._oversample) + this._xOffset
+            let y = this._graphHeight
                 - (
                     quantize(
                         waveSplineSolver(
                             this._configuration.activeGenerator.waveSpline,
                             quantize(
-                                i/(this._graphWidth*this._oversample), 
-                                this._configuration.activeGenerator.waveSplineView.quantizeX, 
+                                i / (this._graphWidth * this._oversample),
+                                this._configuration.activeGenerator.waveSplineView.quantizeX,
                                 this._configuration.activeGenerator.waveSplineView.quantizeXThreshold
                             ),
                             this._configuration.activeGenerator.waveSpline.phase
-                        ), 
+                        ),
                         this._configuration.activeGenerator.waveSplineView.quantizeY
                     ) * this._graphHeight
-                ) 
+                )
                 + this._yOffset
-            if (i>0) {
+            if (i > 0) {
                 this._context.strokeStyle = "#E0E0E0"
                 this._context.beginPath()
                 this._context.moveTo(lastX, lastY)

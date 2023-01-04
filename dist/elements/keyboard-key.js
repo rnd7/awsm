@@ -1,7 +1,7 @@
 import WebComponent from "../dom/web-component.js"
 
 export default class KeyboardKey extends WebComponent {
-    
+
     static TRIGGER_EVENT = "trigger"
 
     static style = 'elements/keyboard-key.css'
@@ -11,7 +11,7 @@ export default class KeyboardKey extends WebComponent {
         this._frequency = 440
         this._noteName = ""
         this._backgroundColor = null
-        
+
         this._buttonEl = document.createElement('button')
         this._buttonEl.classList.add('container')
         this._highlightEl = document.createElement('div')
@@ -29,7 +29,7 @@ export default class KeyboardKey extends WebComponent {
 
     async _init() {
         await this.fetchStyle(KeyboardKey.style)
-        this.shadowRoot.append(this._buttonEl)
+        requestAnimationFrame(() => { this.shadowRoot.append(this._buttonEl) })
         this.render()
     }
 
@@ -98,7 +98,7 @@ export default class KeyboardKey extends WebComponent {
         this._backgroundColor = value
         this.render()
     }
-    
+
     get backgroundColor() {
         return this._backgroundColor
     }
