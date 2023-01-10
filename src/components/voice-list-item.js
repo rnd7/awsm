@@ -31,6 +31,7 @@ export class VoiceListItem extends WebComponent {
         this._stateChangeButton.label = "Kill"
         this._stateChangeButton.classList.add("hidden")
         this._stateChangeButton.addEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveTrigger))
+
         this._containerEl.append(this._stateChangeButton)
         this._removable = false
 
@@ -76,6 +77,7 @@ export class VoiceListItem extends WebComponent {
         this._removable = value
         this.render()
     }
+
     get removable() {
         return this._removable
     }
@@ -87,6 +89,7 @@ export class VoiceListItem extends WebComponent {
         this._addVoiceListeners()
         this.render()
     }
+
     get voice() {
         return this._voice
     }
@@ -96,6 +99,7 @@ export class VoiceListItem extends WebComponent {
         SignalProcessor.add(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.add(this._voice, Voice.NAME_CHANGE, this.bound(this._onVoiceNameChange))
     }
+
     _removeVoiceListeners() {
         if (!this._voice) return
         SignalProcessor.remove(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
@@ -134,14 +138,15 @@ export class VoiceListItem extends WebComponent {
 
     destroy() {
         this._removeVoiceListeners()
+        this._categoryEl.destroy()
+        this._categoryEl = null
+        this._labelEl.destroy()
+        this._labelEl = null
         this._stateChangeButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveTrigger))
         this._stateChangeButton.destroy()
-        this._labelEl.destroy()
-        this._categoryEl.destroy()
-        this._containerEl.remove()
         this._stateChangeButton = null
+        this._containerEl.remove()
         this._voice = null
-        this._labelEl = null
         super.destroy()
     }
 }

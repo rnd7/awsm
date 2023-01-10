@@ -24,8 +24,6 @@ export default class VoiceInterface extends Bindable {
         this._generatorPool = generatorPool
         this.voice = voice
         this.outputBus = outputBus
-
-
     }
 
     set outputBus(value) {
@@ -55,7 +53,6 @@ export default class VoiceInterface extends Bindable {
         }
     }
 
-
     set voice(value) {
         this._removeVoiceListeners()
         this._voice = value
@@ -77,7 +74,6 @@ export default class VoiceInterface extends Bindable {
         SignalProcessor.add(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onVoicePitchScaleChange))
         SignalProcessor.add(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.add(this._voice, Voice.SUSTAIN_CHANGE, this.bound(this._onVoiceSustainChange))
-
     }
 
     _removeVoiceListeners() {
@@ -89,8 +85,6 @@ export default class VoiceInterface extends Bindable {
         SignalProcessor.remove(this._voice, Voice.PITCH_SCALE_CHANGE, this.bound(this._onVoicePitchScaleChange))
         SignalProcessor.remove(this._voice, Voice.STATE_CHANGE, this.bound(this._onVoiceStateChange))
         SignalProcessor.remove(this._voice, Voice.SUSTAIN_CHANGE, this.bound(this._onVoiceSustainChange))
-
-
     }
 
     _onVoiceSustainChange() {
@@ -127,7 +121,6 @@ export default class VoiceInterface extends Bindable {
         } else {
             this._gainGenerator = null
         }
-
     }
 
     _onVoicePitchChange() {
@@ -158,6 +151,7 @@ export default class VoiceInterface extends Bindable {
         }
 
     }
+
     _onVoicePitchScaleChange() {
         this._waveGenerator._pitchScaleParam.setValueAtTime(this._voice.pitchScale, this._audioContext.currentTime)
     }
@@ -167,8 +161,6 @@ export default class VoiceInterface extends Bindable {
         this._onVoiceGainChange()
         this._onVoicePitchChange()
         this._onVoicePitchScaleChange()
-
-
     }
 
     _onVoiceStateChange() {
@@ -206,7 +198,6 @@ export default class VoiceInterface extends Bindable {
     _onDeleteTimeout() {
         this._voice.state = DEAD
     }
-
 
     destroy() {
         if (this._stateChangeTimeout) this._stateChangeTimeout = clearTimeout(this._stateChangeTimeout)

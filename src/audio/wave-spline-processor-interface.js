@@ -167,6 +167,7 @@ export default class WaveSplineProcessorInterface extends Bindable {
     connect() {
         return this._waveSplineProcessor.connect(...arguments)
     }
+
     disconnect() {
         return this._waveSplineProcessor.disconnect(...arguments)
 

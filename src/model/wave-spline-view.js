@@ -42,7 +42,6 @@ export default class WaveSplineView extends ModelBase {
         return this._timeUnit
     }
 
-
     set frequency(value) {
         if (this._frequency === value) return
         this._frequency = value
@@ -58,6 +57,7 @@ export default class WaveSplineView extends ModelBase {
         this._quantizeX = value
         SignalProcessor.send(this, WaveSplineView.QUANTIZE_X_CHANGE)
     }
+
     get quantizeX() {
         return this._quantizeX
     }
@@ -91,7 +91,6 @@ export default class WaveSplineView extends ModelBase {
     get quantizeYThreshold() {
         return this._quantizeYThreshold
     }
-
 
     toObject() {
         return {

@@ -8,7 +8,7 @@ import RotaryCombo from "../elements/rotary-combo.js"
 import { TRANSPOSE } from "../elements/rotary-combo-driver/transpose.js"
 import { DEAD, IDLE } from "../model/voice-state.js"
 import WaveSplineView from "../model/wave-spline-view.js"
-import { MONOPHON, POLYPHON } from "../model/voice-mode.js"
+import { MONOPHONE, POLYPHONE } from "../model/voice-mode.js"
 import DynamicWebComponent from "../dom/dynamic-web-component.js"
 
 
@@ -30,11 +30,11 @@ export default class KeyboardSection extends DynamicWebComponent {
         this._modeSelectElement.options = [
             {
                 label: "Mono",
-                value: MONOPHON
+                value: MONOPHONE
             },
             {
                 label: "Poly",
-                value: POLYPHON
+                value: POLYPHONE
             }
         ]
         this._modeSelectElement.addEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onModeSelectChange))
@@ -84,7 +84,6 @@ export default class KeyboardSection extends DynamicWebComponent {
     }
 
     _onPointerUp(e) {
-
         if (e.target === this._buttonEl) {
             requestAnimationFrame(() => {
                 this._buttonEl.append(this._modalContent)
@@ -169,14 +168,13 @@ export default class KeyboardSection extends DynamicWebComponent {
     _onKeyDown(e) {
         if (!e.detail.frequency) return
         if (
-            this._configuration.keyboardMode === MONOPHON
+            this._configuration.keyboardMode === MONOPHONE
             && this._configuration.activeVoice
             && (this._configuration.activeVoice.state !== IDLE
                 && this._configuration.activeVoice.state !== DEAD
             )
         ) {
             this._configuration.activeVoice.wave.waveSplineView.frequency = e.detail.frequency
-
         } else {
             let voice = null
             if (this._configuration.activeVoice) {
@@ -264,16 +262,20 @@ export default class KeyboardSection extends DynamicWebComponent {
 
     destroy() {
         this._removeConfigurationListeners()
+        document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
         this._keyboard.removeEventListener(Keyboard.NOTE_ON_EVENT, this.bound(this._onKeyDown), false)
         this._keyboard.destroy()
+        this._keyboard = null
         this._transposeRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTransposeComboChange), false)
         this._transposeRotaryCombo.destroy()
+        this._transposeRotaryCombo = null
         this._modeSelectElement.removeEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onModeSelectChange))
         this._modeSelectElement.destroy()
+        this._modeSelectElement = null
         this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
         this._buttonEl.remove()
         this._modalContent.destroy()
-        this._modal.destroy()
+        this._modalContent = null
         this._configuration = null
         this._containerEl.remove()
         super.destroy()

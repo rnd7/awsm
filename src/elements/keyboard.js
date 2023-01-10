@@ -178,6 +178,7 @@ export default class Keyboard extends WebComponent {
         this._containerEl.removeEventListener("pointerup", this.bound(this._onPointerUp), false)
         this.destroyContainer(this._containerEl)
         this._containerEl.remove()
+        this._containerEl = null
         super.destroy()
     }
 }

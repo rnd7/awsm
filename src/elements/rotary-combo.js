@@ -8,7 +8,6 @@ export default class RotaryCombo extends WebComponent {
     static VALUE_CHANGE_EVENT = "value-change"
     static style = 'elements/rotary-combo.css'
 
-
     constructor() {
         super()
 
@@ -156,6 +155,7 @@ export default class RotaryCombo extends WebComponent {
     destroy() {
         this._rotary.removeEventListener(Rotary.VALUE_CHANGE_EVENT, this.bound(this._onRotaryChange))
         this._rotary.destroy()
+        this._rotary = null
         this._input.removeEventListener(NumericInput.VALUE_CHANGE_EVENT, this.bound(this._onInputChange))
         this._input.destroy()
         this._input = null

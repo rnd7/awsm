@@ -53,6 +53,8 @@ export default class SelectOption extends WebComponent {
 
     destroy() {
         this._containerEl.remove()
+        this._containerEl = null
+        this._value = null
         super.destroy()
     }
 }

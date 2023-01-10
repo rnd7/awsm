@@ -41,7 +41,6 @@ export default class WaveSplineNode extends ModelBase {
         SignalProcessor.send(this, WaveSplineNode.E_CHANGE)
     }
 
-
     toObject() {
         return {
             x: this.x,
@@ -49,6 +48,7 @@ export default class WaveSplineNode extends ModelBase {
             e: this.e
         }
     }
+
     destroy() {
         super.destroy()
     }

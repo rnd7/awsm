@@ -56,7 +56,6 @@ export default class SelectModal extends WebComponent {
         return "none"
     }
 
-
     renderCallback() {
         this.manageContainer(this._containerEl, this._options.map((option) => {
             return {
@@ -71,6 +70,8 @@ export default class SelectModal extends WebComponent {
         this._containerEl.removeEventListener('pointerup', this.bound(this._onContainerPointerUp))
         this.destroyContainer(this._containerEl)
         this._containerEl.remove()
+        this._options = null
+        this._value = null
         super.destroy()
     }
 }

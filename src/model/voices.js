@@ -1,14 +1,8 @@
-import Bindable from "../data/bindable.js"
 import SignalProcessor from "../events/signal-processor.js"
-import randomString from "../string/random-string.js"
 import instantiate from "./instantiate.js"
 import ModelBase from "./model-base.js"
 import { RELEASE } from "./voice-state.js"
 import Voice from "./voice.js"
-import WaveSplineView from "./wave-spline-view.js"
-import WaveSpline from "./wave-spline.js"
-
-
 
 export default class Voices extends ModelBase {
     static CHANGE = Symbol("CHANGE")
@@ -96,6 +90,10 @@ export default class Voices extends ModelBase {
     }
 
     destroy() {
+        this._voices.forEach((voice) => {
+            this._removeVoiceListeners(voice)
+        })
+        this._nodes = null
         super.destroy()
     }
 }

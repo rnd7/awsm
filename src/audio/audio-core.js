@@ -10,7 +10,6 @@ import { DEAD } from "../model/voice-state.js"
 export default class AudioCore extends Bindable {
     constructor(configuration) {
         super()
-
         this._voiceInterfaces = new Map()
         this._init(configuration)
     }
@@ -23,7 +22,7 @@ export default class AudioCore extends Bindable {
         this._masterOutput.gain.value = .5
         await this._audioContext.audioWorklet.addModule(`audio/wave-spline-processor.js?a=${Math.random()}`).catch(console.error)
         await this._audioContext.audioWorklet.addModule(`audio/clipper.js?a=${Math.random()}`).catch(console.error)
-        this._holdInMem = new AudioWorkletNode(this._audioContext, 'awsm-wave-spline-processor')
+        this._preloadedWaveSplineProcessor = new AudioWorkletNode(this._audioContext, 'awsm-wave-spline-processor')
         this._clipper = new AudioWorkletNode(this._audioContext, 'awsm-clipper')
         this._masterOutput.connect(this._clipper)
         this._clipper.connect(this._audioContext.destination)

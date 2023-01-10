@@ -75,6 +75,7 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
                 this._nodes = null
                 this._splines = null
                 this._active = false
+                this.port.onmessage = null
                 this.port.close()
             }
         }

@@ -1,2 +1,2 @@
-export const MONOPHON = "monophon"
-export const POLYPHON = "polyphone"
+export const MONOPHONE = "monophone"
+export const POLYPHONE = "polyphone"

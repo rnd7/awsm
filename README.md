@@ -524,7 +524,7 @@ While you still can use the application in portrait orientation, I have to admit
 
 ## Motivation
 
-Curiosity and the joy in developing software that serves as a tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this technology. It overcomes the perfomance limitations of the previous approach, perhaps finally sophisticated real-time audio in the browser. I wanted to give it a try. It seemed to be the time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in a vector graphics program.
+It was curiosity and the joy in developing software that serves as a tool for creative expression. When I read about the AudioWorklet replacing the ScriptProcessorNode I was excited to try out this new technology. It overcomes the perfomance limitations of the previous approach, perhaps finally sophisticated real-time audio in the browser. I wanted to give it a try. It seemed to be the time for what is now the third revision of a synthesizer, where you can edit the waveform similar to a curve in a vector graphics program.
 
 ## Technology
 

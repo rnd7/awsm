@@ -66,22 +66,24 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this.render()
     }
 
-
     _onXRotaryComboChange(e) {
         if (this._waveSplineNode) {
             this._waveSplineNode.x = this._xRotaryCombo.value
         }
     }
+
     _onYRotaryComboChange(e) {
         if (this._waveSplineNode) {
             this._waveSplineNode.y = this._yRotaryCombo.value
         }
     }
+
     _onERotaryComboChange(e) {
         if (this._waveSplineNode) {
             this._waveSplineNode.e = this._eRotaryCombo.value
         }
     }
+
     _onRemoveButttonTrigger(e) {
         this.dispatchEvent(
             new CustomEvent(WaveSplineNodeListItem.REMOVE_EVENT, {
@@ -91,11 +93,13 @@ export default class WaveSplineNodeListItem extends WebComponent {
             })
         )
     }
+
     set active(value) {
         if (this._active === value) return
         this._active = value
         this.render()
     }
+
     get active() {
         return this._active
     }
@@ -105,6 +109,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._exponent = value
         this.render()
     }
+
     get exponent() {
         return this._exponent
     }
@@ -116,9 +121,11 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._addWaveSplineNodeListeners()
         this._updateAll()
     }
+
     get waveSplineNode() {
         return this._waveSplineNode
     }
+
     _addWaveSplineNodeListeners() {
         if (!this._waveSplineNode) return
         SignalProcessor.add(this._waveSplineNode, ModelBase.NAME_CHANGE, this.bound(this._onWaveSplineNodeNameChange))
@@ -126,6 +133,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         SignalProcessor.add(this._waveSplineNode, WaveSplineNode.X_CHANGE, this.bound(this._onWaveSplineNodeXChange))
         SignalProcessor.add(this._waveSplineNode, WaveSplineNode.Y_CHANGE, this.bound(this._onWaveSplineNodeYChange))
     }
+
     _removeWaveSplineNodeListeners() {
         if (!this._waveSplineNode) return
         SignalProcessor.remove(this._waveSplineNode, ModelBase.NAME_CHANGE, this.bound(this._onWaveSplineNodeNameChange))
@@ -133,6 +141,7 @@ export default class WaveSplineNodeListItem extends WebComponent {
         SignalProcessor.remove(this._waveSplineNode, WaveSplineNode.X_CHANGE, this.bound(this._onWaveSplineNodeXChange))
         SignalProcessor.remove(this._waveSplineNode, WaveSplineNode.Y_CHANGE, this.bound(this._onWaveSplineNodeYChange))
     }
+
     _onWaveSplineNodeNameChange() {
         this._nameLabel.text = this._waveSplineNode.name
     }
@@ -168,14 +177,19 @@ export default class WaveSplineNodeListItem extends WebComponent {
         this._waveSplineNode = null
         this._active = null
         this._nameLabel.destroy()
+        this._nameLabel = null
         this._xRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onXRotaryComboChange))
         this._xRotaryCombo.destroy()
+        this._xRotaryCombo = null
         this._yRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onYRotaryComboChange))
         this._yRotaryCombo.destroy()
+        this._yRotaryCombo = null
         this._eRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onERotaryComboChange))
         this._eRotaryCombo.destroy()
+        this._eRotaryCombo = null
         this._removeButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveButttonTrigger))
         this._removeButton.destroy()
+        this._removeButton = null
         this._containerEl.remove()
         super.destroy()
 

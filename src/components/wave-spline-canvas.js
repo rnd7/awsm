@@ -241,9 +241,9 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
             this._graphHeight = this.dedicatedHeight - this._graphOffset * 2
         }
 
-        this._context.fillStyle = "#181818";
+        this._context.fillStyle = "#181818"
         this._context.fillRect(0, 0, this._context.canvas.width, this._context.canvas.height)
-        this._context.fillStyle = "#101010";
+        this._context.fillStyle = "#101010"
         this._context.fillRect(this._xOffset, this._yOffset, this._graphWidth, this._graphHeight)
 
         if (
@@ -266,14 +266,13 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         y = this._graphHeight - y
         y += this._yOffset
         this._context.beginPath()
-        this._context.arc(x, y, this._handleRadius, 0, 2 * Math.PI, false);
+        this._context.arc(x, y, this._handleRadius, 0, 2 * Math.PI, false)
         this._context.fillStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
         this._context.fill()
         this._context.beginPath()
         this._context.strokeStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
         this._context.arc(x, y, this._handleStrokeRadius, 0, 2 * Math.PI, false)
         this._context.stroke()
-
     }
 
     _renderZero() {
@@ -368,8 +367,9 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
     }
 
     destroy() {
+        this._removeActiveGeneratorListeners()
         this._removeConfigurationListeners()
-        clearTimeout(this._pointerDownTimeout)
+        this._pointerDownTimeout = clearTimeout(this._pointerDownTimeout)
         this._canvasEl.removeEventListener('pointerdown', this.bound(this._onPointerDown))
         this._canvasEl.removeEventListener('pointermove', this.bound(this._onPointerMoveWhileDown))
         this._canvasEl.removeEventListener('pointerup', this.bound(this._onPointerUp))
@@ -378,6 +378,7 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._canvasEl = null
         this._configuration = null
         this._context = null
+
         this._containerEl.remove()
         this._containerEl = null
         super.destroy()

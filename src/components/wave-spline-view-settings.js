@@ -107,6 +107,7 @@ export default class WaveSplineViewSettings extends WebComponent {
         if (!this._configuration) return
         SignalProcessor.remove(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
     }
+
     _onActiveGeneratorChange(e, t) {
         this._updateActiveGenerator()
     }
@@ -255,18 +256,21 @@ export default class WaveSplineViewSettings extends WebComponent {
     destroy() {
         this._removeConfigurationListeners()
         this._removeActiveGeneratorListeners()
+        this._timeUnitSelect.removeEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeYControlChange))
+        this._timeUnitSelect.destroy()
+        this._timeUnitSelect = null
         this._frequencyControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onFrequencyControlChange))
         this._frequencyControl.destroy()
         this._frequencyControl = null
         this._quantizeXControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeXControlChange))
         this._quantizeXControl.destroy()
         this._quantizeXControl = null
+        this._quantizeXThresholdControl.destroy()
+        this._quantizeXThresholdControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeXThresholdControlChange))
+        this._quantizeXThresholdControl = null
         this._quantizeYControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeYControlChange))
         this._quantizeYControl.destroy()
         this._quantizeYControl = null
-        this._timeUnitSelect.removeEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onQuantizeYControlChange))
-        this._timeUnitSelect.destroy()
-        this._timeUnitSelect = null
         this._configuration = null
         this._containerEl.remove()
         super.destroy()
