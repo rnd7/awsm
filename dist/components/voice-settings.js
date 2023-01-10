@@ -54,7 +54,6 @@ export default class VoiceSettings extends WebComponent {
         this._attackCombo.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onAttackComboChange))
         this._voiceSetttingsEl.append(this._attackCombo)
 
-
         this._sustainCombo = RotaryCombo.create()
         this._sustainCombo.label = "Sustain"
         this._sustainCombo.driver = SUSTAIN
@@ -84,8 +83,6 @@ export default class VoiceSettings extends WebComponent {
         this._contentContainerEl.addEventListener(VoiceGainGenerator.SELECT_EVENT, this.bound(this._onGeneratorSelected))
         this._contentContainerEl.addEventListener(VoiceGainGenerator.CREATE_EVENT, this.bound(this._onGeneratorCreate))
         this._contentContainerEl.addEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
-
-        this._voices
 
         this._init()
     }
@@ -369,12 +366,26 @@ export default class VoiceSettings extends WebComponent {
         this._contentContainerEl.removeEventListener(VoiceGainGenerator.REMOVE_EVENT, this.bound(this._onGeneratorRemove))
 
         this._waveGeneratorComp.destroy()
+        this._waveGeneratorComp = null
         this._pitchGeneratorComp.destroy()
+        this._pitchGeneratorComp = null
         this._gainGeneratorComp.destroy()
-
-
+        this._gainGeneratorComp = null
+        this._attackCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onAttackComboChange))
+        this._attackCombo.destroy()
+        this._attackCombo = null
+        this._sustainCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onSustainComboChange))
+        this._sustainCombo.destroy()
+        this._sustainCombo = null
+        this._releaseCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onReleaseComboChange))
+        this._releaseCombo.destroy()
+        this._releaseCombo = null
+        this._volumeCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onVolumeComboChange))
+        this._volumeCombo.destroy()
+        this._volumeCombo = null
         this._spawnButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onSpawnButtonTrigger))
         this._spawnButton.destroy()
+        this._spawnButton = null
 
         this._configuration = null
         this._activeVoice = null

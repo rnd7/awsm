@@ -30,11 +30,7 @@ export default class Rotary extends DynamicWebComponent {
         this._knobRadius = .6
         this._knobIndicator = .075
         this._continuous = false
-
-        this._svgRotationIndicator =
-
-
-            this._containerEl = document.createElement('div')
+        this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
         this._containerEl.addEventListener('pointerdown', this.bound(this._onPointerDown))
 
@@ -116,7 +112,6 @@ export default class Rotary extends DynamicWebComponent {
         this._changeValue(targetValue)
     }
 
-
     _onPointerUp(e) {
         this._onPointerDownEnd(e)
     }
@@ -127,11 +122,12 @@ export default class Rotary extends DynamicWebComponent {
 
     _onPointerDownEnd(e) {
         this._active = false
+        console.log("pointerDownEnd")
         this.dispatchEvent(
             new CustomEvent(
                 Rotary.LOCK_RELEASE,
                 {
-                    bubbles: false,
+                    bubbles: true,
                     cancelable: false,
                     composed: true
                 }
@@ -209,7 +205,6 @@ export default class Rotary extends DynamicWebComponent {
     }
 
     renderCallback() {
-
         if (this._context.canvas.width != this.dedicatedWidth || this._context.canvas.height != this.dedicatedHeight) {
             this._context.canvas.width = this.dedicatedWidth
             this._context.canvas.height = this.dedicatedHeight
@@ -226,13 +221,13 @@ export default class Rotary extends DynamicWebComponent {
 
         // bg
         this._context.beginPath()
-        this._context.arc(cx, cy, maxRadius, 0, 2 * Math.PI, false);
+        this._context.arc(cx, cy, maxRadius, 0, 2 * Math.PI, false)
         this._context.fillStyle = "#202020"
         this._context.fill()
 
         // knob bg
         this._context.beginPath()
-        this._context.arc(cx, cy, maxRadius * this._knobRadius, 0, 2 * Math.PI, false);
+        this._context.arc(cx, cy, maxRadius * this._knobRadius, 0, 2 * Math.PI, false)
         this._context.fillStyle = "#101010"
         this._context.fill()
         const knobIndicatorSize = maxRadius * this._knobIndicator
@@ -244,7 +239,7 @@ export default class Rotary extends DynamicWebComponent {
 
         // knob indicator
         this._context.beginPath()
-        this._context.arc(indicatorPos.x, indicatorPos.y, maxRadius * this._knobIndicator, 0, 2 * Math.PI, false);
+        this._context.arc(indicatorPos.x, indicatorPos.y, maxRadius * this._knobIndicator, 0, 2 * Math.PI, false)
         this._context.fillStyle = "#c0c0c0"
         this._context.fill()
 
@@ -265,10 +260,14 @@ export default class Rotary extends DynamicWebComponent {
         this._containerEl.removeEventListener('pointermove', this.bound(this._onPointerMoveWhileDown), false)
         this._containerEl.removeEventListener('pointerup', this.bound(this._onPointerUp), false)
         this._containerEl.removeEventListener('pointercancel', this.bound(this._onPointerCancel), false)
+        this._canvasEl.oncontextmenu = null
         this._canvasEl.remove()
+        this._canvasEl = null
+        this._context = null
         this._scale = null
         this._pointerDownPosition = null
-        this._context = null
+        this._containerEl.remove()
+        this._containerEl = null
         super.destroy()
     }
 }

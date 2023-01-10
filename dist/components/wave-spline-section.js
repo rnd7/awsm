@@ -75,10 +75,12 @@ export default class WaveSplineSection extends WebComponent {
         if (!this._configuration) return
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
     }
+
     _removeConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.remove(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
     }
+
     _onActiveGeneratorChange(e, t) {
         this.render()
     }
@@ -95,7 +97,12 @@ export default class WaveSplineSection extends WebComponent {
         this._removeConfigurationListeners()
         this._configuration = null
         this._waveSplineCanvas.destroy()
+        this._waveSplineCanvas = null
+        this._waveSplineLabel.destroy()
+        this._waveSplineLabel = null
         this._waveSplineNodes.destroy()
+        this._waveSplineNodes = null
+        this._configuration = null
         super.destroy()
     }
 

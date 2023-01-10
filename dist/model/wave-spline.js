@@ -20,7 +20,6 @@ export default class WaveSpline extends ModelBase {
         this.type = type
         this.phase = phase
         this.e = e
-
     }
 
     set type(value) {
@@ -44,7 +43,6 @@ export default class WaveSpline extends ModelBase {
         return this._e
     }
 
-
     set phase(value) {
         if (this._phase === value) return
         this._phase = value
@@ -54,8 +52,6 @@ export default class WaveSpline extends ModelBase {
     get phase() {
         return this._phase
     }
-
-
 
     set nodes(value) {
         this.clearNodes(true)

@@ -15,8 +15,6 @@ export default class Toggle extends WebComponent {
         this._buttonEl.addEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
 
-
-
         this._indicatorEl = document.createElement('div')
         this._indicatorEl.classList.add("indicator")
         this._buttonEl.append(this._indicatorEl)
@@ -87,7 +85,6 @@ export default class Toggle extends WebComponent {
         else this._indicatorEl.classList.remove("active")
         if (this._blink) this._indicatorEl.classList.add("blink")
         else this._indicatorEl.classList.remove("blink")
-
     }
 
     destroy() {
@@ -95,6 +92,7 @@ export default class Toggle extends WebComponent {
         this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
         this._buttonEl.remove()
         this._containerEl.remove()
+        this._containerEl = null
         super.destroy()
     }
 }

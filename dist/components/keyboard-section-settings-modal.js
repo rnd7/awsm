@@ -140,16 +140,18 @@ export default class KeyboardSectionSettingsModal extends WebComponent {
 
     destroy() {
         this._removeConfigurationListeners()
-
+        this._transposeRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTransposeComboChange), false)
+        this._transposeRotaryCombo.destroy()
+        this._transposeRotaryCombo = null
         this._frequencyRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onFrequencyComboChange), false)
         this._frequencyRotaryCombo.destroy()
-
+        this._frequencyRotaryCombo = null
         this._keysRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onKeysComboChange), false)
         this._keysRotaryCombo.destroy()
-
+        this._keysRotaryCombo = null
         this._divisionsRotaryCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onDivisionsComboChange), false)
         this._divisionsRotaryCombo.destroy()
-
+        this._divisionsRotaryCombo = null
         this._containerEl.remove()
         super.destroy()
     }

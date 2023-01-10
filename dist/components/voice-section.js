@@ -15,7 +15,6 @@ export default class VoiceSection extends WebComponent {
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 
-
         this._voiceSettingsContainer = document.createElement('div')
         this._voiceSettingsContainer.classList.add("voice-row", "voice-settings-row")
         this._containerEl.append(this._voiceSettingsContainer)
@@ -38,9 +37,6 @@ export default class VoiceSection extends WebComponent {
         this._voiceRowEl = document.createElement('div')
         this._voiceRowEl.classList.add("voice-row", "voice-selection-row")
         this._voicesContainer.append(this._voiceRowEl)
-
-
-
 
         this._voicesContainerEl = document.createElement('div')
         this._voicesContainerEl.classList.add('voices')
@@ -69,6 +65,7 @@ export default class VoiceSection extends WebComponent {
         this._updateEditorState()
         this.render()
     }
+
     get configuration() {
         return this._configuration
     }
@@ -137,12 +134,17 @@ export default class VoiceSection extends WebComponent {
     }
 
     destroy() {
-
         this._containerEl.removeEventListener("pointerdown", this.bound(this._onContainerDown))
         this._removeConfigurationListeners()
+
+        this._voiceSettings.destroy()
+        this._voiceSettings = null
+        this._voicesLabel.destroy()
+        this._voicesLabel = null
+
         this.destroyContainer(this._voicesContainerEl)
+
         this._configuration = null
-        this._voices = null
         this._containerEl.remove()
         this._containerEl = null
         super.destroy()

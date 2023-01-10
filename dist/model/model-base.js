@@ -3,14 +3,15 @@ import SignalProcessor from "../events/signal-processor.js"
 
 export default class ModelBase extends Bindable {
     static _nameGenerator = null
+
     static set nameGenerator(value) {
         ModelBase._nameGenerator = value
         SignalProcessor.send(ModelBase, ModelBase.NAME_GENERATOR_CHANGE)
     }
+
     static get nameGenerator() {
         return ModelBase._nameGenerator
     }
-
 
     static NAME_GENERATOR_CHANGE = Symbol("NAME_GENERATOR_CHANGE")
     static NAME_CHANGE = Symbol("NAME_CHANGE")

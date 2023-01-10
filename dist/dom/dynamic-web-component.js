@@ -31,6 +31,7 @@ export default class DynamicWebComponent extends WebComponent {
     destroy() {
         this._resizeObserver.disconnect()
         this._resizeObserver = null
+        this._dedicatedWidth = this._dedicatedHeight = 0
         super.destroy()
     }
 

@@ -17,7 +17,6 @@ export default class NumericInput extends WebComponent {
         this._inputEl.addEventListener("change", this.bound(this._onInputChange))
         this._containerEl.append(this._inputEl)
         this._init()
-
     }
 
     async _init() {

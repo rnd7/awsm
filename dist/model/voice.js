@@ -4,7 +4,6 @@ import instantiate from "./instantiate.js"
 import ModelBase from "./model-base.js"
 import { IDLE } from "./voice-state.js"
 
-
 export default class Voice extends ModelBase {
 
     static WAVE_CHANGE = Symbol("WAVE_CHANGE")
@@ -24,7 +23,6 @@ export default class Voice extends ModelBase {
         wave = null,
         pitch = null,
         gain = null,
-        time = null,
         attack = 0.7,
         sustain = Number.MAX_SAFE_INTEGER,
         release = 3,
@@ -37,7 +35,6 @@ export default class Voice extends ModelBase {
         this.wave = wave
         this.pitch = pitch
         this.gain = gain
-        this.time = time
         this.attack = attack
         this.sustain = sustain
         this.release = release
@@ -46,7 +43,6 @@ export default class Voice extends ModelBase {
         this.startTime = startTime
         this.stopTime = stopTime
         this.state = IDLE
-
     }
 
     get state() {
@@ -133,6 +129,7 @@ export default class Voice extends ModelBase {
         if (!generator) return
         SignalProcessor.add(generator, SignalProcessor.WILDCARD, this.bound(this._onGeneratorChange))
     }
+
     _removeGeneratorListeners(generator) {
         if (!generator) return
         SignalProcessor.remove(generator, SignalProcessor.WILDCARD, this.bound(this._onGeneratorChange))
@@ -154,12 +151,9 @@ export default class Voice extends ModelBase {
         return this._wave
     }
 
-
-
     get generators() {
-        return [this._wave, this._gain, this._pitch, this._time].filter(e => e)
+        return [this._wave, this._gain, this._pitch].filter(e => e)
     }
-
 
     set pitch(value) {
         if (this._pitch === value) return
@@ -173,7 +167,6 @@ export default class Voice extends ModelBase {
         return this._pitch
     }
 
-
     set gain(value) {
         if (this._gain === value) return
         this._removeGeneratorListeners(this._gain)
@@ -186,24 +179,11 @@ export default class Voice extends ModelBase {
         return this._gain
     }
 
-    set time(value) {
-        if (this._time === value) return
-        this._time = instantiate(value, Generator, false)
-        SignalProcessor.send(this, Voice.TIME_CHANGE)
-    }
-
-    get time() {
-        return this._time
-    }
-
-
-
     toObject() {
         const obj = {}
         if (this._wave) obj.wave = this._wave.toObject()
         if (this._pitch) obj.pitch = this._pitch.toObject()
         if (this._gain) obj.gain = this._gain.toObject()
-        if (this._time) obj.time = this._time.toObject()
         obj.volume = this._volume
         obj.attack = this._attack
         obj.sustain = this._sustain
@@ -213,7 +193,11 @@ export default class Voice extends ModelBase {
         obj.stopTime = this._stopTime
         return obj
     }
+
     destroy() {
+        this._removeGeneratorListeners(this._wave)
+        this._removeGeneratorListeners(this._pitch)
+        this._removeGeneratorListeners(this._gain)
         super.destroy()
     }
 }

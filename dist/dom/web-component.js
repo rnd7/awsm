@@ -75,22 +75,6 @@ export default class WebComponent extends HTMLElement {
         return document.createElement(name)
     }
 
-    destroy() {
-        cancelAnimationFrame(this._animationFrameHandle)
-        this._renderFlag = false
-        this.removeStyle()
-        this.remove()
-        this._styleEl = null
-        this._binding.destroy()
-        this._binding = null
-    }
-
-    destroyContainer(containerElement) {
-        while (containerElement.children.length) {
-            containerElement.lastChild.destroy()
-        }
-    }
-
     manageContainer(containerElement, list, componentClass, createCallback, destroyCallback) {
         while (containerElement.children.length > list.length) {
             if (destroyCallback) destroyCallback(containerElement.lastChild)
@@ -104,5 +88,21 @@ export default class WebComponent extends HTMLElement {
         list.forEach((item, index) => {
             containerElement.children[index].from(item)
         })
+    }
+
+    destroyContainer(containerElement) {
+        while (containerElement.children.length) {
+            containerElement.lastChild.destroy()
+        }
+    }
+
+    destroy() {
+        cancelAnimationFrame(this._animationFrameHandle)
+        this._renderFlag = false
+        this.removeStyle()
+        this.remove()
+        this._styleEl = null
+        this._binding.destroy()
+        this._binding = null
     }
 }

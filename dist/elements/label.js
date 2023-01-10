@@ -6,7 +6,6 @@ export default class Label extends WebComponent {
     constructor() {
         super()
 
-
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
 

@@ -23,7 +23,6 @@ export default class HeaderSection extends DynamicWebComponent {
         this._h1ContainerEl.classList.add('h-container')
         this._containerEl.append(this._h1ContainerEl)
 
-
         this._tempoControl = RotaryCombo.create()
         this._tempoControl.driver = TEMPO
         this._tempoControl.scale = LINEAR
@@ -199,17 +198,22 @@ export default class HeaderSection extends DynamicWebComponent {
 
     destroy() {
         this._removeConfigurationListeners()
-
+        document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
         this._logo.destroy()
-
+        this._logo = null
         this._tempoControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTempoControlChange))
         this._tempoControl.destroy()
         this._tempoControl = null
-
         this._masterVolumeControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onMasterVolumeControlChange))
         this._masterVolumeControl.destroy()
         this._masterVolumeControl = null
-
+        this._clipToggle.removeEventListener(Toggle.TRIGGER_EVENT, this.bound(this._onClipToggleTrigger))
+        this._clipToggle.destroy()
+        this._clipToggle = null
+        this._panicButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onPanicButtonTrigger))
+        this._panicButton.destroy()
+        this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
+        this._modalContent.destroy()
         this._containerEl.remove()
         this._configuration = null
         super.destroy()

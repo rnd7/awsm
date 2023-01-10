@@ -55,13 +55,14 @@ export default class Button extends WebComponent {
 
     renderCallback() {
         this._buttonEl.textContent = this._label
-
     }
 
     destroy() {
         this._buttonEl.removeEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
         this._buttonEl.remove()
+        this._buttonEl = null
+        this._label = null
         this._containerEl.remove()
         super.destroy()
     }

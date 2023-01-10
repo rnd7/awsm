@@ -18,7 +18,6 @@ export default class Generator extends ModelBase {
         this.waveSplineView = waveSplineView
     }
 
-
     set waveSpline(value) {
         if (value === this._waveSpline) return
         this._removeWaveSplineListeners()
@@ -70,7 +69,6 @@ export default class Generator extends ModelBase {
     _onWaveSplineViewChange(e, t) {
         SignalProcessor.send(this, e)
     }
-
 
     toObject() {
         const obj = {}

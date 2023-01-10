@@ -1,11 +1,11 @@
-import WebComponent from "../dom/web-component.js";
-import Button from "../elements/button.js";
-import RotaryCombo from "../elements/rotary-combo.js";
-import { TEMPO } from "../elements/rotary-combo-driver/tempo.js";
-import { LINEAR } from "../elements/rotary-scale/linear.js";
-import Toggle from "../elements/toggle.js";
-import Configuration from "../model/configuration.js";
-import SignalProcessor from "../events/signal-processor.js";
+import WebComponent from "../dom/web-component.js"
+import Button from "../elements/button.js"
+import RotaryCombo from "../elements/rotary-combo.js"
+import { TEMPO } from "../elements/rotary-combo-driver/tempo.js"
+import { LINEAR } from "../elements/rotary-scale/linear.js"
+import Toggle from "../elements/toggle.js"
+import Configuration from "../model/configuration.js"
+import SignalProcessor from "../events/signal-processor.js"
 
 export default class GlobalSettingsModal extends WebComponent {
 
@@ -25,14 +25,12 @@ export default class GlobalSettingsModal extends WebComponent {
         this._tempoControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTempoControlChange))
         this._containerEl.append(this._tempoControl)
 
-
         this._masterVolumeControl = RotaryCombo.create()
         this._masterVolumeControl.classList.add("right-align")
         this._masterVolumeControl.label = "Main Out"
         this._masterVolumeControl.labelColor = '#202020'
         this._masterVolumeControl.addEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onMasterVolumeControlChange))
         this._containerEl.append(this._masterVolumeControl)
-
 
         this._clipToggle = Toggle.create()
         this._clipToggle.classList.add("clip")
@@ -45,6 +43,7 @@ export default class GlobalSettingsModal extends WebComponent {
         this._panicButton.label = "Panic"
         this._panicButton.addEventListener(Button.TRIGGER_EVENT, this.bound(this._onPanicButtonTrigger))
         this._containerEl.append(this._panicButton)
+
         this._init()
     }
 
@@ -126,11 +125,16 @@ export default class GlobalSettingsModal extends WebComponent {
 
     destroy() {
         this._removeConfigurationListeners()
-
+        this._tempoControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onTempoControlChange))
+        this._tempoControl.destroy()
+        this._masterVolumeControl.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onMasterVolumeControlChange))
+        this._masterVolumeControl.destroy()
+        this._clipToggle.removeEventListener(Toggle.TRIGGER_EVENT, this.bound(this._onClipToggleTrigger))
+        this._clipToggle.destroy()
+        this._panicButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onPanicButtonTrigger))
+        this._panicButton.destroy()
         this._containerEl.remove()
         this._configuration = null
         super.destroy()
     }
-
-
 }

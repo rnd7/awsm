@@ -55,7 +55,6 @@ export default class AWSM extends DynamicWebComponent {
         this._headerSection.configuration = this._configuration
         this._containerEl.append(this._headerSection)
 
-
         this._configContainer = document.createElement('div')
         this._configContainer.classList.add('config-container')
         this._containerEl.append(this._configContainer)
@@ -63,7 +62,6 @@ export default class AWSM extends DynamicWebComponent {
         this._waveSplineSection = WaveSplineSection.create()
         this._waveSplineSection.configuration = this._configuration
         this._configContainer.append(this._waveSplineSection)
-
 
         this._parameterContainer = document.createElement('div')
         this._parameterContainer.classList.add('parameter-container')
@@ -85,12 +83,9 @@ export default class AWSM extends DynamicWebComponent {
         this._waveSplineConfig.configuration = this._configuration
         this._settingsContentContainer.append(this._waveSplineConfig)
 
-
         this._waveSplineSettings = WaveSplineViewSettings.create()
         this._waveSplineSettings.configuration = this._configuration
         this._settingsContentContainer.append(this._waveSplineSettings)
-
-
 
         this._voiceSection = VoiceSection.create()
         this._voiceSection.configuration = this._configuration

@@ -69,6 +69,8 @@ export default class VoicePitchGenerator extends VoiceGenerator {
 
     destroy() {
         this._removeVoiceListeners()
+        this._pitchScaleCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onPitchScaleComboChange))
+        this._pitchScaleCombo.destroy()
         this.content = null
         this._pitchScaleCombo.destroy()
         super.destroy()

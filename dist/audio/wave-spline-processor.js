@@ -12,7 +12,6 @@ function quantize(value, quantize = 0, threshold = 0) {
     if (!quantize) return value
     let t = threshold * .5 + .5
     return ((t + value * quantize) | 0) / quantize
-
 }
 ;// CONCATENATED MODULE: ./src/model/wave-spline-type.js
 const EXPONENTIAL_SPLINE = "exponential-spline"
@@ -171,6 +170,7 @@ class WaveSplineProcessor extends AudioWorkletProcessor {
                 this._nodes = null
                 this._splines = null
                 this._active = false
+                this.port.onmessage = null
                 this.port.close()
             }
         }

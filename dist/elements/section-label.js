@@ -37,7 +37,10 @@ export default class SectionLabel extends WebComponent {
     }
 
     destroy() {
+        this._labelEl.remove()
+        this._labelEl = null
         this._containerEl.remove()
+        this._containerEl = null
         super.destroy()
     }
 }

@@ -92,6 +92,7 @@ export default class VoiceGenerator extends WebComponent {
         this._removable = value
         this.render()
     }
+
     get removable() {
         return this._removable
     }
@@ -101,6 +102,7 @@ export default class VoiceGenerator extends WebComponent {
         this._label = value
         this.render()
     }
+
     get label() {
         return this._label
     }
@@ -110,6 +112,7 @@ export default class VoiceGenerator extends WebComponent {
         this._active = value
         this.render()
     }
+
     get active() {
         return this._active
     }
@@ -119,6 +122,7 @@ export default class VoiceGenerator extends WebComponent {
         this._masterTempo = value
         this.render()
     }
+
     get masterTempo() {
         return this._masterTempo
     }
@@ -130,6 +134,7 @@ export default class VoiceGenerator extends WebComponent {
         this._addGeneratorListeners()
         this.render()
     }
+
     get generator() {
         return this._generator
     }
@@ -168,6 +173,7 @@ export default class VoiceGenerator extends WebComponent {
             }
         ))
     }
+
     _onCreateTrigger(e) {
         this.dispatchEvent(new CustomEvent(
             VoiceGenerator.CREATE_EVENT,
@@ -186,6 +192,7 @@ export default class VoiceGenerator extends WebComponent {
     _updateAll() {
         this._onFrequencyChange()
     }
+
     renderCallback() {
         if (this._generator) {
             this._frequencyEl.text = `${this._generator.waveSplineView.frequency.toFixed(2)} Hz`
@@ -221,8 +228,6 @@ export default class VoiceGenerator extends WebComponent {
             this._durationEl.text = ""
         }
 
-
-
         if (this._removable && !this._buttonContainer.parentElement) {
             this._containerEl.append(this._buttonContainer)
         } else if (!this._removable && this._buttonContainer.parentElement) {
@@ -243,17 +248,24 @@ export default class VoiceGenerator extends WebComponent {
     }
 
     destroy() {
-
-        this._removeButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveTrigger))
-        this._createButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onCreateTrigger))
         this._removeGeneratorListeners()
 
-        this._createButton.destroy()
-        this._removeButton.destroy()
-        this._frequencyEl.destroy()
-        this._noteEl.destroy()
-        this._noteValueEl.destroy()
         this._labelEl.destroy()
+        this._labelEl = null
+        this._createButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onCreateTrigger))
+        this._createButton.destroy()
+        this._createButton = null
+        this._removeButton.removeEventListener(Button.TRIGGER_EVENT, this.bound(this._onRemoveTrigger))
+        this._removeButton.destroy()
+        this._removeButton = null
+        this._frequencyEl.destroy()
+        this._frequencyEl = null
+        this._durationEl.destroy()
+        this._durationEl = null
+        this._noteEl.destroy()
+        this._noteEl = null
+        this._noteValueEl.destroy()
+        this._noteValueEl = null
 
         this._containerEl.remove()
 

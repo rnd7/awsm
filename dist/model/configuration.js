@@ -7,7 +7,7 @@ import WaveSplineNode from "./wave-spline-node.js"
 import WaveSplineView from "./wave-spline-view.js"
 import ModelBase from "./model-base.js"
 import noteFrequencyConversion from "../music/note-frequency-conversion.js"
-import { POLYPHON } from "./voice-mode.js"
+import { POLYPHONE } from "./voice-mode.js"
 import { GAIN, PITCH, WAVE } from "./voice-generator-category.js"
 
 export default class Configuration extends ModelBase {
@@ -46,7 +46,7 @@ export default class Configuration extends ModelBase {
         keyboardTranspose = -2 * 12,
         masterTempo = 120,
         masterVolume = .75,
-        keyboardMode = POLYPHON,
+        keyboardMode = POLYPHONE,
         speakerProtection = true
     }) {
         super(...arguments)
@@ -334,6 +334,9 @@ export default class Configuration extends ModelBase {
         if (this._activeGenerator) obj.activeGenerator = this._activeGenerator.toObject()
         if (this._activeWaveSplineNode) obj.activeWaveSplineNode = this._activeWaveSplineNode.toObject()
         return obj
+    }
 
+    destroy() {
+        super.destroy()
     }
 }

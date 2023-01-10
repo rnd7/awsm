@@ -17,7 +17,6 @@ export default class Select extends WebComponent {
         this._containerEl.classList.add('container')
 
         this._buttonEl = document.createElement('button')
-        this._buttonEl.addEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
         this._containerEl.append(this._buttonEl)
 
@@ -46,6 +45,7 @@ export default class Select extends WebComponent {
     set vertical(value) {
         this._vertical = value
     }
+
     get vertical() {
         return this._vertical
     }
@@ -53,6 +53,7 @@ export default class Select extends WebComponent {
     set options(value) {
         this._modalContent.options = value
     }
+
     get options() {
         return this._modalContent.options
     }
@@ -78,9 +79,6 @@ export default class Select extends WebComponent {
 
     get modal() {
         return this._modal
-    }
-
-    _onPointerDown(e) {
     }
 
     _onPointerUp(e) {
@@ -111,7 +109,6 @@ export default class Select extends WebComponent {
         )
         this._ignore = e
         document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
-
     }
 
     _onGlobalPointerUp(e) {
@@ -139,15 +136,19 @@ export default class Select extends WebComponent {
     }
 
     destroy() {
-        this._labelEl.destroy()
-        this._valueEl.destroy()
+        document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
         this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
-        this._buttonEl.removeEventListener("pointerdown", this.bound(this._onPointerDown))
         this._buttonEl.remove()
+        this._buttonEl = null
+        this._labelEl.destroy()
+        this._labelEl = null
+        this._valueEl.destroy()
+        this._valueEl = null
         this._modalContent.removeEventListener(SelectModal.VALUE_CHANGE_EVENT, this.bound(this._onValueChange))
         this._modalContent.destroy()
-        this._modal.destroy()
+        this._modalContent = null
         this._containerEl.remove()
+        this._containerEl = null
         super.destroy()
     }
 }

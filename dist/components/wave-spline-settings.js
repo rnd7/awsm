@@ -154,12 +154,11 @@ export default class WaveSplineSettings extends WebComponent {
     _onEComboChange(e) {
         if (!this._waveSpline) return
         this._waveSpline.e = this._eCombo.value
-
     }
+
     _onPhaseComboChange(e) {
         if (!this._waveSpline) return
         this._waveSpline.phase = this._phaseCombo.value
-
     }
 
     _updateAll() {
@@ -178,10 +177,17 @@ export default class WaveSplineSettings extends WebComponent {
         this._removeWaveSplineListeners()
 
         this._typeSelect.removeEventListener(Select.VALUE_CHANGE_EVENT, this.bound(this._onTypeSelectChange))
+        this._typeSelect.destroy()
+        this._typeSelect = null
         this._eCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onEComboChange))
+        this._eCombo.destroy()
+        this._eCombo = null
+        this._phaseCombo.destroy()
         this._phaseCombo.removeEventListener(RotaryCombo.VALUE_CHANGE_EVENT, this.bound(this._onPhaseComboChange))
+        this._phaseCombo = null
 
         this._containerEl.remove()
+
         this._configuration = null
         this._waveSpline = null
         super.destroy()

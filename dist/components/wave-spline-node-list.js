@@ -15,20 +15,16 @@ export default class WaveSplineNodeList extends WebComponent {
         super()
         this._containerEl = document.createElement('div')
         this._containerEl.classList.add('container')
-
         this._containerEl.addEventListener("pointerdown", this.bound(this._onContainerDown), false)
-
         this._containerEl.addEventListener(WaveSplineNodeListItem.REMOVE_EVENT, this.bound(this._onWaveSplineNodeRemove))
-
+        this._containerEl.addEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
+        this._containerEl.addEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
         this._waveSpline = null
         this._configuration = null
         this._locked = false
-
         this._compact = false
-
         this._init()
     }
-
 
     async _init() {
         await this.fetchStyle(WaveSplineNodeList.style)
@@ -48,6 +44,7 @@ export default class WaveSplineNodeList extends WebComponent {
         this._addConfigurationListeners()
         this._updateActiveGenerator()
     }
+
     get configuration() {
         return this._configuration
     }
@@ -67,6 +64,7 @@ export default class WaveSplineNodeList extends WebComponent {
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
         SignalProcessor.add(this._configuration, Configuration.ACTIVE_WAVESPLINE_NODE_CHANGE, this.bound(this._onActiveWaveSplineNodeChange))
     }
+
     _removeConfigurationListeners() {
         if (!this._configuration) return
         SignalProcessor.remove(this._configuration, Configuration.ACTIVE_GENERATOR_CHANGE, this.bound(this._onActiveGeneratorChange))
@@ -98,6 +96,7 @@ export default class WaveSplineNodeList extends WebComponent {
         this._addActiveGeneratorListeners()
         this._updateActiveGenerator()
     }
+
     get activeGenerator() {
         return this._activeGenerator
     }
@@ -135,19 +134,18 @@ export default class WaveSplineNodeList extends WebComponent {
         this._configuration.activeWaveSplineNode = e.target.waveSplineNode
     }
 
-
     _addContainerListeners(el) {
-        el.addEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
-        el.addEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
+        //el.addEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
+        //el.addEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
     }
+
     _removeContainerListeners(el) {
-        el.removeEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
-        el.removeEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
+        //el.removeEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
+        //el.removeEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
 
     }
 
     renderCallback() {
-        //if (!this._configuration.activeGenerator) return
         if (this._compact) {
             let list = []
             if (
@@ -193,9 +191,10 @@ export default class WaveSplineNodeList extends WebComponent {
             this.manageContainer(
                 this._containerEl,
                 list,
-                WaveSplineNodeListItem,
+                WaveSplineNodeListItem
+                /*,
                 this.bound(this._addContainerListeners),
-                this.bound(this._removeContainerListeners)
+                this.bound(this._removeContainerListeners)*/
 
             )
             if (this._scrollInPlace) {
@@ -203,7 +202,7 @@ export default class WaveSplineNodeList extends WebComponent {
                 for (let i = 0; i < this._containerEl.childNodes.length; i++) {
                     if (this._containerEl.childNodes[i].waveSplineNode === this._configuration.activeWaveSplineNode) {
                         this._containerEl.childNodes[i].scrollIntoView()
-                        break;
+                        break
                     }
                 }
             }
@@ -212,22 +211,26 @@ export default class WaveSplineNodeList extends WebComponent {
     }
 
     _onLock(e) {
+        console.log("set lock")
         this._locked = true
     }
 
     _onRelease(e) {
+        console.log("release lock")
         this._locked = false
         this.render()
     }
 
     destroy() {
+        this._removeConfigurationListeners()
+        this._removeActiveGeneratorListeners()
         this._containerEl.removeEventListener("pointerdown", this.bound(this._onContainerDown), false)
         this._containerEl.removeEventListener(WaveSplineNodeListItem.REMOVE_EVENT, this.bound(this._onWaveSplineNodeRemove))
+        this._containerEl.removeEventListener(Rotary.SET_LOCK, this.bound(this._onLock))
+        this._containerEl.removeEventListener(Rotary.LOCK_RELEASE, this.bound(this._onRelease))
         this.destroyContainer(this._containerEl)
         this._containerEl.remove()
         this._containerEl = null
-        this._removeConfigurationListeners()
-        this._removeActiveGeneratorListeners()
         this._configuration = null
         super.destroy()
     }
