@@ -211,12 +211,10 @@ export default class WaveSplineNodeList extends WebComponent {
     }
 
     _onLock(e) {
-        console.log("set lock")
         this._locked = true
     }
 
     _onRelease(e) {
-        console.log("release lock")
         this._locked = false
         this.render()
     }

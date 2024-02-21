@@ -8,6 +8,7 @@ import Button from "../elements/button.js"
 import Toggle from "../elements/toggle.js"
 import DynamicWebComponent from "../dom/dynamic-web-component.js"
 import GlobalSettingsModal from "./global-settings-modal.js"
+import Select from "../elements/select.js"
 
 export default class HeaderSection extends DynamicWebComponent {
     static style = 'components/header-section.css'
@@ -88,7 +89,8 @@ export default class HeaderSection extends DynamicWebComponent {
     }
 
     _onPointerUp(e) {
-        if (e.target === this._buttonEl) {
+        this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
+        //if (e.target === this._buttonEl) {
             requestAnimationFrame(() => {
                 this._buttonEl.append(this._modalContent)
                 const referenceRect = this._modalContent.getBoundingClientRect()
@@ -102,18 +104,25 @@ export default class HeaderSection extends DynamicWebComponent {
                 this._indicatorEl.style.height = `${60}px`
                 this._buttonEl.append(this._indicatorEl)
             })
-
+            this.dispatchEvent(
+                new CustomEvent(Select.TRIGGER_EVENT, {
+                    bubbles: true,
+                    cancelable: false,
+                    composed: true
+                })
+            )
             this._ignore = e
             document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
-        }
+        //}
     }
 
     _onGlobalPointerUp(e) {
-        if (e !== this._ignore && !e.path.includes(this._modalContent)) {
+        if (e !== this._ignore) { //  && !e.path.includes(this._modalContent)
             this._modalContent.remove()
             this._indicatorEl.remove()
             document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
         }
+        this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
     }
 
     _addConfigurationListeners() {

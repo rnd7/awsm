@@ -122,7 +122,6 @@ export default class Rotary extends DynamicWebComponent {
 
     _onPointerDownEnd(e) {
         this._active = false
-        console.log("pointerDownEnd")
         this.dispatchEvent(
             new CustomEvent(
                 Rotary.LOCK_RELEASE,

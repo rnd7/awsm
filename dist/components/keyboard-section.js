@@ -71,6 +71,17 @@ export default class KeyboardSection extends DynamicWebComponent {
 
         this._configuration
         this._init()
+
+
+        //document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
+    }
+
+    _onGlobalPointerUp(e) {
+        if (e !== this._ignore && !e.path.includes(this._modalContent)) {
+            this._modalContent.remove()
+            this._indicatorEl.remove()
+            document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
+        }
     }
 
     async _init() {
@@ -84,7 +95,9 @@ export default class KeyboardSection extends DynamicWebComponent {
     }
 
     _onPointerUp(e) {
-        if (e.target === this._buttonEl) {
+    
+        this._buttonEl.removeEventListener("pointerup", this.bound(this._onPointerUp))
+        //if (e.target === this._buttonEl) {    
             requestAnimationFrame(() => {
                 this._buttonEl.append(this._modalContent)
                 const referenceRect = this._modalContent.getBoundingClientRect()
@@ -107,15 +120,18 @@ export default class KeyboardSection extends DynamicWebComponent {
             )
             this._ignore = e
             document.addEventListener('pointerup', this.bound(this._onGlobalPointerUp))
-        }
+        //}
     }
 
     _onGlobalPointerUp(e) {
-        if (e !== this._ignore && !e.path.includes(this._modalContent)) {
+        console.log(e)
+        if (e !== this._ignore) { //  && !e.path.includes(this._modalContent)
             this._modalContent.remove()
             this._indicatorEl.remove()
             document.removeEventListener('pointerup', this.bound(this._onGlobalPointerUp))
         }
+
+        this._buttonEl.addEventListener("pointerup", this.bound(this._onPointerUp))
     }
     _onTransposeComboChange(e) {
         this._configuration.keyboardTranspose = this._transposeRotaryCombo.value
