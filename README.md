@@ -1,3 +1,5 @@
+# ABADONED NEW VERSION COMMING SOON
+
 # AWSM
 The *AwesomeWaveSplineMachine* is a software synthesizer that utilizes what I call dynamic *WaveSpline* synthesis. For the nerds, this is basically the interpretation of a set of temporal-ordered unitless time-value pairs as parametrically exponentially interpolated one-dimensional spline that you can manipulate in real-time while playback. 
 
