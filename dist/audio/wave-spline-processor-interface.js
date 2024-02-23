@@ -23,6 +23,8 @@ export default class WaveSplineProcessorInterface extends Bindable {
         this._quantizeTimeThresholdParam = this._waveSplineProcessor.parameters.get('quantizeTimeThreshold')
         this._quantizeValueParam = this._waveSplineProcessor.parameters.get('quantizeValue')
 
+        this._gain = this._audioContext.createGain()
+        this._waveSplineProcessor.connect(this._gain)
         this.generator = generator
 
     }
@@ -164,12 +166,12 @@ export default class WaveSplineProcessorInterface extends Bindable {
         return this._pitchParam
     }
 
-    connect() {
-        return this._waveSplineProcessor.connect(...arguments)
+    connect(target) {
+        return this._gain.connect(...arguments)
     }
 
     disconnect() {
-        return this._waveSplineProcessor.disconnect(...arguments)
+        return this._gain.disconnect(...arguments)
 
     }
 
@@ -188,7 +190,9 @@ export default class WaveSplineProcessorInterface extends Bindable {
         })
         this._waveSplineProcessor.port.close()
         this._waveSplineProcessor.disconnect()
+        this._gain.disconnect()
         this._waveSplineProcessor = null
+        this._gain = null
 
         this._audioContext = null
         this._generator = null

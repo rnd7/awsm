@@ -124,7 +124,6 @@ export default class KeyboardSection extends DynamicWebComponent {
     }
 
     _onGlobalPointerUp(e) {
-        console.log(e)
         if (e !== this._ignore) { //  && !e.path.includes(this._modalContent)
             this._modalContent.remove()
             this._indicatorEl.remove()
