@@ -269,10 +269,6 @@ export default class WaveSplineCanvas extends DynamicWebComponent {
         this._context.arc(x, y, this._handleRadius, 0, 2 * Math.PI, false)
         this._context.fillStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
         this._context.fill()
-        this._context.beginPath()
-        this._context.strokeStyle = (this._configuration.activeWaveSplineNode === node) ? "#E0E0E0" : "#505050"
-        this._context.arc(x, y, this._handleStrokeRadius, 0, 2 * Math.PI, false)
-        this._context.stroke()
     }
 
     _renderZero() {
