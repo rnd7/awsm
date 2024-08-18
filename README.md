@@ -5,7 +5,7 @@ I wonder if nobody came up with something like this, but I couldn't find anythin
 
 A screenshot of the *AwesomeWaveSplineMachine* in action. You can try it yourself, check the link below.
 
-![alt text](documentation/awsm-showcase-small.png "AWSM - Header section")
+![alt text](documentation/awsm-showcase-small.png "AWSM - Showcase")
 
 ## Purpose
 This is not a production-ready music instrument! Some key features are missing, likely there are some bugs, and you can expect audio clicks and glitches under certain conditions. It's a prototype, a proof of concept and my personal playground. But yes, you can make music with it.
@@ -550,20 +550,10 @@ Nevertheless I put quite a lot of effort into this. Everything was built from sc
 
 For now no further development is planned. Even if I'd love to try out some more ideas and integrate a bunch of further features, I do not have the time to do so. Maybe I'll mess around with this some time in the future. Don't expect anything to stay or change.
 
-I think some crucial features are missing. The list is long, but here are a few of the features I would love to add.
+In the meantime, I have released AWSM MKII. The new version is much more powerful and, most importantly, more flexible. It is a completely independent implementation, have a look at the following repo.
 
-- ~~Speaker Protection~~
-- ~~Improve support for smartphones and other small screen size devices~~
-- Selection and transformation of multiple WaveSplineNodes at once
-- Local storage of multiple configurations using IndexedDB API
-- WaveSplineProcessor WASM implementation
-- Referencing option when connecting generators
-- WaveSpline referencing
-- Implement more interpolation algorithms
-- MIDI support
-- Stereo panning for Voices
-- Automate everything
-- Electron wrapper
+[AWSM - AwesomeWaveSplineMachine MKII](https://github.com/rnd7/awsm-mkii)
+
 
 ## Exponential WaveSpline Algorithm
 At its core it's just a simple algorithm. The general concept would also work with linear interpolation, but exponential interpolation sounds so much smoother. Modifying the exponent in realtime changes the curve steepness dynamically somehow similar to what a filter does.
